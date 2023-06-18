@@ -1,0 +1,43 @@
+.elements {
+    margin: 0%;
+    padding: 0%;
+}
+
+.home-page {
+    background-color: #f1f1f1;
+}
+
+.menu {
+    background-color: white;
+    position: absolute;
+    width: 216px;
+    height: fit-content;
+    margin: 2%;
+    padding-top: 7%;
+    padding-bottom: 7.5%;
+    border-radius: 25px;
+    filter: drop-shadow(0px 4px 18px rgba(0, 0, 0, 0.1));
+}
+
+.main-con {
+    background-color: white;
+    position: absolute;
+    width: 1160px;
+    height: 625px;
+    margin: 2%;
+    left: 264px;
+    border-radius: 25px;
+    filter: drop-shadow(0px 4px 18px rgba(0, 0, 0, 0.1));
+}
+
+.menu-content {
+    align-items: center;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-size: 18px;
+}
+
+.hori-line {
+    width: 180px;
+}
