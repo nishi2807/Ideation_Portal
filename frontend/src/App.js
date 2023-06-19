@@ -2,15 +2,18 @@
 // import './App.css';
 
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
-import Navbar from './Components/Navbar';
 import Home from './Pages/Home';
+import Login from './Pages/Login';
+import SignUp from './Pages/Signup';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Home/>}></Route>
+          <Route path='/' element={<Login/>}></Route>
+          <Route path='/signup' element={<SignUp/>}></Route>
+          <Route path='/home' element={<Home/>}></Route>
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../Components/Navbar";
-import './Home.css';
+import "./Home.css";
 
 const Home = () => {
     return (
@@ -21,7 +21,7 @@ const Home = () => {
                 <hr className="hori-line"></hr>
                 <p className="menu-content">Settings</p>
             </div>
-            <div className="main-con"></div>
+            <div className="main-content"></div>
         </div>
     );
 };

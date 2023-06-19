@@ -1,0 +1,101 @@
+.signup-button {
+    position: absolute;
+    display: flex;
+    background-color: #ffa559;
+    border: #ffa559;
+    text-align: center;
+    width: 20vw;
+    padding: 2%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 100;
+    align-items: center;
+    margin-left: 5%;
+    /* margin-top: 80%; */
+    top: 450px;
+    border-radius: 10px;
+    color: white;
+    font-size: 20px;
+    justify-content: space-evenly;
+}
+
+#signup-subheading-name {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    margin-top: 28%;
+    margin-left: 5%;
+    padding-bottom: 10%;
+    color: #3f3f3f;
+}
+
+#signup-box-name {
+    box-sizing: border-box;
+    position:absolute;
+    display: flex;
+    margin-top: 36%;
+    margin-left: 5%;
+    border: 2px solid #3f3f3f;
+    border-radius: 10px;
+    margin-bottom: 20%;
+    padding: 2%;
+    width: 20vw;
+}
+
+#signup-subheading-email {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    margin-top: 40%;
+    margin-left: 5%;
+    padding-bottom: 10%;
+    color: #3f3f3f;
+}
+
+#signup-box-email {
+    box-sizing: border-box;
+    position:absolute;
+    display: flex;
+    margin-top: 48%;
+    margin-left: 5%;
+    border: 2px solid #3f3f3f;
+    border-radius: 10px;
+    margin-bottom: 20%;
+    padding: 2%;
+    width: 20vw;
+}
+
+#signup-subheading-pass {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    margin-top: 52%;
+    margin-left: 5%;
+    padding-bottom: 10%;
+    color: #3f3f3f;
+}
+
+#signup-box-pass {
+    box-sizing: border-box;
+    position:absolute;
+    display: flex;
+    margin-top: 60%;
+    margin-left: 5%;
+    border: 2px solid #3f3f3f;
+    border-radius: 10px;
+    margin-bottom: 20%;
+    padding: 2%;
+    width: 20vw;
+}
+
+.signup-text {
+    /* margin: 10%; */
+    top: 40px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 40px;
+    left: 135px;
+    position: absolute;
+    display: flex;
+}

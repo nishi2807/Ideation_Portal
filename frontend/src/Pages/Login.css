@@ -1,0 +1,193 @@
+.elements {
+    margin: 0%;
+    padding: 0%;
+}
+
+.login-bg {
+    background-color: #f1f1f1;
+    width: 100vw;
+    height: 100vh;
+}
+
+.login-main-con {
+    position: absolute;
+    width: 1220px;
+    height: 600px;
+    left: 60px;
+    align-self: center;
+    display: flex;
+    margin: 5%;
+}
+
+.text-con {
+    position: absolute;
+    display: flex;
+    height: 450px;
+    width: 678px;
+    background: #2d2d2d;
+    border-radius: 50px 0px 0px 50px;
+    padding-top: 7%;
+    padding-left: 10%;
+}
+
+.org-con {
+    position:absolute;
+    display:flex;
+    height: 250px;
+    width: 800px;
+    background-color: #ffa559;
+    border-radius: 0px 0px 0px 50px;
+    margin-top: 28.7%;
+    align-items: center;
+}
+
+.heading {
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    align-items: center;
+    text-align: center;
+    font-size: 80px;
+}
+
+.slogan {
+    position: absolute;
+    display: flex;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    font-size: 25px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.login-con {
+    position: absolute;
+    display: flex;
+    height: 527px;
+    background-color: white;
+    width: 345.5px;
+    border-radius: 0px 50px 50px 0px;
+    left: 800px;
+    padding: 3%;
+}
+
+.login-text {
+    /* margin: 10%; */
+    top: 40px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 40px;
+    left: 150px;
+    position: absolute;
+    display: flex;
+}
+
+#login-subheading-email {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    margin-top: 28%;
+    margin-left: 5%;
+    padding-bottom: 10%;
+    color: #3f3f3f;
+}
+
+#login-box-email {
+    box-sizing: border-box;
+    position:absolute;
+    display: flex;
+    margin-top: 36%;
+    margin-left: 5%;
+    border: 2px solid #3f3f3f;
+    border-radius: 10px;
+    margin-bottom: 20%;
+    padding: 2%;
+    width: 20vw;
+}
+
+#login-subheading-pass {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    margin-top: 40%;
+    margin-left: 5%;
+    padding-bottom: 10%;
+    color: #3f3f3f;
+}
+
+#login-box-pass {
+    box-sizing: border-box;
+    position:absolute;
+    display: flex;
+    margin-top: 48%;
+    margin-left: 5%;
+    border: 2px solid #3f3f3f;
+    border-radius: 10px;
+    margin-bottom: 20%;
+    padding: 2%;
+    width: 20vw;
+}
+
+.login-button {
+    position: absolute;
+    display: flex;
+    background-color: #ffa559;
+    border: #ffa559;
+    text-align: center;
+    width: 20vw;
+    padding: 2%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 100;
+    align-items: center;
+    margin-left: 5%;
+    top: 350px;
+    border-radius: 10px;
+    color: white;
+    font-size: 20px;
+    justify-content: space-evenly;
+}
+
+.google-button {
+    position: absolute;
+    display: flex;
+    background-color: red;
+    border: red;
+    text-align: center;
+    width: 20vw;
+    padding: 2%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 100;
+    align-items: center;
+    margin-left: 5%;
+    /* margin-top: 80%; */
+    top: 450px;
+    border-radius: 10px;
+    color: white;
+    font-size: 20px;
+    justify-content: space-evenly;
+}
+
+.option {
+    position: absolute;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    color: #858585;
+    font-size: 18px;
+    width: 20vw;
+    top: 390px;
+    margin-left: 35%;
+}
+
+.no-acc {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #858585;
+    font-size: 15px;
+    margin-left: 5%;
+    top: 485px;
+    align-items: center;
+    text-align: center;
+}
