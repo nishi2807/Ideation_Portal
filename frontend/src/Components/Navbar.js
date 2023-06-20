@@ -1,11 +1,16 @@
 import React from "react";
 import './navbar.css';
+import { currentuser } from "../Pages/constants";
+import { useSelector } from "react-redux";
 
-const Navbar = () => {
+
+function Navbar() {
+    const CurrentUser_name = useSelector((state) => state.CurrentUser_name);
+
     return (
         <div className="navbar">
             <h3 className="ms-title">Ideation Portal</h3>
-            <h4 className="ms-username">Username</h4>
+            <h4 className="ms-username">{CurrentUser_name}</h4>
             <div className="user-con">
                 <img className="user-icon" ></img>
             </div>
