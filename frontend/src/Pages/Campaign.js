@@ -18,6 +18,10 @@ function Campaign() {
         Navigate('/create-group');
     }
 
+    const initiate_camp = () => {
+        Navigate('/initiate-campaign')
+    }
+
     return (
         <div className='home-page'>
             <Navbar></Navbar>
@@ -40,7 +44,7 @@ function Campaign() {
             </div>
             <div className='main-content'>
                 <button className='create-group' onClick={createGroup}>Create New Group</button>
-                <button className='ini-camp'>Initiate Campaign</button>
+                <button className='ini-camp' onClick={initiate_camp}>Initiate Campaign</button>
                 <div className='ver-line'></div>
             </div>
         </div>

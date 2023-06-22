@@ -1,14 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
-import './createGroup.css';
 import { Form } from 'react-bootstrap';
-import axios from 'axios';
 
-function CreateGroup() {
 
+function Initiate_campaign() {
     const Navigate = useNavigate();
-
     const logout = () => {
         Navigate('/');
     }
@@ -29,31 +26,9 @@ function CreateGroup() {
         Navigate('/initiate-campaign')
     }
 
-    const [values, setValues] = useState({
-        camp_id: '',
-        camp_user_email: ''
-    })
-
-    const handleInput = (event) => {
-        setValues(prev => ({ ...prev, [event.target.name]: event.target.value }))
-    }
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-
-        axios.post('http://localhost:8081/campaign/emails', { camp_id: values.camp_id, camp_user_email: values.camp_user_email })
-            .then(res => {
-                alert("Successfully created the group for the campaign !");
-                Navigate('/campaign')
-            })
-            .catch(error => {
-                console.error('Error:', error.response.data);
-                // Handle the error
-            });
-    }
-
+    
     return (
-        <div className='home-page'>
+        <div>
             <Navbar></Navbar>
             <div className="menu">
                 <p className="menu-content" onClick={home}>Home</p>
@@ -78,7 +53,7 @@ function CreateGroup() {
                 <div className='ver-line'></div>
 
                 <div className='create-group-con'>
-                    <h3 className='camp-heading'>Ideation Group</h3>
+                    <h3 className='camp-heading'>Initiate Campaign</h3>
                     <Form>
                         <Form.Group>
                             <Form.Label id='camp_id'>Campaign ID:</Form.Label>
@@ -87,24 +62,24 @@ function CreateGroup() {
                                 type="text"
                                 name="camp_id"
                                 placeholder="Enter Campaign ID"
-                                onChange={handleInput}
+                                // onChange={handleInput}
                                 required
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label id='camp_user'>Ideation Users:</Form.Label>
+                            <Form.Label id='camp_user'>Problem Statement:</Form.Label>
                             <Form.Control
                                 id="camp_user_box"
-                                type="email"
+                                type="text"
                                 name="camp_user_email"
-                                placeholder="Enter email id of user seperated with commas (,)"
-                                onChange={handleInput}
+                                placeholder="Enter the problem statement for the campaign"
+                                // onChange={handleInput}
                                 required
                             />
                         </Form.Group>
                     </Form>
                     <div>
-                        <button className="savegroup-btn" name="save-group" onClick={handleSubmit}>Save</button>
+                        <button className="savegroup-btn" name="save-group" >Save</button>
                     </div>
                 </div>
             </div>
@@ -112,4 +87,4 @@ function CreateGroup() {
     )
 }
 
-export default CreateGroup;
+export default Initiate_campaign;

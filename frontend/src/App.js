@@ -6,6 +6,7 @@ import Home from './Pages/Home';
 import Login from './Pages/Login';
 import Campaign from './Pages/Campaign';
 import CreateGroup from './Pages/CreateGroup';
+import Initiate_campaign from './Pages/Initiate-campaign';
 // import SignUp from './Pages/Signup';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path='/home' element={<Home/>}></Route>
           <Route path='/campaign' element={<Campaign/>}></Route>
           <Route path='/create-group' element={<CreateGroup/>}></Route>
+          <Route path='/initiate-campaign' element={<Initiate_campaign/>}></Route>
         </Routes>
       </BrowserRouter>
     </div>
