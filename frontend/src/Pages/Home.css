@@ -13,8 +13,8 @@
     width: 216px;
     height: fit-content;
     margin: 2%;
-    padding-top: 7%;
-    padding-bottom: 7.5%;
+    padding-top: 5.7%;
+    padding-bottom: 5%;
     border-radius: 25px;
     filter: drop-shadow(0px 4px 18px rgba(0, 0, 0, 0.1));
 }
@@ -22,11 +22,12 @@
 .main-content {
     background-color: white;
     position: absolute;
-    width: 1160px;
-    height: 625px;
+    width: 1095px;
+    height: 76vh;
     margin: 2%;
     left: 264px;
     border-radius: 25px;
+    padding: 2%;
     filter: drop-shadow(0px 4px 18px rgba(0, 0, 0, 0.1));
 }
 
@@ -40,4 +41,97 @@
 
 .hori-line {
     width: 180px;
+}
+
+.report-con {
+    background-color: #ffa559;
+    position: absolute;
+    display: flex;
+    height: 37vh;
+    width: 1095px;
+    top: 51%;
+    border-radius: 25px;
+}
+
+.carousel {
+    background-color: #f1f1f1;
+    position: absolute;
+    display: flex;
+    height: 35vh;
+    width: 1095px;
+    border-radius: 25px;
+}
+
+/* .idea-con {
+    position: absolute;
+    display: flex;
+    width: 90px;
+    height: 90px;
+    background-color: #ffa559;
+    align-items: center;
+    top: 61px;
+    left: 89px;
+} */
+
+.ideas {
+    /* background-color: #ffa559; */
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    top: 60px;
+    left: 130px;
+    background: url(icons8-idea-90.png);
+    background-repeat: no-repeat;
+    /* border-radius: 50px; */
+    /* border: #ffa559; */
+}
+
+.idea-text {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 25px;
+    color: white;
+    top: 140px;
+    left: 112px;
+}
+
+.camp {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    top: 60px;
+    left: 500px;
+    background-color: #f1f1f1;
+    background: url(campaign.png);
+}
+
+.camp-text {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 25px;
+    color: white;
+    top: 140px;
+    left: 450px;
+}
+
+.report {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    top: 60px;
+    right: 130px;
+    background-color: #f1f1f1;
+    background: url(report.png);
+}
+
+.report-text {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 25px;
+    color: white;
+    top: 140px;
+    right: 105px;
 }

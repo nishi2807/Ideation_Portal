@@ -1,0 +1,76 @@
+.create-group-con{
+    padding:3%;
+    margin:2%;
+    height: fit-content;
+    width: fit-content;
+}
+
+.camp-heading{
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    top: 5px;
+    left: 280px;
+    font-style: normal;
+}
+
+#camp_id{
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    left: 280px;
+    margin-top: 1%;
+}
+
+#camp_id_box{
+    position: absolute;
+    display: flex;
+    left: 280px;
+    top: 130px;
+    height: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 7px;
+    padding: 0.6%;
+    width: 200px;
+}
+
+#camp_user{
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    left: 660px;
+    margin-top: 1%;
+}
+
+#camp_user_box{
+    position: absolute;
+    display: flex;
+    left: 660px;
+    top: 130px;
+    height: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 7px;
+    padding: 0.6%;
+    width: 400px;
+}
+
+.savegroup-btn {
+    position: absolute;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    background-color: #ffa559;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    padding: 0.7%;
+    border: #ffa559;
+    width: 150px;
+    top: 180px;
+    right: 78px;
+    border-radius: 10px;
+    justify-content: center;
+}

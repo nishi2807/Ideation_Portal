@@ -20,20 +20,20 @@ app.listen(8081, () => {
     console.log("Listening to port 8081!")
 })
 
-app.post('/signup', (req, res) => {
-    const sql = "INSERT INTO login (`name`, `email`, `password`) VALUES (?)"
-    console.log(encryptData(req.body.password, secretKey))
-    const values = [
-        req.body.name,
-        req.body.email,
-        req.body.password
-    ]
-    db.query(sql, [values], (err, data) => {
-        if (err) {
-            return res.json("Error");
-        }
-        return res.json(data);
-    })
+// app.post('/signup', (req, res) => {
+//     const sql = "INSERT INTO users (`name`, `email`, `password`) VALUES (?)"
+//     console.log(encryptData(req.body.password, secretKey))
+//     const values = [
+//         req.body.name,
+//         req.body.email,
+//         req.body.password
+//     ]
+//     db.query(sql, [values], (err, data) => {
+//         if (err) {
+//             return res.json("Error");
+//         }
+//         return res.json(data);
+//     })
 
     // const name = req.body.name;
     // const email = req.body.email;
@@ -72,12 +72,12 @@ app.post('/signup', (req, res) => {
     //     // Store the hashed password in your database or use it as needed
     //     console.log('Hashed password:', hashedPassword);
     //   });
-});
+// });
 
 app.post('/username', (req, res) => {
     const email = req.body.email;
     console.log(email)
-    const sql = "SELECT name FROM login WHERE email = ?";
+    const sql = "SELECT name FROM users WHERE email = ?";
 
     db.query(sql, [email], (err, data) => {
         if (err) {
@@ -96,7 +96,7 @@ app.post('/username', (req, res) => {
 
 
 app.post('/login', (req, res) => {
-    const sql = "SELECT * FROM login WHERE `email` = (?)";
+    const sql = "SELECT * FROM users WHERE `email` = (?)";
     const email = req.body.email;
     let password = req.body.password;
 
@@ -113,40 +113,66 @@ app.post('/login', (req, res) => {
         } else {
             return res.json("Failed");
         }
-
-        // const hashedPassword = data[0].password; // Convert to string
-        // // console.log("password:", password);
-        // // console.log("hashedPassword:", hashedPassword);
-
-        // bcrypt.compare(password, hashedPassword, function(err, result) {
-        //     if (err) {
-        //       console.error('Error comparing passwords:', err);
-        //       return;
-        //     }
-
-        //     if (result) {
-        //       console.log('Passwords match!');
-        //       return res.json("Success")
-        //     } else {
-        //       console.log('Passwords do not match.');
-        //     }
-        // });
-
-        // bcrypt.compare(password, hashedPassword, (err, isMatch) => {
-        //     if (err) {
-        //         console.error('Error comparing passwords:', err);
-        //         return res.json("Error");
-        //     }
-
-        //     if (isMatch) {
-        //         // Passwords match, login successful
-        //         console.log("Success");
-        //         return res.json("Success");
-        //     } else {
-        //         // Passwords do not match
-        //         console.log("Failed to login")
-        //         return res.json("Failed");
-        //     }
-        // });
     });
 });
+
+// app.post('/campaign/emails', (req, res) => {
+//     const { camp_id, camp_user_email } = req.body;
+//     console.log(camp_user_email)
+  
+//     const emails = camp_user_email.split(',').map(email => [camp_id, email.trim()]);
+  
+//     const sql = 'INSERT INTO campaign_user (camp_id, camp_user_email) VALUES ?';
+  
+//     db.query(sql, [emails], (error, result) => {
+//       if (error) {
+//         console.error('Error inserting emails:', error);
+//         return res.status(500).json({ message: 'Failed to store emails' });
+//       }
+  
+//       console.log('Emails stored successfully');
+//       return res.status(200).json({ message: 'Emails stored successfully' });
+//     });
+//   });
+
+app.post('/campaign/emails', (req, res) => {
+    const { camp_id, camp_user_email } = req.body;
+  
+    // Split the camp_user_emails string into an array of individual email addresses
+    const emails = camp_user_email.split(',').map(email => email.trim());
+  
+    // Check if the emails are already registered in the users table
+    const checkEmailsQuery = 'SELECT email FROM users WHERE email IN (?)';
+  
+    db.query(checkEmailsQuery, [emails], (checkError, checkResult) => {
+      if (checkError) {
+        console.error('Error checking emails:', checkError);
+        return res.status(500).json({ message: 'Failed to check emails' });
+      }
+  
+      const registeredEmails = checkResult.map(row => row.email);
+  
+      const unregisteredEmails = emails.filter(email => !registeredEmails.includes(email));
+  
+      if (unregisteredEmails.length > 0) {
+        console.log('Unregistered emails:', unregisteredEmails);
+        return res.status(400).json({ message: 'Unregistered emails found', unregistered: unregisteredEmails });
+      }
+  
+      // Store the emails in the campaign_user table
+      const storeEmailsQuery = 'INSERT INTO campaign_user (camp_id, camp_user_email) VALUES ?';
+      const values = emails.map(email => [camp_id, email]);
+  
+      db.query(storeEmailsQuery, [values], (storeError, storeResult) => {
+        if (storeError) {
+          console.error('Error storing emails:', storeError);
+          return res.status(500).json({ message: 'Failed to store emails' });
+        }
+  
+        console.log('Emails stored successfully');
+        return res.status(200).json({ message: 'Emails stored successfully' });
+      });
+    });
+  });
+  
+  
