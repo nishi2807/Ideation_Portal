@@ -1,0 +1,103 @@
+#camp_statement {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    left: 580px;
+    /* top: 200px; */
+    margin-top: 1%;
+}
+
+#camp_statement_box {
+    position: absolute;
+    display: flex;
+    left: 580px;
+    top: 130px;
+    height: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 7px;
+    padding: 0.6%;
+    width: 480px;
+}
+
+#camp_owner {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    left: 280px;
+    /* top: 200px; */
+    margin-top: 9%;
+}
+
+#camp_owner_box{
+    position: absolute;
+    display: flex;
+    left: 280px;
+    top: 220px;
+    height: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 7px;
+    padding: 0.6%;
+    width: 200px;
+}
+
+#camp_start {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    margin-top: 9%;
+    left: 580px;
+}
+
+#camp_end {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    margin-top: 9%;
+    left: 860px;
+}
+
+#camp_start_box{
+    position: absolute;
+    display: flex;
+    left: 580px;
+    top: 220px;
+    height: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 7px;
+    padding: 0.6%;
+    width: 200px;
+}
+
+#camp_end_box{
+    position: absolute;
+    display: flex;
+    left: 860px;
+    top: 220px;
+    height: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 7px;
+    padding: 0.6%;
+    width: 200px;
+}
+
+.inicamp-btn {
+    position: absolute;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    background-color: #ffa559;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    padding: 0.7%;
+    border: #ffa559;
+    width: 150px;
+    top: 300px;
+    right: 78px;
+    border-radius: 10px;
+    justify-content: center;
+}

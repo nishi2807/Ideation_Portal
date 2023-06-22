@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
 import { Form } from 'react-bootstrap';
+import './Initiate-campaign.css';
+import axios from 'axios';
 
 
 function Initiate_campaign() {
@@ -26,7 +28,33 @@ function Initiate_campaign() {
         Navigate('/initiate-campaign')
     }
 
-    
+    const [values, setValues] = useState({
+        camp_id: '',
+        camp_startdate: '',
+        camp_enddate: '',
+        camp_owner: '',
+        camp_title: ''
+    });
+
+    const handleInput = (event) => {
+        setValues(prev => ({ ...prev, [event.target.name]: event.target.value }))
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        axios.post('http://localhost:8081/campaign/initiate', { camp_id: values.camp_id, camp_startdate: values.camp_startdate, camp_enddate: values.camp_enddate, camp_owner: values.camp_owner, camp_title: values.camp_title })
+            .then(res => {
+                alert("Successfully initiated the campaign !");
+                Navigate('/campaign')
+            })
+            .catch(error => {
+                console.error('Error:', error.response.data);
+                // Handle the error
+            });
+    }
+
+
     return (
         <div>
             <Navbar></Navbar>
@@ -53,7 +81,7 @@ function Initiate_campaign() {
                 <div className='ver-line'></div>
 
                 <div className='create-group-con'>
-                    <h3 className='camp-heading'>Initiate Campaign</h3>
+                    <h3 className='camp-heading'>Initiate a New Campaign</h3>
                     <Form>
                         <Form.Group>
                             <Form.Label id='camp_id'>Campaign ID:</Form.Label>
@@ -62,24 +90,57 @@ function Initiate_campaign() {
                                 type="text"
                                 name="camp_id"
                                 placeholder="Enter Campaign ID"
-                                // onChange={handleInput}
+                                onChange={handleInput}
                                 required
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label id='camp_user'>Problem Statement:</Form.Label>
+                            <Form.Label id='camp_statement'>Problem Statement:</Form.Label>
                             <Form.Control
-                                id="camp_user_box"
+                                id="camp_statement_box"
                                 type="text"
-                                name="camp_user_email"
+                                name="camp_title"
                                 placeholder="Enter the problem statement for the campaign"
-                                // onChange={handleInput}
+                                onChange={handleInput}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label id='camp_owner'>Campaign Owner:</Form.Label>
+                            <Form.Control
+                                id="camp_owner_box"
+                                type="name"
+                                name="camp_owner"
+                                placeholder="Enter your full name"
+                                onChange={handleInput}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label id='camp_start'>Start Date:</Form.Label>
+                            <Form.Control
+                                id="camp_start_box"
+                                type="date"
+                                name="camp_startdate"
+                                // placeholder="Enter your full name"
+                                onChange={handleInput}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label id='camp_end'>End Date:</Form.Label>
+                            <Form.Control
+                                id="camp_end_box"
+                                type="date"
+                                name="camp_enddate"
+                                // placeholder="Enter your full name"
+                                onChange={handleInput}
                                 required
                             />
                         </Form.Group>
                     </Form>
                     <div>
-                        <button className="savegroup-btn" name="save-group" >Save</button>
+                        <button className="inicamp-btn" name="init-camp" onClick={handleSubmit}>Initiate</button>
                     </div>
                 </div>
             </div>
