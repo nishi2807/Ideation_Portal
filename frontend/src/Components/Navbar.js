@@ -9,7 +9,10 @@ function Navbar() {
 
     return (
         <div className="navbar">
-            <h3 className="ms-title">Ideation Portal</h3>
+            <div className="ms-logo-container">
+                <p className="ms-logo"></p>
+            </div>
+            <h3 className="ms-title">Ideation</h3>
             <h4 className="ms-username">{CurrentUser_name}</h4>
             <div className="user-con">
                 <img className="user-icon" ></img>
