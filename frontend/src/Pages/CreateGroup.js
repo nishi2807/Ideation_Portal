@@ -103,6 +103,59 @@ function CreateGroup() {
                             />
                         </Form.Group>
                     </Form>
+                    <hr className='hr-create-group'></hr>
+                    <h3 className='vote-heading'>Voting Group</h3>
+                    <Form>
+                        <Form.Group>
+                            <Form.Label id='vote_id'>Campaign ID:</Form.Label>
+                            <Form.Control
+                                id="vote_id_box"
+                                type="text"
+                                name="camp_id"
+                                placeholder="Enter Campaign ID"
+                                onChange={handleInput}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label id='vote_user'>Voting Users:</Form.Label>
+                            <Form.Control
+                                id="vote_user_box"
+                                type="email"
+                                name="camp_user_email"
+                                placeholder="Enter email id of user seperated with commas (,)"
+                                onChange={handleInput}
+                                required
+                            />
+                        </Form.Group>
+                        <hr className='hr-vote-group'></hr>
+                    </Form>
+                    <h3 className='manage-heading'>Management Group</h3>
+                    <Form>
+                        <Form.Group>
+                            <Form.Label id='manage_id'>Campaign ID:</Form.Label>
+                            <Form.Control
+                                id="manage_id_box"
+                                type="text"
+                                name="camp_id"
+                                placeholder="Enter Campaign ID"
+                                onChange={handleInput}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label id='manage_user'>Management Users:</Form.Label>
+                            <Form.Control
+                                id="manage_user_box"
+                                type="email"
+                                name="camp_user_email"
+                                placeholder="Enter email id of user seperated with commas (,)"
+                                onChange={handleInput}
+                                required
+                            />
+                        </Form.Group>
+                        <hr className='hr-manage-group'></hr>
+                    </Form>
                     <div>
                         <button className="savegroup-btn" name="save-group" onClick={handleSubmit}>Save</button>
                     </div>

@@ -122,7 +122,6 @@ function Initiate_campaign() {
                                 id="camp_start_box"
                                 type="date"
                                 name="camp_startdate"
-                                // placeholder="Enter your full name"
                                 onChange={handleInput}
                                 required
                             />
@@ -133,7 +132,6 @@ function Initiate_campaign() {
                                 id="camp_end_box"
                                 type="date"
                                 name="camp_enddate"
-                                // placeholder="Enter your full name"
                                 onChange={handleInput}
                                 required
                             />

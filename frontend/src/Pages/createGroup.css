@@ -69,8 +69,136 @@
     padding: 0.7%;
     border: #ffa559;
     width: 150px;
-    top: 180px;
+    top: 550px;
     right: 78px;
     border-radius: 10px;
     justify-content: center;
+}
+
+.hr-create-group{
+    position: absolute;
+    display: flex;
+    width: 820px;
+    left: 270px;
+    top: 180px;
+}
+
+.vote-heading {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    top: 180px;
+    left: 280px;
+    font-style: normal;
+}
+
+#vote_id {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    left: 280px;
+    margin-top: 16%;
+}
+
+#vote_id_box{
+    position: absolute;
+    display: flex;
+    left: 280px;
+    top: 305px;
+    height: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 7px;
+    padding: 0.6%;
+    width: 200px;
+}
+
+#vote_user {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    left: 660px;
+    margin-top: 16%;
+}
+
+#vote_user_box{
+    position: absolute;
+    display: flex;
+    left: 660px;
+    top: 305px;
+    height: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 7px;
+    padding: 0.6%;
+    width: 400px;
+}
+
+.hr-vote-group{
+    position: absolute;
+    display: flex;
+    width: 820px;
+    left: 270px;
+    top: 355px;
+}
+
+.hr-manage-group{
+    position: absolute;
+    display: flex;
+    width: 820px;
+    left: 270px;
+    top: 355px;
+}
+
+.manage-heading {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    top: 360px;
+    left: 280px;
+    font-style: normal;
+}
+
+#manage_id {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    left: 280px;
+    margin-top: 32%;
+}
+
+#manage_id_box{
+    position: absolute;
+    display: flex;
+    left: 280px;
+    top: 490px;
+    height: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 7px;
+    padding: 0.6%;
+    width: 200px;
+}
+
+#manage_user {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    left: 660px;
+    margin-top: 32%;
+}
+
+#manage_user_box{
+    position: absolute;
+    display: flex;
+    left: 660px;
+    top: 490px;
+    height: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 7px;
+    padding: 0.6%;
+    width: 400px;
 }

@@ -8,6 +8,7 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
     padding: 1.2%;
+    margin-top: 1%;
     border: #ffa559;
     border-radius: 10px;
 }
@@ -35,6 +36,6 @@
     text-align: center;
     align-items: center;
     border-radius: 10px;
-    margin-top: 6%;
+    margin-top: 8%;
     width: max-content;
 }
