@@ -37,11 +37,11 @@ function Home() {
             <div className="main-content">
                 <div className="carousel"></div>
                 <div className="report-con">
-                    <img className="ideas"></img>
+                    <p className="ideas"></p>
                     <p className="idea-text">Total Ideas</p>
-                    <img className="camp"></img>
+                    <p className="camp"></p>
                     <p className="camp-text">Total Campaigns</p>
-                    <img className="report"></img>
+                    <p className="report"></p>
                     <p className="report-text">Total Reports</p>
                 </div>
             </div>

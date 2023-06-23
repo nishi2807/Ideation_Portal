@@ -30,6 +30,29 @@
     padding-left: 10%;
 }
 
+.logo-con {
+    position: absolute;
+    display: flex;
+    background-color: white;
+    height: 120px;
+    width: 170px;
+    top: 120px;
+    left: 160px;
+    border-radius: 10px;
+    /* padding: 1%; */
+}
+
+.logo {
+    position: absolute;
+    display: flex;
+    width: 170px;
+    height: 170px;
+    top: -40px;
+    left: 5px;
+    /* right: -15px; */
+    background-image: url(igt_logo.png);
+}
+
 .org-con {
     position:absolute;
     display:flex;
@@ -47,6 +70,8 @@
     align-items: center;
     text-align: center;
     font-size: 80px;
+    position: absolute;
+    left: 350px;
 }
 
 .slogan {
@@ -73,7 +98,7 @@
 
 .login-text {
     /* margin: 10%; */
-    top: 40px;
+    top: 90px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 40px;
     left: 150px;
@@ -86,7 +111,7 @@
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 20px;
-    margin-top: 28%;
+    margin-top: 38%;
     margin-left: 5%;
     padding-bottom: 10%;
     color: #3f3f3f;
@@ -96,7 +121,7 @@
     box-sizing: border-box;
     position:absolute;
     display: flex;
-    margin-top: 36%;
+    margin-top: 46%;
     margin-left: 5%;
     border: 2px solid #3f3f3f;
     border-radius: 10px;
@@ -110,7 +135,7 @@
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 20px;
-    margin-top: 40%;
+    margin-top: 50%;
     margin-left: 5%;
     padding-bottom: 10%;
     color: #3f3f3f;
@@ -120,7 +145,7 @@
     box-sizing: border-box;
     position:absolute;
     display: flex;
-    margin-top: 48%;
+    margin-top: 58%;
     margin-left: 5%;
     border: 2px solid #3f3f3f;
     border-radius: 10px;
@@ -141,7 +166,7 @@
     font-weight: 100;
     align-items: center;
     margin-left: 5%;
-    top: 350px;
+    top: 400px;
     border-radius: 10px;
     color: white;
     font-size: 20px;

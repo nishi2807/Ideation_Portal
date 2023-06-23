@@ -55,7 +55,10 @@ function Login() {
         <div className="login-bg">
             <div className="login-main-con">
                 <div className="text-con">
-                    <h1 className="heading">Ideation Portal</h1>
+                <div className="logo-con">
+                    <p className="logo"></p>
+                </div>
+                    <h1 className="heading">Ideation</h1>
                 </div>
                 <div className="org-con">
                     <p className="slogan">"Unleash your creativity and bring your ideas to life with our ideation portal"</p>
@@ -91,19 +94,19 @@ function Login() {
                     <div>
                         <button className="login-button" name="login" onClick={handleSubmit}>LogIn</button>
                     </div>
-                    <div>
+                    {/* <div>
                         <h2 className="option">
                             - Or -
                         </h2>
-                    </div>
-                    <div>
+                    </div> */}
+                    {/* <div>
                         <button className="google-button">Google</button>
-                    </div>
-                    <div>
+                    </div> */}
+                    {/* <div>
                         <p className="no-acc">
                             Don't have an account? <Link to="/signup">SignUp</Link>
                         </p>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

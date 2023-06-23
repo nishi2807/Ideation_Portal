@@ -78,7 +78,7 @@
     position: absolute;
     width: 90px;
     height: 90px;
-    top: 60px;
+    top: 50px;
     left: 130px;
     background: url(icons8-idea-90.png);
     background-repeat: no-repeat;
@@ -100,7 +100,7 @@
     position: absolute;
     width: 90px;
     height: 90px;
-    top: 60px;
+    top: 50px;
     left: 500px;
     background-color: #f1f1f1;
     background: url(campaign.png);
@@ -120,7 +120,7 @@
     position: absolute;
     width: 90px;
     height: 90px;
-    top: 60px;
+    top: 50px;
     right: 130px;
     background-color: #f1f1f1;
     background: url(report.png);
