@@ -30,26 +30,29 @@ function CreateGroup() {
     }
 
     const [values, setValues] = useState({
-        camp_id: '',
-        camp_user_email: ''
+        // camp_id: '',
+        // camp_user_email: ''
     })
 
     const handleInput = (event) => {
         setValues(prev => ({ ...prev, [event.target.name]: event.target.value }))
+        console.log(values)
     }
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-
-        axios.post('http://localhost:8081/campaign/emails', { camp_id: values.camp_id, camp_user_email: values.camp_user_email })
+    const updatedb = (id,email,role) => {
+        axios.post('http://localhost:8081/campaign/emails', { camp_id: id, camp_user_email: email, camp_user_role: role })
             .then(res => {
                 alert("Successfully created the group for the campaign !");
                 Navigate('/campaign')
             })
             .catch(error => {
                 console.error('Error:', error.response.data);
-                // Handle the error
             });
+    }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        updatedb(values.camp_ideation_id, values.camp_ideation_user_email, "I")
+        updatedb(values.camp_voting_id, values.camp_voting_user_email, "V")
+        updatedb(values.camp_management_id, values.camp_management_user_email, "M")        
     }
 
     return (
@@ -85,7 +88,7 @@ function CreateGroup() {
                             <Form.Control
                                 id="camp_id_box"
                                 type="text"
-                                name="camp_id"
+                                name="camp_ideation_id"
                                 placeholder="Enter Campaign ID"
                                 onChange={handleInput}
                                 required
@@ -96,7 +99,7 @@ function CreateGroup() {
                             <Form.Control
                                 id="camp_user_box"
                                 type="email"
-                                name="camp_user_email"
+                                name="camp_ideation_user_email"
                                 placeholder="Enter email id of user seperated with commas (,)"
                                 onChange={handleInput}
                                 required
@@ -111,7 +114,7 @@ function CreateGroup() {
                             <Form.Control
                                 id="vote_id_box"
                                 type="text"
-                                name="camp_id"
+                                name="camp_voting_id"
                                 placeholder="Enter Campaign ID"
                                 onChange={handleInput}
                                 required
@@ -122,7 +125,7 @@ function CreateGroup() {
                             <Form.Control
                                 id="vote_user_box"
                                 type="email"
-                                name="camp_user_email"
+                                name="camp_voting_user_email"
                                 placeholder="Enter email id of user seperated with commas (,)"
                                 onChange={handleInput}
                                 required
@@ -137,7 +140,7 @@ function CreateGroup() {
                             <Form.Control
                                 id="manage_id_box"
                                 type="text"
-                                name="camp_id"
+                                name="camp_management_id"
                                 placeholder="Enter Campaign ID"
                                 onChange={handleInput}
                                 required
@@ -148,7 +151,7 @@ function CreateGroup() {
                             <Form.Control
                                 id="manage_user_box"
                                 type="email"
-                                name="camp_user_email"
+                                name="camp_management_user_email"
                                 placeholder="Enter email id of user seperated with commas (,)"
                                 onChange={handleInput}
                                 required

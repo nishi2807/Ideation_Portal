@@ -1,8 +1,9 @@
 const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
-const bcrypt = require("bcrypt");
-const crypto = require('crypto');
+// const bcrypt = require("bcrypt");
+// const crypto = require('crypto');
+const nodemailer = require("nodemailer");
 
 const app = express();
 
@@ -19,60 +20,6 @@ const db = mysql.createConnection({
 app.listen(8081, () => {
     console.log("Listening to port 8081!")
 })
-
-// app.post('/signup', (req, res) => {
-//     const sql = "INSERT INTO users (`name`, `email`, `password`) VALUES (?)"
-//     console.log(encryptData(req.body.password, secretKey))
-//     const values = [
-//         req.body.name,
-//         req.body.email,
-//         req.body.password
-//     ]
-//     db.query(sql, [values], (err, data) => {
-//         if (err) {
-//             return res.json("Error");
-//         }
-//         return res.json(data);
-//     })
-
-// const name = req.body.name;
-// const email = req.body.email;
-// let password = req.body.password;
-
-// bcrypt.genSalt(10, (err, salt) => {
-//     if (err) {
-//         console.error('Error generating salt:', err);
-//         return res.json("Error");
-//     }
-
-//     bcrypt.hash(password.toString(), salt, (err, hashedPassword) => {
-//         if (err) {
-//             console.error('Error hashing password:', err);
-//             return res.json("Error");
-//         }
-
-//         const values = [[name, email, hashedPassword]];
-//         db.query(sql, values, (err, data) => {
-//             if (err) {
-//                 console.error('Error executing query:', err);
-//                 return res.json("Error");
-//             }
-//             console.log('Query executed successfully:', data);
-//             return res.json(data);
-//         });
-//     });
-// });
-
-// bcrypt.hash(password.toString(), 10, function(err, hashedPassword) {
-//     if (err) {
-//       console.error('Error hashing password:', err);
-//       return;
-//     }
-
-//     // Store the hashed password in your database or use it as needed
-//     console.log('Hashed password:', hashedPassword);
-//   });
-// });
 
 app.post('/username', (req, res) => {
     const email = req.body.email;
@@ -116,27 +63,8 @@ app.post('/login', (req, res) => {
     });
 });
 
-// app.post('/campaign/emails', (req, res) => {
-//     const { camp_id, camp_user_email } = req.body;
-//     console.log(camp_user_email)
-
-//     const emails = camp_user_email.split(',').map(email => [camp_id, email.trim()]);
-
-//     const sql = 'INSERT INTO campaign_user (camp_id, camp_user_email) VALUES ?';
-
-//     db.query(sql, [emails], (error, result) => {
-//       if (error) {
-//         console.error('Error inserting emails:', error);
-//         return res.status(500).json({ message: 'Failed to store emails' });
-//       }
-
-//       console.log('Emails stored successfully');
-//       return res.status(200).json({ message: 'Emails stored successfully' });
-//     });
-//   });
-
 app.post('/campaign/emails', (req, res) => {
-    const { camp_id, camp_user_email } = req.body;
+    const { camp_id, camp_user_email, camp_user_role } = req.body;
 
     // Split the camp_user_emails string into an array of individual email addresses
     const emails = camp_user_email.split(',').map(email => email.trim());
@@ -160,8 +88,8 @@ app.post('/campaign/emails', (req, res) => {
         }
 
         // Store the emails in the campaign_user table
-        const storeEmailsQuery = 'INSERT INTO campaign_user (camp_id, camp_user_email) VALUES ?';
-        const values = emails.map(email => [camp_id, email]);
+        const storeEmailsQuery = 'INSERT INTO campaign_user (camp_id, camp_user_email, camp_user_role) VALUES ?';
+        const values = emails.map(email => [camp_id, email, camp_user_role]);
 
         db.query(storeEmailsQuery, [values], (storeError, storeResult) => {
             if (storeError) {
@@ -170,7 +98,32 @@ app.post('/campaign/emails', (req, res) => {
             }
 
             console.log('Emails stored successfully');
-            return res.status(200).json({ message: 'Emails stored successfully' });
+
+            // Send email invitations to the participants
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'jobpower14@gmail.com',
+                    pass: 'xcsdbolaiymfadra'
+                }
+            });
+
+            const mailOptionsI = {
+                from: 'jobpower14@gmail.com',
+                to: emails,
+                subject: camp_user_role == 'I' ? "Welcome to Ideation Group" : camp_user_role == 'V' ? "Welcome to Voting Group" : "Welcome to Management Group",
+                text: camp_user_role == 'I' ? "You are invited to participate in the campaign. We will send you the participation link as soon as the campaign is initiated." : camp_user_role == 'V' ? "You are invited to participate in the campaign. We will send you the participation link as soon as the campaign is initiated." : "You are invited to participate in the campaign. We will send you the participation link as soon as the campaign is initiated."
+            };
+
+            transporter.sendMail(mailOptionsI, (emailError, info) => {
+                if (emailError) {
+                    console.error('Error sending email invitations:', emailError);
+                    return res.status(500).json({ message: 'Failed to send email invitations' });
+                }
+
+                console.log('Email invitations sent successfully');
+                return res.status(200).json({ message: 'Emails stored and invitations sent successfully' });
+            });
         });
     });
 });
