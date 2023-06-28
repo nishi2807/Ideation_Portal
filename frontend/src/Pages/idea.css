@@ -1,0 +1,96 @@
+.main-form {
+    background-color: white;
+    position: absolute;
+    width: 1360px;
+    height: 76vh;
+    margin: 2%;
+    /* left: 264px; */
+    border-radius: 25px;
+    padding: 2%;
+    filter: drop-shadow(0px 4px 18px rgba(0, 0, 0, 0.1));
+}
+
+.form-heading { 
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    margin-left: 18.8%;
+}
+
+.prob-stat {
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    margin-left: 18.9%;
+    margin-top: 5%;
+}
+
+#idea_title {
+    position:absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    left: 21%;
+    margin-top: 8%;
+}
+
+#idea_title_box {
+    position: absolute;
+    display: flex;
+    left: 21%;
+    margin-top: 10.5%;
+    height: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 7px;
+    padding: 0.6%;
+    width: 800px;
+}
+
+#idea_des {
+    position:absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    left: 21%;
+    margin-top: 14.5%;
+}
+
+#idea_des_box {
+    position: absolute;
+    display: flex;
+    left: 21%;
+    margin-top: 17%;
+    height: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 7px;
+    padding: 0.6%;
+    border: 2px solid black;
+    /* padding-top: 0%; */
+    width: 800px;
+    resize: vertical;
+    min-height: 200px;
+    /* height: 250px; */
+    /* text-align:start;
+    align-items: flex-start; */
+    /* justify-content: flex-start; */
+}
+
+.idea-post-btn {
+    position: absolute;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    background-color: #ffa559;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    padding: 0.7%;
+    border: #ffa559;
+    width: 150px;
+    top: 550px;
+    right: 300px;
+    border-radius: 10px;
+    justify-content: center;
+}
