@@ -128,6 +128,8 @@ app.post('/campaign/emails', (req, res) => {
     });
 });
 
+const crypto = require('crypto'); // Import the crypto module
+
 app.post('/campaign/initiate', (req, res) => {
     const { camp_id, camp_startdate, camp_enddate, camp_owner, camp_title } = req.body;
 
@@ -163,12 +165,62 @@ app.post('/campaign/initiate', (req, res) => {
                     return res.status(500).json({ message: 'Failed to initiate campaign' });
                 }
 
-                console.log('Campaign initiated successfully');
-                return res.status(200).json({ message: 'Campaign initiated successfully' });
+                // Generate a unique token for the campaign
+                const token = crypto.randomBytes(20).toString('hex');
+
+                // Store the token, campaign ID, and end date in a separate table or database
+                const storeLinkQuery = 'INSERT INTO campaign_links (token, campaign_id, end_date) VALUES (?, ?, ?)';
+                db.query(storeLinkQuery, [token, camp_id, camp_enddate], (storeError, storeResult) => {
+                    if (storeError) {
+                        console.error('Error storing campaign link:', storeError);
+                        return res.status(500).json({ message: 'Failed to store campaign link' });
+                    }
+
+                    // Create the link URL
+                    const postIdeaURL = `http://localhost:3000/post-idea?token=${token}`;
+
+                    console.log('Campaign initiated successfully');
+                    console.log('Post-Idea URL:', postIdeaURL);
+
+                    // Get the email addresses of users in the ideation group
+                    const getUserEmailsQuery = 'SELECT camp_user_email FROM campaign_user WHERE camp_id = ? AND camp_user_role = "I"';
+                    db.query(getUserEmailsQuery, [camp_id], (getEmailsError, getEmailsResult) => {
+                        if (getEmailsError) {
+                            console.error('Error retrieving user emails:', getEmailsError);
+                            return res.status(500).json({ message: 'Failed to retrieve user emails' });
+                        }
+
+                        const emails = getEmailsResult.map(user => user.camp_user_email);
+
+                        // Send email invitations to the participants
+                        const transporter = nodemailer.createTransport({
+                            service: 'gmail',
+                            auth: {
+                                user: 'jobpower14@gmail.com',
+                                pass: 'xcsdbolaiymfadra'
+                            }
+                        });
+
+                        const mailOptionsI = {
+                            from: 'jobpower14@gmail.com',
+                            to: emails.join(', '),
+                            subject: 'Invitation to post your Idea',
+                            text: `The campaign has been initiated and now you can post your ideas. Please click on this link: ${postIdeaURL}`
+                        };
+
+                        transporter.sendMail(mailOptionsI, (emailError, info) => {
+                            if (emailError) {
+                                console.error('Error sending email invitations:', emailError);
+                                return res.status(500).json({ message: 'Failed to send email invitations' });
+                            }
+
+                            console.log('Email invitations sent successfully');
+                            return res.status(200).json({ message: 'Emails stored and invitations sent successfully' });
+                        });
+                    });
+                });
             });
         });
     });
 });
-
-
 
