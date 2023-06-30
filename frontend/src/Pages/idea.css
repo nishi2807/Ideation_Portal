@@ -16,6 +16,7 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 30px;
     margin-left: 18.8%;
+    margin-top: 0%;
 }
 
 .prob-stat {
@@ -24,7 +25,7 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
     margin-left: 18.9%;
-    margin-top: 5%;
+    margin-top: 4%;
 }
 
 #idea_title {
@@ -33,14 +34,14 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
     left: 21%;
-    margin-top: 8%;
+    margin-top: 6.5%;
 }
 
 #idea_title_box {
     position: absolute;
     display: flex;
     left: 21%;
-    margin-top: 10.5%;
+    margin-top: 8.7%;
     height: 18px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 7px;
@@ -54,14 +55,38 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
     left: 21%;
-    margin-top: 14.5%;
+    margin-top: 12.7%;
 }
 
 #idea_des_box {
     position: absolute;
     display: flex;
     left: 21%;
-    margin-top: 17%;
+    margin-top: 15%;
+    height: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 7px;
+    padding: 0.6%;
+    border: 2px solid black;
+    width: 800px;
+    resize: vertical;
+    min-height: 90px;
+}
+
+#idea_how {
+    position:absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    left: 21%;
+    margin-top: 24%;
+}
+
+#idea_how_box {
+    position: absolute;
+    display: flex;
+    left: 21%;
+    margin-top: 26.5%;
     height: 18px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 7px;
@@ -70,7 +95,7 @@
     /* padding-top: 0%; */
     width: 800px;
     resize: vertical;
-    min-height: 200px;
+    min-height: 90px;
     /* height: 250px; */
     /* text-align:start;
     align-items: flex-start; */
