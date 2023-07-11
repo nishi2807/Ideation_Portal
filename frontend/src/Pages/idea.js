@@ -45,6 +45,7 @@ function Idea() {
             })
             .catch(error => {
                 console.error('Error:', error.response.data);
+                alert('campaign has already been closed !')
                 // Handle the error
             });
 
