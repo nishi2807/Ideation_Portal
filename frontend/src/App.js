@@ -7,6 +7,7 @@ import Login from './Pages/Login';
 import Campaign from './Pages/Campaign';
 import CreateGroup from './Pages/CreateGroup';
 import Initiate_campaign from './Pages/Initiate-campaign';
+import Mnidea from './Pages/mnidea';
 import Idea from './Pages/idea';
 import Vote from './Pages/votes';
 // import SignUp from './Pages/Signup';
