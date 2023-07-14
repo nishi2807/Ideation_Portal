@@ -4,7 +4,7 @@
     /* background-color: blue; */
     width: 1360px;
     height: 400px;
-    overflow: auto;
+    overflow:hidden;
 }
 
 .title {
@@ -102,30 +102,30 @@
     list-style-type: none;
     padding: 0;
     margin: 0;
-  }
-  
-  .pagination .page-item {
+}
+
+.pagination .page-item {
     margin-right: 5px;
-  }
-  
-  .pagination .page-item .page-link {
+}
+
+.pagination .page-item .page-link {
     padding: 5px 10px;
     border: 1px solid #ccc;
     text-decoration: none;
     color: #333;
-  }
-  
-  .pagination .page-item.active .page-link {
+}
+
+.pagination .page-item.active .page-link {
     background-color: #333 !important;
     color: #fff !important;
-  }
-  
-  .pagination .page-item.disabled .page-link {
+}
+
+.pagination .page-item.disabled .page-link {
     pointer-events: none;
     cursor: default;
     color: #ccc;
-  }
-  
+}
+
 
 .submit-container {
     display: flex;

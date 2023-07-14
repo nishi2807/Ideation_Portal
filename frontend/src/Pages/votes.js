@@ -10,10 +10,11 @@ function Vote() {
     const [ideas, setIdeas] = useState([]);
     const location = useLocation();
     const token = new URLSearchParams(location.search).get('token');
-    const entriesPerPage = 5;
+    const entriesPerPage = 7;
     const navigate = useNavigate();
     const [pageNumber, setPageNumber] = useState(0);
     const [pageCount, setPageCount] = useState(0);
+    const [ideaRatings, setIdeaRatings] = useState([]); // Array to store ratings for each idea
 
     useEffect(() => {
         axios
@@ -22,6 +23,7 @@ function Vote() {
                 const allIdeas = response.data;
                 setPageCount(Math.ceil(allIdeas.length / entriesPerPage));
                 setIdeas(allIdeas.slice(pageNumber * entriesPerPage, (pageNumber + 1) * entriesPerPage));
+                setIdeaRatings(allIdeas.map(() => 0)); // Initialize ratings array with 0 for each idea
             })
             .catch((error) => console.error('Error fetching ideas:', error));
     }, [token, pageNumber]);
@@ -33,10 +35,15 @@ function Vote() {
         return text.substr(0, maxLength) + '...';
     };
 
-    const handleVote = (rating, ideaId) => {
-        // Handle the vote for the idea with the provided ideaId
-        // Send the vote to your backend server or update the local state accordingly
-        // console.log(`Voted ${rating} stars for idea with ID: ${ideaId}`);
+    const handleVote = (rating, index) => {
+        // Calculate the correct index for the rating
+        const ideaIndex = pageNumber * entriesPerPage + index;
+        // Create a copy of the ratings array
+        const updatedRatings = [...ideaRatings];
+        // Update the rating for the corresponding idea index
+        updatedRatings[ideaIndex] = rating;
+        // Update the state with the new ratings
+        setIdeaRatings(updatedRatings);
     };
 
     const handlePageChange = ({ selected }) => {
@@ -44,53 +51,57 @@ function Vote() {
     };
 
     const handleReadMore = (ideaId) => {
-        // Handle the "Read More" button click
-        // Redirect to the idea detail page or perform any other desired action
         navigate(`/idea/${ideaId}`);
     };
 
     return (
-        <div className='home-page'>
+        <div className="home-page">
             <Navbar />
-            <div className='main-form'>
+            <div className="main-form">
                 <div>
-                    <h1 className='idea-heading'>Vote these Ideas</h1>
+                    <h1 className="idea-heading">Vote these Ideas</h1>
                 </div>
-                <div className='ideas-con'>
-                    <table className='ideas-table'>
+                <div className="ideas-con">
+                    <table className="ideas-table">
                         <thead>
                             <tr>
                                 <th>Idea Title</th>
                                 <th>Idea Summary</th>
                                 <th>Idea Description</th>
                                 <th>Vote</th>
-                                <th>Read More</th>
+                                <th>Idea Detail</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {ideas.map((idea) => (
-                                <tr key={idea.id}>
-                                    <td className='title'>{truncateText(idea.idea_title, 40)}</td>
-                                    <td className='summ'>{truncateText(idea.idea_summary, 50)}</td>
-                                    <td className='descrip'>{truncateText(idea.idea_description, 55)}</td>
-                                    <td className='votes-cell'>
-                                        <Rating
-                                            count={5}
-                                            size={24}
-                                            activeColor='#ffd700'
-                                            onChange={(rating) => handleVote(rating, idea.id)}
-                                        />
-                                    </td>
-                                    <td>
-                                        <button className='read-more-btn' onClick={() => handleReadMore(idea.id)}>Click Here</button>
-                                    </td>
-                                </tr>
-                            ))}
+                            {ideas.map((idea, index) => {
+                                const ideaIndex = pageNumber * entriesPerPage + index;
+                                return (
+                                    <tr key={idea.id}>
+                                        <td className="title">{truncateText(idea.idea_title, 40)}</td>
+                                        <td className="summ">{truncateText(idea.idea_summary, 50)}</td>
+                                        <td className="descrip">{truncateText(idea.idea_description, 55)}</td>
+                                        <td className="votes-cell">
+                                            <Rating
+                                                count={5}
+                                                size={24}
+                                                activeColor="#ffd700"
+                                                value={ideaRatings[ideaIndex]}
+                                                onChange={(rating) => handleVote(rating, index)}
+                                            />
+                                        </td>
+                                        <td>
+                                            <button className="read-more-btn" onClick={() => handleReadMore(idea.id)}>
+                                                Click Here
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>
-                <div className='submit-container'>
-                    <button className='submit-button'>Submit Votes</button>
+                <div className="submit-container">
+                    <button className="submit-button">Submit Votes</button>
                     <ReactPaginate
                         previousLabel={'◀'}
                         nextLabel={'▶'}
@@ -108,7 +119,6 @@ function Vote() {
                         previousLinkClassName={'page-link'}
                         nextClassName={'page-item'}
                         nextLinkClassName={'page-link'}
-                        // breakClassName={'page-item disabled'}
                         breakLinkClassName={'page-link'}
                     />
                 </div>

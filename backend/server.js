@@ -308,31 +308,77 @@ app.post('/ideas/:campaignId/:token', (req, res) => {
 
 app.post('/ideas', (req, res) => {
     const { token } = req.query;
-  
+
     db.query('SELECT campaign_id FROM campaign_links WHERE token = ?', [token], (error, linkResults) => {
-      if (error) {
-        console.error('Error fetching campaign link data from the database:', error);
-        res.status(500).send('Internal Server Error');
-      } else if (linkResults.length === 0) {
-        res.status(404).send('Campaign link not found');
-      } else {
-        const campId = linkResults[0].campaign_id;
-  
-        // Fetch the ideas that have the associated camp_id
-        db.query(
-          'SELECT idea_title, idea_summary, idea_description FROM ideas WHERE camp_id = ?',
-          [campId],
-          (error, ideaResults) => {
-            if (error) {
-              console.error('Error fetching ideas data from the database:', error);
-              res.status(500).send('Internal Server Error');
-            } else {
-              res.json(ideaResults);
-            }
-          }
-        );
-      }
+        if (error) {
+            console.error('Error fetching campaign link data from the database:', error);
+            res.status(500).send('Internal Server Error');
+        } else if (linkResults.length === 0) {
+            res.status(404).send('Campaign link not found');
+        } else {
+            const campId = linkResults[0].campaign_id;
+
+            // Fetch the ideas that have the associated camp_id
+            db.query(
+                'SELECT idea_title, idea_summary, idea_description FROM ideas WHERE camp_id = ?',
+                [campId],
+                (error, ideaResults) => {
+                    if (error) {
+                        console.error('Error fetching ideas data from the database:', error);
+                        res.status(500).send('Internal Server Error');
+                    } else {
+                        res.json(ideaResults);
+                    }
+                }
+            );
+        }
     });
-  });
-  
+});
+
+
+app.post('/ideas/voting', (req, res) => {
+    const { votes, camp_id } = req.body;
+
+    const selectSql = 'SELECT id FROM ideas WHERE camp_id = ?';
+    const updateSql = 'UPDATE ideas SET votes = ? WHERE camp_id = ? AND id = ?';
+
+    db.query(selectSql, [camp_id], (selectErr, selectResult) => {
+        if (selectErr) {
+            console.error('Error retrieving ideas from the database: ' + selectErr.stack);
+            res.status(500).json({ error: 'Failed to retrieve ideas.' });
+            return;
+        }
+
+        const ideas = selectResult.map((row) => row.id);
+
+        if (ideas.length !== votes.length) {
+            res.status(400).json({ error: 'Number of votes does not match the number of ideas.' });
+            return;
+        }
+
+        const updateNextIdea = (index) => {
+            if (index >= votes.length) {
+                // All ideas have been updated
+                res.status(201).json({ message: 'Ratings inserted successfully.' });
+                return;
+            }
+
+            const vote = votes[index];
+            const ideaId = ideas[index];
+
+            db.query(updateSql, [vote, camp_id, ideaId], (updateErr, updateResult) => {
+                if (updateErr) {
+                    console.error('Error inserting ratings into the database: ' + updateErr.stack);
+                    res.status(500).json({ error: 'Failed to insert ratings.' });
+                    return;
+                }
+
+                // Update the next idea
+                updateNextIdea(index + 1);
+            });
+        };
+
+        updateNextIdea(0); // Start updating from index 0
+    });
+});
 
