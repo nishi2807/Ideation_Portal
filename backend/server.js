@@ -338,47 +338,67 @@ app.post('/ideas', (req, res) => {
 
 app.post('/ideas/voting', (req, res) => {
     const { votes, camp_id } = req.body;
+    const token = req.query.token;
 
-    const selectSql = 'SELECT id FROM ideas WHERE camp_id = ?';
-    const updateSql = 'UPDATE ideas SET votes = ? WHERE camp_id = ? AND id = ?';
+    const selectUserSql = 'SELECT email FROM campaign_links WHERE token = ?';
+    const selectIdeaSql = 'SELECT id FROM ideas WHERE camp_id = ?';
 
-    db.query(selectSql, [camp_id], (selectErr, selectResult) => {
-        if (selectErr) {
-            console.error('Error retrieving ideas from the database: ' + selectErr.stack);
-            res.status(500).json({ error: 'Failed to retrieve ideas.' });
+    const insertSql = 'INSERT INTO vote (Idea_id, camp_id, email, vote) VALUES (?, ?, ?, ?)';
+
+    db.query(selectUserSql, [token], (selectUserErr, selectUserResult) => {
+        if (selectUserErr) {
+            console.error('Error retrieving user information from the database: ' + selectUserErr.stack);
+            res.status(500).json({ error: 'Failed to retrieve user information.' });
             return;
         }
 
-        const ideas = selectResult.map((row) => row.id);
-
-        if (ideas.length !== votes.length) {
-            res.status(400).json({ error: 'Number of votes does not match the number of ideas.' });
+        if (selectUserResult.length === 0) {
+            res.status(404).json({ error: 'Invalid token.' });
             return;
         }
 
-        const updateNextIdea = (index) => {
-            if (index >= votes.length) {
-                // All ideas have been updated
-                res.status(201).json({ message: 'Ratings inserted successfully.' });
+        const userEmail = selectUserResult[0].email;
+
+        db.query(selectIdeaSql, [camp_id], (selectIdeaErr, selectIdeaResult) => {
+            if (selectIdeaErr) {
+                console.error('Error retrieving ideas from the database: ' + selectIdeaErr.stack);
+                res.status(500).json({ error: 'Failed to retrieve ideas.' });
                 return;
             }
 
-            const vote = votes[index];
-            const ideaId = ideas[index];
+            const ideas = selectIdeaResult.map((row) => row.id);
 
-            db.query(updateSql, [vote, camp_id, ideaId], (updateErr, updateResult) => {
-                if (updateErr) {
-                    console.error('Error inserting ratings into the database: ' + updateErr.stack);
-                    res.status(500).json({ error: 'Failed to insert ratings.' });
+            if (ideas.length !== votes.length) {
+                res.status(400).json({ error: 'Number of votes does not match the number of ideas.' });
+                return;
+            }
+
+            const insertNextVote = (index) => {
+                if (index >= votes.length) {
+                    // All votes have been inserted
+                    res.status(201).json({ message: 'Votes inserted successfully.' });
                     return;
                 }
 
-                // Update the next idea
-                updateNextIdea(index + 1);
-            });
-        };
+                const vote = votes[index];
+                const ideaId = ideas[index];
 
-        updateNextIdea(0); // Start updating from index 0
+                db.query(
+                    insertSql,
+                    [ideaId, camp_id, userEmail, vote],
+                    (insertErr, insertResult) => {
+                        if (insertErr) {
+                            console.error('Error inserting vote into the database: ' + insertErr.stack);
+                            res.status(500).json({ error: 'Failed to insert vote.' });
+                            return;
+                        }
+
+                        insertNextVote(index + 1);
+                    }
+                );
+            };
+
+            insertNextVote(0);
+        });
     });
 });
-

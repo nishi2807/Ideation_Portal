@@ -10,7 +10,7 @@ function Vote() {
     const [ideas, setIdeas] = useState([]);
     const location = useLocation();
     const token = new URLSearchParams(location.search).get('token');
-    const entriesPerPage = 7;
+    const entriesPerPage = 10;
     const navigate = useNavigate();
     const [pageNumber, setPageNumber] = useState(0);
     const [pageCount, setPageCount] = useState(0);
@@ -79,7 +79,7 @@ function Vote() {
                                     <tr key={idea.id}>
                                         <td className="title">{truncateText(idea.idea_title, 40)}</td>
                                         <td className="summ">{truncateText(idea.idea_summary, 50)}</td>
-                                        <td className="descrip">{truncateText(idea.idea_description, 55)}</td>
+                                        <td className="descrip">{truncateText(idea.idea_description, 50)}</td>
                                         <td className="votes-cell">
                                             <Rating
                                                 count={5}
