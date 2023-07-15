@@ -337,13 +337,14 @@ app.post('/ideas', (req, res) => {
 
 
 app.post('/ideas/voting', (req, res) => {
-    const { votes, camp_id } = req.body;
+    const { votes } = req.body;
     const token = req.query.token;
+    const camp_id = req.query.camp_id;
 
     const selectUserSql = 'SELECT email FROM campaign_links WHERE token = ?';
     const selectIdeaSql = 'SELECT id FROM ideas WHERE camp_id = ?';
 
-    const insertSql = 'INSERT INTO vote (Idea_id, camp_id, email, vote) VALUES (?, ?, ?, ?)';
+    const insertSql = 'INSERT INTO vote (idea_id, camp_id, email, vote) VALUES (?, ?, ?, ?)';
 
     db.query(selectUserSql, [token], (selectUserErr, selectUserResult) => {
         if (selectUserErr) {

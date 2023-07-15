@@ -10,11 +10,11 @@ function Vote() {
     const [ideas, setIdeas] = useState([]);
     const location = useLocation();
     const token = new URLSearchParams(location.search).get('token');
+    const campid = new URLSearchParams(location.search).get('camp_id');
     const entriesPerPage = 10;
     const navigate = useNavigate();
     const [pageNumber, setPageNumber] = useState(0);
     const [pageCount, setPageCount] = useState(0);
-    const [ideaRatings, setIdeaRatings] = useState([]); // Array to store ratings for each idea
 
     useEffect(() => {
         axios
@@ -23,7 +23,6 @@ function Vote() {
                 const allIdeas = response.data;
                 setPageCount(Math.ceil(allIdeas.length / entriesPerPage));
                 setIdeas(allIdeas.slice(pageNumber * entriesPerPage, (pageNumber + 1) * entriesPerPage));
-                setIdeaRatings(allIdeas.map(() => 0)); // Initialize ratings array with 0 for each idea
             })
             .catch((error) => console.error('Error fetching ideas:', error));
     }, [token, pageNumber]);
@@ -36,14 +35,13 @@ function Vote() {
     };
 
     const handleVote = (rating, index) => {
-        // Calculate the correct index for the rating
         const ideaIndex = pageNumber * entriesPerPage + index;
-        // Create a copy of the ratings array
-        const updatedRatings = [...ideaRatings];
-        // Update the rating for the corresponding idea index
-        updatedRatings[ideaIndex] = rating;
-        // Update the state with the new ratings
-        setIdeaRatings(updatedRatings);
+        const updatedIdeas = [...ideas];
+        updatedIdeas[ideaIndex] = {
+            ...updatedIdeas[ideaIndex],
+            rating: rating,
+        };
+        setIdeas(updatedIdeas);
     };
 
     const handlePageChange = ({ selected }) => {
@@ -52,6 +50,20 @@ function Vote() {
 
     const handleReadMore = (ideaId) => {
         navigate(`/idea/${ideaId}`);
+    };
+
+    const handleSubmitVotes = () => {
+        const ratings = ideas.map((idea) => idea.rating || 0);
+        console.log(ratings)
+
+        axios
+            .post(`http://localhost:8081/ideas/voting?token=${token}&camp_id=${campid}`, { votes: ratings })
+            .then((response) => {
+                console.log('Votes submitted successfully:', response.data);
+            })
+            .catch((error) => {
+                console.error('Error submitting votes:', error);
+            });
     };
 
     return (
@@ -85,7 +97,7 @@ function Vote() {
                                                 count={5}
                                                 size={24}
                                                 activeColor="#ffd700"
-                                                value={ideaRatings[ideaIndex]}
+                                                value={idea.rating || 0}
                                                 onChange={(rating) => handleVote(rating, index)}
                                             />
                                         </td>
@@ -101,7 +113,9 @@ function Vote() {
                     </table>
                 </div>
                 <div className="submit-container">
-                    <button className="submit-button">Submit Votes</button>
+                    <button className="submit-button" onClick={handleSubmitVotes}>
+                        Submit Votes
+                    </button>
                     <ReactPaginate
                         previousLabel={'◀'}
                         nextLabel={'▶'}
