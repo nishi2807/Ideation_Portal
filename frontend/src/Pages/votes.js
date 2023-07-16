@@ -59,6 +59,7 @@ function Vote() {
         axios
             .post(`http://localhost:8081/ideas/voting?token=${token}&camp_id=${campid}`, { votes: ratings })
             .then((response) => {
+                alert("Your votes are successfully submitted!")
                 console.log('Votes submitted successfully:', response.data);
             })
             .catch((error) => {

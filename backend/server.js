@@ -343,8 +343,10 @@ app.post('/ideas/voting', (req, res) => {
 
     const selectUserSql = 'SELECT email FROM campaign_links WHERE token = ?';
     const selectIdeaSql = 'SELECT id FROM ideas WHERE camp_id = ?';
+    const selectVoteSql = 'SELECT id FROM vote WHERE idea_id = ? AND camp_id = ? AND email = ?';
 
     const insertSql = 'INSERT INTO vote (idea_id, camp_id, email, vote) VALUES (?, ?, ?, ?)';
+    const updateSql = 'UPDATE vote SET vote = ? WHERE idea_id = ? AND camp_id = ? AND email = ?';
 
     db.query(selectUserSql, [token], (selectUserErr, selectUserResult) => {
         if (selectUserErr) {
@@ -374,10 +376,10 @@ app.post('/ideas/voting', (req, res) => {
                 return;
             }
 
-            const insertNextVote = (index) => {
+            const insertOrUpdateNextVote = (index) => {
                 if (index >= votes.length) {
-                    // All votes have been inserted
-                    res.status(201).json({ message: 'Votes inserted successfully.' });
+                    // All votes have been inserted or updated
+                    res.status(201).json({ message: 'Votes inserted/updated successfully.' });
                     return;
                 }
 
@@ -385,21 +387,53 @@ app.post('/ideas/voting', (req, res) => {
                 const ideaId = ideas[index];
 
                 db.query(
-                    insertSql,
-                    [ideaId, camp_id, userEmail, vote],
-                    (insertErr, insertResult) => {
-                        if (insertErr) {
-                            console.error('Error inserting vote into the database: ' + insertErr.stack);
-                            res.status(500).json({ error: 'Failed to insert vote.' });
+                    selectVoteSql,
+                    [ideaId, camp_id, userEmail],
+                    (selectVoteErr, selectVoteResult) => {
+                        if (selectVoteErr) {
+                            console.error('Error retrieving vote from the database: ' + selectVoteErr.stack);
+                            res.status(500).json({ error: 'Failed to retrieve vote.' });
                             return;
                         }
 
-                        insertNextVote(index + 1);
+                        if (selectVoteResult.length === 0) {
+                            // Insert new vote
+                            db.query(
+                                insertSql,
+                                [ideaId, camp_id, userEmail, vote],
+                                (insertErr, insertResult) => {
+                                    if (insertErr) {
+                                        console.error('Error inserting vote into the database: ' + insertErr.stack);
+                                        res.status(500).json({ error: 'Failed to insert vote.' });
+                                        return;
+                                    }
+
+                                    insertOrUpdateNextVote(index + 1);
+                                }
+                            );
+                        } else {
+                            // Update existing vote
+                            const voteId = selectVoteResult[0].id;
+
+                            db.query(
+                                updateSql,
+                                [vote, ideaId, camp_id, userEmail],
+                                (updateErr, updateResult) => {
+                                    if (updateErr) {
+                                        console.error('Error updating vote in the database: ' + updateErr.stack);
+                                        res.status(500).json({ error: 'Failed to update vote.' });
+                                        return;
+                                    }
+
+                                    insertOrUpdateNextVote(index + 1);
+                                }
+                            );
+                        }
                     }
                 );
             };
 
-            insertNextVote(0);
+            insertOrUpdateNextVote(0);
         });
     });
 });
