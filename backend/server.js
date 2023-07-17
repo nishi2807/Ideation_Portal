@@ -553,17 +553,52 @@ app.post('/ideas/ideaContent', (req, res) => {
 
 app.post('/ideas/topVoted', (req, res) => {
     const camp_id = req.body.camp_id;
-  
+
     const selectIdeasSql = 'SELECT id, idea_title, idea_summary, idea_description, votes FROM ideas WHERE camp_id = ? ORDER BY votes DESC LIMIT 5';
-  
+
     db.query(selectIdeasSql, [camp_id], (selectIdeasErr, selectIdeasResult) => {
-      if (selectIdeasErr) {
-        console.error('Error retrieving top voted ideas from the database:', selectIdeasErr);
-        res.status(500).json({ error: 'Failed to retrieve top voted ideas.' });
-        return;
-      }
-  
-      res.status(200).json({ ideas: selectIdeasResult });
+        if (selectIdeasErr) {
+            console.error('Error retrieving top voted ideas from the database:', selectIdeasErr);
+            res.status(500).json({ error: 'Failed to retrieve top voted ideas.' });
+            return;
+        }
+
+        res.status(200).json({ ideas: selectIdeasResult });
     });
-  });
-  
+});
+
+app.post('/ideas/selectedIdeas', (req, res) => {
+    const { token, ideas, camp_id } = req.body;
+    // const camp_id = req.query.camp_id;
+
+    // Verify the email from the token
+    const selectUserSql = 'SELECT email FROM campaign_links WHERE token = ?';
+    db.query(selectUserSql, [token], (selectUserErr, selectUserResult) => {
+        if (selectUserErr) {
+            console.error('Error retrieving user information from the database:', selectUserErr);
+            res.status(500).json({ error: 'Failed to retrieve user information.' });
+            return;
+        }
+
+        if (selectUserResult.length === 0) {
+            res.status(404).json({ error: 'Invalid token.' });
+            return;
+        }
+
+        const userEmail = selectUserResult[0].email;
+
+        // Store the selected ideas
+        const insertSql = 'INSERT INTO selected_ideas (idea_id, camp_id, email) VALUES ?';
+        const values = ideas.map(ideaId => [ideaId, camp_id, userEmail]);
+
+        db.query(insertSql, [values], (insertErr, insertResult) => {
+            if (insertErr) {
+                console.error('Error inserting selected ideas into the database:', insertErr);
+                res.status(500).json({ error: 'Failed to insert selected ideas.' });
+                return;
+            }
+
+            res.status(200).json({ message: 'Selected ideas stored successfully.' });
+        });
+    });
+});
