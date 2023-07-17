@@ -164,9 +164,10 @@ app.post('/campaign/initiate', (req, res) => {
                     return res.status(500).json({ message: 'Failed to initiate campaign' });
                 }
 
-                // Get the email addresses of users in the voting and ideation groups
+                // Get the email addresses of users in the voting, ideation, and management groups
                 const getVoterEmailsQuery = 'SELECT camp_user_email FROM campaign_user WHERE camp_id = ? AND camp_user_role = "V"';
                 const getIdeatorEmailsQuery = 'SELECT camp_user_email FROM campaign_user WHERE camp_id = ? AND camp_user_role = "I"';
+                const getManagementEmailsQuery = 'SELECT camp_user_email FROM campaign_user WHERE camp_id = ? AND camp_user_role = "M"';
 
                 db.query(getVoterEmailsQuery, [camp_id], (getVoterEmailsError, getVoterEmailsResult) => {
                     if (getVoterEmailsError) {
@@ -184,90 +185,131 @@ app.post('/campaign/initiate', (req, res) => {
 
                         const ideatorEmails = getIdeatorEmailsResult.map((user) => user.camp_user_email);
 
-                        // Generate a unique token for each email recipient and send email invitations
-                        const transporter = nodemailer.createTransport({
-                            service: 'gmail',
-                            auth: {
-                                user: 'jobpower14@gmail.com',
-                                pass: 'xcsdbolaiymfadra',
-                            },
-                        });
+                        db.query(getManagementEmailsQuery, [camp_id], (getManagementEmailsError, getManagementEmailsResult) => {
+                            if (getManagementEmailsError) {
+                                console.error('Error retrieving management emails:', getManagementEmailsError);
+                                return res.status(500).json({ message: 'Failed to retrieve management emails' });
+                            }
 
-                        voterEmails.forEach((email) => {
-                            const token = crypto.randomBytes(20).toString('hex');
+                            const managementEmails = getManagementEmailsResult.map((user) => user.camp_user_email);
 
-                            // Store the token, campaign ID, and end date in the campaign_links table
-                            const storeLinkQuery = 'INSERT INTO campaign_links (token, campaign_id, end_date, email) VALUES (?, ?, ?, ?)';
-                            db.query(storeLinkQuery, [token, camp_id, camp_enddate, email], (storeError, storeResult) => {
-                                if (storeError) {
-                                    console.error('Error storing campaign link:', storeError);
-                                    return res.status(500).json({ message: 'Failed to store campaign link' });
-                                }
+                            // Generate a unique token for each email recipient and send email invitations
+                            const transporter = nodemailer.createTransport({
+                                service: 'gmail',
+                                auth: {
+                                    user: 'jobpower14@gmail.com',
+                                    pass: 'xcsdbolaiymfadra',
+                                },
+                            });
 
-                                const encodedCampTitle = encodeURIComponent(camp_title);
+                            voterEmails.forEach((email) => {
+                                const token = crypto.randomBytes(20).toString('hex');
 
-                                // Create the link URL with the token for the voting page
-                                const voteURL = `http://localhost:3000/vote?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`;
-
-                                const mailOptions = {
-                                    from: 'jobpower14@gmail.com',
-                                    to: email,
-                                    subject: 'Invitation to Vote',
-                                    text: `The campaign has been initiated, and you are invited to vote. Please click on this link: ${voteURL}`,
-                                };
-
-                                transporter.sendMail(mailOptions, (emailError, info) => {
-                                    if (emailError) {
-                                        console.error('Error sending email invitation:', emailError);
-                                        return res.status(500).json({ message: 'Failed to send email invitation' });
+                                // Store the token, campaign ID, and end date in the campaign_links table
+                                const storeLinkQuery = 'INSERT INTO campaign_links (token, campaign_id, end_date, email) VALUES (?, ?, ?, ?)';
+                                db.query(storeLinkQuery, [token, camp_id, camp_enddate, email], (storeError, storeResult) => {
+                                    if (storeError) {
+                                        console.error('Error storing campaign link:', storeError);
+                                        return res.status(500).json({ message: 'Failed to store campaign link' });
                                     }
-                                    console.log(`Vote invitation email sent successfully to ${email}`);
+
+                                    const encodedCampTitle = encodeURIComponent(camp_title);
+
+                                    // Create the link URL with the token for the voting page
+                                    const voteURL = `http://localhost:3000/vote?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`;
+
+                                    const mailOptions = {
+                                        from: 'jobpower14@gmail.com',
+                                        to: email,
+                                        subject: 'Invitation to Vote',
+                                        text: `The campaign has been initiated, and you are invited to vote. Please click on this link: ${voteURL}`,
+                                    };
+
+                                    transporter.sendMail(mailOptions, (emailError, info) => {
+                                        if (emailError) {
+                                            console.error('Error sending email invitation:', emailError);
+                                            return res.status(500).json({ message: 'Failed to send email invitation' });
+                                        }
+                                        console.log(`Vote invitation email sent successfully to ${email}`);
+                                    });
                                 });
                             });
-                        });
 
-                        ideatorEmails.forEach((email) => {
-                            const token = crypto.randomBytes(20).toString('hex');
+                            ideatorEmails.forEach((email) => {
+                                const token = crypto.randomBytes(20).toString('hex');
 
-                            // Store the token, campaign ID, and end date in the campaign_links table
-                            const storeLinkQuery = 'INSERT INTO campaign_links (token, campaign_id, end_date, email) VALUES (?, ?, ?, ?)';
-                            db.query(storeLinkQuery, [token, camp_id, camp_enddate, email], (storeError, storeResult) => {
-                                if (storeError) {
-                                    console.error('Error storing campaign link:', storeError);
-                                    return res.status(500).json({ message: 'Failed to store campaign link' });
-                                }
-
-                                const encodedCampTitle = encodeURIComponent(camp_title);
-
-                                // Create the link URL with the token for the ideation page
-                                const postIdeaURL = `http://localhost:3000/post-idea?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`;
-
-                                const mailOptions = {
-                                    from: 'jobpower14@gmail.com',
-                                    to: email,
-                                    subject: 'Invitation to Post Idea',
-                                    text: `The campaign has been initiated, and you can now post your ideas. Please click on this link: ${postIdeaURL}`,
-                                };
-
-                                transporter.sendMail(mailOptions, (emailError, info) => {
-                                    if (emailError) {
-                                        console.error('Error sending email invitation:', emailError);
-                                        return res.status(500).json({ message: 'Failed to send email invitation' });
+                                // Store the token, campaign ID, and end date in the campaign_links table
+                                const storeLinkQuery = 'INSERT INTO campaign_links (token, campaign_id, end_date, email) VALUES (?, ?, ?, ?)';
+                                db.query(storeLinkQuery, [token, camp_id, camp_enddate, email], (storeError, storeResult) => {
+                                    if (storeError) {
+                                        console.error('Error storing campaign link:', storeError);
+                                        return res.status(500).json({ message: 'Failed to store campaign link' });
                                     }
-                                    console.log(`Idea invitation email sent successfully to ${email}`);
+
+                                    const encodedCampTitle = encodeURIComponent(camp_title);
+
+                                    // Create the link URL with the token for the ideation page
+                                    const postIdeaURL = `http://localhost:3000/post-idea?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`;
+
+                                    const mailOptions = {
+                                        from: 'jobpower14@gmail.com',
+                                        to: email,
+                                        subject: 'Invitation to Post Idea',
+                                        text: `The campaign has been initiated, and you can now post your ideas. Please click on this link: ${postIdeaURL}`,
+                                    };
+
+                                    transporter.sendMail(mailOptions, (emailError, info) => {
+                                        if (emailError) {
+                                            console.error('Error sending email invitation:', emailError);
+                                            return res.status(500).json({ message: 'Failed to send email invitation' });
+                                        }
+                                        console.log(`Idea invitation email sent successfully to ${email}`);
+                                    });
                                 });
                             });
-                        });
 
-                        console.log('Campaign initiated successfully');
-                        return res.status(200).json({ message: 'Emails stored and invitations sent successfully' });
+                            managementEmails.forEach((email) => {
+                                const token = crypto.randomBytes(20).toString('hex');
+
+                                // Store the token, campaign ID, and end date in the campaign_links table
+                                const storeLinkQuery = 'INSERT INTO campaign_links (token, campaign_id, end_date, email) VALUES (?, ?, ?, ?)';
+                                db.query(storeLinkQuery, [token, camp_id, camp_enddate, email], (storeError, storeResult) => {
+                                    if (storeError) {
+                                        console.error('Error storing campaign link:', storeError);
+                                        return res.status(500).json({ message: 'Failed to store campaign link' });
+                                    }
+
+                                    const encodedCampTitle = encodeURIComponent(camp_title);
+
+                                    // Create the link URL with the token for the management page
+                                    const managementURL = `http://localhost:3000/management?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`;
+
+                                    const mailOptions = {
+                                        from: 'jobpower14@gmail.com',
+                                        to: email,
+                                        subject: 'Invitation to Management',
+                                        text: `The campaign has been initiated, and you are invited to manage the campaign. Please click on this link: ${managementURL}`,
+                                    };
+
+                                    transporter.sendMail(mailOptions, (emailError, info) => {
+                                        if (emailError) {
+                                            console.error('Error sending email invitation:', emailError);
+                                            return res.status(500).json({ message: 'Failed to send email invitation' });
+                                        }
+                                        console.log(`Management invitation email sent successfully to ${email}`);
+                                    });
+                                });
+                            });
+
+                            console.log('Campaign initiated successfully');
+                            return res.status(200).json({ message: 'Emails stored and invitations sent successfully' });
+                        });
                     });
                 });
             });
         });
     });
 });
-
 
 app.post('/ideas/:campaignId/:token', (req, res) => {
     const { idea_title, idea_summary, idea_description } = req.body;
@@ -347,6 +389,7 @@ app.post('/ideas/voting', (req, res) => {
 
     const insertSql = 'INSERT INTO vote (idea_id, camp_id, email, vote) VALUES (?, ?, ?, ?)';
     const updateSql = 'UPDATE vote SET vote = ? WHERE idea_id = ? AND camp_id = ? AND email = ?';
+    const calculateAverageSql = 'SELECT idea_id, AVG(vote) AS average_vote FROM vote WHERE camp_id = ? GROUP BY idea_id';
 
     db.query(selectUserSql, [token], (selectUserErr, selectUserResult) => {
         if (selectUserErr) {
@@ -379,7 +422,32 @@ app.post('/ideas/voting', (req, res) => {
             const insertOrUpdateNextVote = (index) => {
                 if (index >= votes.length) {
                     // All votes have been inserted or updated
-                    res.status(201).json({ message: 'Votes inserted/updated successfully.' });
+
+                    // Calculate average vote for each idea
+                    db.query(calculateAverageSql, [camp_id], (calculateAverageErr, calculateAverageResult) => {
+                        if (calculateAverageErr) {
+                            console.error('Error calculating average vote:', calculateAverageErr);
+                            res.status(500).json({ error: 'Failed to calculate average vote.' });
+                            return;
+                        }
+
+                        // Update the ideas table with the calculated average vote
+                        calculateAverageResult.forEach((averageVote) => {
+                            const { idea_id, average_vote } = averageVote;
+                            db.query(
+                                'UPDATE ideas SET votes = ? WHERE id = ?',
+                                [average_vote, idea_id],
+                                (updateErr, updateResult) => {
+                                    if (updateErr) {
+                                        console.error('Error updating idea with average vote:', updateErr);
+                                    }
+                                }
+                            );
+                        });
+
+                        res.status(201).json({ message: 'Votes inserted/updated successfully.' });
+                    });
+
                     return;
                 }
 
@@ -435,5 +503,50 @@ app.post('/ideas/voting', (req, res) => {
 
             insertOrUpdateNextVote(0);
         });
+    });
+});
+
+
+app.post('/ideas/ideaId', (req, res) => {
+    const camp_id = req.query.camp_id;
+
+    const selectIdeaIdSql = 'SELECT id FROM ideas WHERE camp_id = ? ORDER BY id';
+
+    db.query(selectIdeaIdSql, [camp_id], (selectIdeaIdErr, selectIdeaIdResult) => {
+        if (selectIdeaIdErr) {
+            console.error('Error retrieving ideaId from the database:', selectIdeaIdErr);
+            res.status(500).json({ error: 'Failed to retrieve ideaId.' });
+            return;
+        }
+
+        if (selectIdeaIdResult.length === 0) {
+            res.status(404).json({ error: 'No ideas found for the given camp_id.' });
+            return;
+        }
+
+        const ideaIds = selectIdeaIdResult.map((row) => row.id);
+        res.status(200).json({ ideaIds });
+    });
+});
+
+app.post('/ideas/ideaContent', (req, res) => {
+    const ideaId = req.query.idea_id;
+
+    const selectIdeaContentSql = 'SELECT idea_title, idea_summary, idea_description FROM ideas WHERE id = ?';
+
+    db.query(selectIdeaContentSql, [ideaId], (selectIdeaContentErr, selectIdeaContentResult) => {
+        if (selectIdeaContentErr) {
+            console.error('Error retrieving idea content from the database:', selectIdeaContentErr);
+            res.status(500).json({ error: 'Failed to retrieve idea content.' });
+            return;
+        }
+
+        if (selectIdeaContentResult.length === 0) {
+            res.status(404).json({ error: 'No idea found for the given idea ID.' });
+            return;
+        }
+
+        const ideaContent = selectIdeaContentResult[0];
+        res.status(200).json({ ideaContent });
     });
 });

@@ -10,6 +10,8 @@ import Initiate_campaign from './Pages/Initiate-campaign';
 import Mnidea from './Pages/mnidea';
 import Idea from './Pages/idea';
 import Vote from './Pages/votes';
+import Manage from './Pages/Manage';
+import IdeaDetails from './Pages/IdeaDetails';
 // import SignUp from './Pages/Signup';
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
           <Route path='/initiate-campaign' element={<Initiate_campaign/>}></Route>
           <Route path='/post-idea' element={<Idea/>}></Route>
           <Route path='/vote' element={<Vote/>}></Route>
+          <Route path='/management' element={<Manage/>}></Route>
+          <Route path="/idea-content/:ideaId" element={<IdeaDetails/>}></Route>
         </Routes>
       </BrowserRouter>
     </div>

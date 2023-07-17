@@ -1,0 +1,43 @@
+.idea-det {
+    position:absolute;
+    display: flex;
+    height: 400px;
+    overflow: auto;
+    width: 850px;
+    /* background-color: red; */
+    top: 20%;
+    margin-left: 19%;
+}
+
+.idea-summ {
+    position:absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 150;
+    top: 40px;
+}
+
+.des-title{
+    font-family: Arial, Helvetica, sans-serif;
+    top: 150px;
+    position: absolute;
+}
+
+.summ-title{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.idea-des {
+    position:absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 150;
+    top: 190px;
+}
+
+.des {
+    position: absolute;
+    height: fit-content;
+    width: 830px;
+    margin-top: 5%;
+}

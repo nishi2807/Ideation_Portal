@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../Components/Navbar';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate , Link } from 'react-router-dom';
 import Rating from 'react-rating-stars-component';
 import './votes.css';
 import ReactPaginate from 'react-paginate';
@@ -15,6 +15,7 @@ function Vote() {
     const navigate = useNavigate();
     const [pageNumber, setPageNumber] = useState(0);
     const [pageCount, setPageCount] = useState(0);
+    const [ideaIds, setIdeaIds] = useState([]);
 
     useEffect(() => {
         axios
@@ -22,10 +23,22 @@ function Vote() {
             .then((response) => {
                 const allIdeas = response.data;
                 setPageCount(Math.ceil(allIdeas.length / entriesPerPage));
-                setIdeas(allIdeas.slice(pageNumber * entriesPerPage, (pageNumber + 1) * entriesPerPage));
+                const ideasToDisplay = allIdeas.slice(pageNumber * entriesPerPage, (pageNumber + 1) * entriesPerPage);
+                setIdeas(ideasToDisplay);
             })
             .catch((error) => console.error('Error fetching ideas:', error));
     }, [token, pageNumber]);
+
+    useEffect(() => {
+        axios
+            .post(`http://localhost:8081/ideas/ideaId?camp_id=${campid}`)
+            .then((response) => {
+                const { ideaIds } = response.data;
+                setIdeaIds(ideaIds);
+            })
+            .catch((error) => console.error('Error fetching idea IDs:', error));
+    }, [campid]);
+
 
     const truncateText = (text, maxLength) => {
         if (text.length <= maxLength) {
@@ -49,7 +62,7 @@ function Vote() {
     };
 
     const handleReadMore = (ideaId) => {
-        navigate(`/idea/${ideaId}`);
+        navigate(`/idea-content/${ideaId}`);
     };
 
     const handleSubmitVotes = () => {
@@ -66,6 +79,21 @@ function Vote() {
                 console.error('Error submitting votes:', error);
             });
     };
+
+    const fetchIdeaContent = (ideaId) => {
+        axios
+            .post(`http://localhost:8081/ideas/ideaContent?idea_id=${ideaId}`)
+            .then((response) => {
+                const { ideaContent } = response.data;
+                // console.log('Idea Content:', ideaContent);
+
+                // <Link to={`/idea-content/${ideaId}`} state={{ ideaContent }}>Click Here</Link>
+
+                navigate(`/idea-content/${ideaId}`, { state: { ideaContent } });
+            })
+            .catch((error) => console.error('Error fetching idea content:', error));
+    };
+
 
     return (
         <div className="home-page">
@@ -88,8 +116,10 @@ function Vote() {
                         <tbody>
                             {ideas.map((idea, index) => {
                                 const ideaIndex = pageNumber * entriesPerPage + index;
+                                const ideaId = ideaIds[ideaIndex];
+                                // console.log('Mapped ideaId:', ideaId);
                                 return (
-                                    <tr key={idea.id}>
+                                    <tr key={ideaId}>
                                         <td className="title">{truncateText(idea.idea_title, 40)}</td>
                                         <td className="summ">{truncateText(idea.idea_summary, 50)}</td>
                                         <td className="descrip">{truncateText(idea.idea_description, 50)}</td>
@@ -103,7 +133,7 @@ function Vote() {
                                             />
                                         </td>
                                         <td>
-                                            <button className="read-more-btn" onClick={() => handleReadMore(idea.id)}>
+                                            <button className="read-more-btn" onClick={() => fetchIdeaContent(ideaId)}>
                                                 Click Here
                                             </button>
                                         </td>
