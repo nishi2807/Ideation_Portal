@@ -550,3 +550,20 @@ app.post('/ideas/ideaContent', (req, res) => {
         res.status(200).json({ ideaContent });
     });
 });
+
+app.post('/ideas/topVoted', (req, res) => {
+    const camp_id = req.body.camp_id;
+  
+    const selectIdeasSql = 'SELECT id, idea_title, idea_summary, idea_description, votes FROM ideas WHERE camp_id = ? ORDER BY votes DESC LIMIT 5';
+  
+    db.query(selectIdeasSql, [camp_id], (selectIdeasErr, selectIdeasResult) => {
+      if (selectIdeasErr) {
+        console.error('Error retrieving top voted ideas from the database:', selectIdeasErr);
+        res.status(500).json({ error: 'Failed to retrieve top voted ideas.' });
+        return;
+      }
+  
+      res.status(200).json({ ideas: selectIdeasResult });
+    });
+  });
+  

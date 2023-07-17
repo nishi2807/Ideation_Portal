@@ -92,7 +92,7 @@
     font-size: 18px;
     padding: 0.7%;
     border: #ffa559;
-    width: 150px;
+    width: fit-content;
     top: 530px;
     right: 50px;
     border-radius: 10px;
