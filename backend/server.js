@@ -554,7 +554,7 @@ app.post('/ideas/ideaContent', (req, res) => {
 app.post('/ideas/topVoted', (req, res) => {
     const camp_id = req.body.camp_id;
 
-    const selectIdeasSql = 'SELECT id, idea_title, idea_summary, idea_description, votes FROM ideas WHERE camp_id = ? ORDER BY votes DESC LIMIT 5';
+    const selectIdeasSql = 'SELECT id, idea_title, idea_summary, idea_description, votes FROM ideas WHERE camp_id = ? ORDER BY votes DESC LIMIT 10';
 
     db.query(selectIdeasSql, [camp_id], (selectIdeasErr, selectIdeasResult) => {
         if (selectIdeasErr) {

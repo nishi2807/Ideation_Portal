@@ -69,18 +69,18 @@ function Manage() {
             <Navbar />
             <div className='main-form'>
                 <div>
-                    <h1 className='idea-heading'>Top 5 Voted Ideas</h1>
+                    <h1 className='idea-heading'>Top 10 Voted Ideas</h1>
                 </div>
                 <div className='ideas-con'>
                     <table className='ideas-table'>
                         <thead>
                             <tr>
-                                <th>Title</th>
-                                <th>Summary</th>
-                                <th>Description</th>
+                                <th>Idea Title</th>
+                                <th>Idea Summary</th>
+                                <th>Idea Implimentation</th>
                                 <th>Rating</th>
                                 <th>Select</th>
-                                <th>Read More</th>
+                                <th>Idea Details</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -88,7 +88,7 @@ function Manage() {
                                 <tr key={idea.id}>
                                     <td className='title'>{truncateText(idea.idea_title, 40)}</td>
                                     <td className='summ'>{truncateText(idea.idea_summary, 50)}</td>
-                                    <td className='descrip'>{truncateText(idea.idea_description, 55)}</td>
+                                    <td className='descrip'>{truncateText(idea.idea_description, 50)}</td>
                                     <td>{idea.votes}</td>
                                     <td>
                                         <input

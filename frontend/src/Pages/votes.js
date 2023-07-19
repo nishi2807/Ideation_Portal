@@ -108,7 +108,7 @@ function Vote() {
                             <tr>
                                 <th>Idea Title</th>
                                 <th>Idea Summary</th>
-                                <th>Idea Description</th>
+                                <th>Idea Implimentation</th>
                                 <th>Vote</th>
                                 <th>Idea Detail</th>
                             </tr>
@@ -126,7 +126,7 @@ function Vote() {
                                         <td className="votes-cell">
                                             <Rating
                                                 count={5}
-                                                size={24}
+                                                size={20}
                                                 activeColor="#ffd700"
                                                 value={idea.rating || 0}
                                                 onChange={(rating) => handleVote(rating, index)}
