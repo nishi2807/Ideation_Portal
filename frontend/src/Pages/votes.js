@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../Components/Navbar';
 import axios from 'axios';
-import { useLocation, useNavigate , Link } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import Rating from 'react-rating-stars-component';
 import './votes.css';
 import ReactPaginate from 'react-paginate';
 
 function Vote() {
     const [ideas, setIdeas] = useState([]);
+    const [allIdeas, setAllIdeas] = useState([]); // New state for storing all ideas
     const location = useLocation();
     const token = new URLSearchParams(location.search).get('token');
     const campid = new URLSearchParams(location.search).get('camp_id');
@@ -16,14 +17,30 @@ function Vote() {
     const [pageNumber, setPageNumber] = useState(0);
     const [pageCount, setPageCount] = useState(0);
     const [ideaIds, setIdeaIds] = useState([]);
+    const [prevRatings, setPrevRatings] = useState([]);
+
+    useEffect(() => {
+        setPrevRatings((prevRatings) => {
+            const updatedPrevRatings = [...prevRatings];
+            for (let i = prevRatings.length; i < pageCount; i++) {
+                updatedPrevRatings[i] = [];
+            }
+            return updatedPrevRatings;
+        });
+    }, [pageCount]);
+
 
     useEffect(() => {
         axios
             .post(`http://localhost:8081/ideas?token=${token}`)
             .then((response) => {
                 const allIdeas = response.data;
+                setAllIdeas(allIdeas); // Store all ideas in the state
                 setPageCount(Math.ceil(allIdeas.length / entriesPerPage));
-                const ideasToDisplay = allIdeas.slice(pageNumber * entriesPerPage, (pageNumber + 1) * entriesPerPage);
+                const ideasToDisplay = allIdeas.slice(
+                    pageNumber * entriesPerPage,
+                    (pageNumber + 1) * entriesPerPage
+                );
                 setIdeas(ideasToDisplay);
             })
             .catch((error) => console.error('Error fetching ideas:', error));
@@ -39,7 +56,6 @@ function Vote() {
             .catch((error) => console.error('Error fetching idea IDs:', error));
     }, [campid]);
 
-
     const truncateText = (text, maxLength) => {
         if (text.length <= maxLength) {
             return text;
@@ -48,31 +64,26 @@ function Vote() {
     };
 
     const handleVote = (rating, index) => {
-        const ideaIndex = pageNumber * entriesPerPage + index;
-        const updatedIdeas = [...ideas];
-        updatedIdeas[ideaIndex] = {
-            ...updatedIdeas[ideaIndex],
-            rating: rating,
-        };
-        setIdeas(updatedIdeas);
+        setPrevRatings((prevRatings) => {
+            const updatedRatings = [...prevRatings];
+            updatedRatings[pageNumber] = [...updatedRatings[pageNumber]]; // Create a new array to ensure immutability
+            updatedRatings[pageNumber][index] = rating;
+            return updatedRatings;
+        });
     };
 
     const handlePageChange = ({ selected }) => {
         setPageNumber(selected);
     };
 
-    const handleReadMore = (ideaId) => {
-        navigate(`/idea-content/${ideaId}`);
-    };
-
     const handleSubmitVotes = () => {
-        const ratings = ideas.map((idea) => idea.rating || 0);
-        console.log(ratings)
+        const allRatings = prevRatings.flat(); // Flatten the ratings array
+        console.log(allRatings);
 
         axios
-            .post(`http://localhost:8081/ideas/voting?token=${token}&camp_id=${campid}`, { votes: ratings })
+            .post(`http://localhost:8081/ideas/voting?token=${token}&camp_id=${campid}`, { votes: allRatings })
             .then((response) => {
-                alert("Your votes are successfully submitted!")
+                alert('Your votes are successfully submitted!');
                 console.log('Votes submitted successfully:', response.data);
             })
             .catch((error) => {
@@ -85,15 +96,10 @@ function Vote() {
             .post(`http://localhost:8081/ideas/ideaContent?idea_id=${ideaId}`)
             .then((response) => {
                 const { ideaContent } = response.data;
-                // console.log('Idea Content:', ideaContent);
-
-                // <Link to={`/idea-content/${ideaId}`} state={{ ideaContent }}>Click Here</Link>
-
                 navigate(`/idea-content/${ideaId}`, { state: { ideaContent } });
             })
             .catch((error) => console.error('Error fetching idea content:', error));
     };
-
 
     return (
         <div className="home-page">
@@ -117,7 +123,6 @@ function Vote() {
                             {ideas.map((idea, index) => {
                                 const ideaIndex = pageNumber * entriesPerPage + index;
                                 const ideaId = ideaIds[ideaIndex];
-                                // console.log('Mapped ideaId:', ideaId);
                                 return (
                                     <tr key={ideaId}>
                                         <td className="title">{truncateText(idea.idea_title, 40)}</td>
@@ -128,12 +133,15 @@ function Vote() {
                                                 count={5}
                                                 size={20}
                                                 activeColor="#ffd700"
-                                                value={idea.rating || 0}
+                                                value={prevRatings[pageNumber]?.[index] || 0} // Use previous rating if available
                                                 onChange={(rating) => handleVote(rating, index)}
                                             />
                                         </td>
                                         <td>
-                                            <button className="read-more-btn" onClick={() => fetchIdeaContent(ideaId)}>
+                                            <button
+                                                className="read-more-btn"
+                                                onClick={() => fetchIdeaContent(ideaId)}
+                                            >
                                                 Click Here
                                             </button>
                                         </td>
