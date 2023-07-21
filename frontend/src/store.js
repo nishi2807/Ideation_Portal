@@ -1,7 +1,7 @@
 import { createStore } from "redux";
 
 const initialState = {
-  CurrentUser_name: null,
+  CurrentUser_name: "",
 };
 
 const reducer = (state = initialState, action) => {

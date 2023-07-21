@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
 import './Campaign.css';
+import { useSelector } from 'react-redux';
 
 function Campaign() {
     const Navigate = useNavigate();
@@ -21,6 +22,8 @@ function Campaign() {
     const initiate_camp = () => {
         Navigate('/initiate-campaign')
     }
+
+    const currentuser = useSelector((state) => state.currentUser);
 
     return (
         <div className='home-page'>
