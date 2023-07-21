@@ -54,7 +54,8 @@
     font-style: normal;
     font-size: 20px;
     display: flex;
-    left: 1295px;
+    /* left: 1295px; */
+    right: 5%;
 }
 
 .user-con{
@@ -62,7 +63,7 @@
     position:absolute;
     width: 36px;
     height: 36px;
-    left: 1410px;
+    left: 1470px;
     border-radius: 25px;
 }
 

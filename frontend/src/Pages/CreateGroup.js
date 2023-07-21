@@ -63,11 +63,11 @@ function CreateGroup() {
                 <hr className="hori-line"></hr>
                 <p className="menu-content" style={{ color: '#FFa559' }} onClick={campaign}>Campaigns</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">Your Ideas</p>
+                <p className="menu-content">Ideation</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">All Ideas</p>
+                <p className="menu-content">Voting</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">Review Ideas</p>
+                <p className="menu-content">Management</p>
                 <hr className="hori-line"></hr>
                 <p className="menu-content">About Us</p>
                 <hr className="hori-line"></hr>
