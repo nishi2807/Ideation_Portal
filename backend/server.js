@@ -14,7 +14,7 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "registeration"
+    database: "ideation_portal"
 })
 
 app.listen(8081, () => {
