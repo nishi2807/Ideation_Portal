@@ -670,3 +670,48 @@ app.post('/get-user-details', (req, res) => {
         });
     });
 });
+
+app.post('/get-user-campaigns', (req, res) => {
+    const { name } = req.body;
+
+    const selectUserSql = 'SELECT email FROM users WHERE name = ?';
+    const selectUserCampaignsSql = `
+      SELECT cu.camp_id, c.camp_startdate, c.camp_enddate, c.camp_owner, c.camp_title, c.camp_users
+      FROM campaign_user cu
+      INNER JOIN campaigns c ON cu.camp_id = c.camp_id
+      WHERE cu.camp_user_email = ?;
+    `;
+
+    db.query(selectUserSql, [name], (selectUserErr, selectUserResult) => {
+        if (selectUserErr) {
+            console.error('Error retrieving user details from the database:', selectUserErr);
+            res.status(500).json({ error: 'Failed to retrieve user details.' });
+            return;
+        }
+
+        if (selectUserResult.length === 0) {
+            res.status(404).json({ error: 'User not found.' });
+            return;
+        }
+
+        const user = selectUserResult[0];
+        const userEmail = user.email; // Get the user's email from the query result
+
+        // Fetch the campaigns in which the user participated
+        db.query(selectUserCampaignsSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
+            if (selectCampaignsErr) {
+                console.error('Error retrieving user campaigns from the database:', selectCampaignsErr);
+                res.status(500).json({ error: 'Failed to retrieve user campaigns.' });
+                return;
+            }
+
+            if (selectCampaignsResult.length === 0) {
+                res.status(404).json({ error: 'User did not participate in any campaigns.' });
+                return;
+            }
+
+            // Send the campaign details as the response
+            res.status(200).json(selectCampaignsResult);
+        });
+    });
+});

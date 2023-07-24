@@ -24,7 +24,7 @@ function Home() {
     ]
 
     const CurrentUser_name = useSelector((state) => state.CurrentUser_name);
-    console.log(CurrentUser_name)
+    // console.log(CurrentUser_name)
 
     const [totalIdeas, setTotalIdeas] = useState(0);
     const [totalCampaigns, setTotalCampaigns] = useState(0);
