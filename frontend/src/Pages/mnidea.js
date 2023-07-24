@@ -7,23 +7,46 @@ import ReactPaginate from 'react-paginate';
 
 function Mnidea() {
     const [ideas, setIdeas] = useState([]);
-    const [pageNumber, setPageNumber] = useState(0);
-    const [pageCount, setPageCount] = useState(0);
+    const [allIdeas, setAllIdeas] = useState([]); // New state for storing all ideas
     const location = useLocation();
     const token = new URLSearchParams(location.search).get('token');
-    const entriesPerPage = 5;
+    const campid = new URLSearchParams(location.search).get('camp_id');
+    const camptitle = new URLSearchParams(location.search).get('camp_title');
+    const entriesPerPage = 10;
     const navigate = useNavigate();
+    const [pageNumber, setPageNumber] = useState(0);
+    const [pageCount, setPageCount] = useState(0);
+    const [ideaIds, setIdeaIds] = useState([]);
 
     useEffect(() => {
         axios
             .post(`http://localhost:8081/ideas?token=${token}`)
             .then((response) => {
                 const allIdeas = response.data;
+                setAllIdeas(allIdeas); // Store all ideas in the state
                 setPageCount(Math.ceil(allIdeas.length / entriesPerPage));
-                setIdeas(allIdeas.slice(pageNumber * entriesPerPage, (pageNumber + 1) * entriesPerPage));
+                const ideasToDisplay = allIdeas.slice(
+                    pageNumber * entriesPerPage,
+                    (pageNumber + 1) * entriesPerPage
+                );
+                setIdeas(ideasToDisplay);
             })
             .catch((error) => console.error('Error fetching ideas:', error));
     }, [token, pageNumber]);
+
+    useEffect(() => {
+        axios
+            .post(`http://localhost:8081/ideas/ideaId?camp_id=${campid}`)
+            .then((response) => {
+                const { ideaIds } = response.data;
+                setIdeaIds(ideaIds);
+            })
+            .catch((error) => console.error('Error fetching idea IDs:', error));
+    }, [campid]);
+
+    const SubmitIdea = () => {
+        navigate(`/post-idea?token=${token}&camp_title=${camptitle}&camp_id=${campid}`)
+    }
 
     const truncateText = (text, maxLength) => {
         if (text.length <= maxLength) {
@@ -36,10 +59,14 @@ function Mnidea() {
         setPageNumber(selected);
     };
 
-    const handleReadMore = (ideaId) => {
-        // Handle the "Read More" button click
-        // Redirect to the idea detail page or perform any other desired action
-        navigate(`/idea/${ideaId}`);
+    const fetchIdeaContent = (ideaId) => {
+        axios
+            .post(`http://localhost:8081/ideas/ideaContent?idea_id=${ideaId}`)
+            .then((response) => {
+                const { ideaContent } = response.data;
+                navigate(`/idea-content/${ideaId}`, { state: { ideaContent } });
+            })
+            .catch((error) => console.error('Error fetching idea content:', error));
     };
 
     return (
@@ -60,37 +87,48 @@ function Mnidea() {
                             </tr>
                         </thead>
                         <tbody>
-                            {ideas.map((idea) => (
-                                <tr key={idea.id}>
-                                    <td className='title'>{truncateText(idea.idea_title, 40)}</td>
-                                    <td className='summ'>{truncateText(idea.idea_summary, 60)}</td>
-                                    <td className='descrip'>{truncateText(idea.idea_description, 60)}</td>
-                                    <td>
-                                        <button
-                                            className='read-more-btn'
-                                            onClick={() => handleReadMore(idea.id)}
-                                        >
-                                            Click Here
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
+                            {ideas.map((idea, index) => {
+                                const ideaIndex = pageNumber * entriesPerPage + index;
+                                const ideaId = ideaIds[ideaIndex];
+                                return (
+                                    <tr key={ideaId}>
+                                        <td className="ititle">{truncateText(idea.idea_title, 40)}</td>
+                                        <td className="isumm">{truncateText(idea.idea_summary, 50)}</td>
+                                        <td className="idescrip">{truncateText(idea.idea_description, 50)}</td>
+                                        <td>
+                                            <button
+                                                className="read-more-btn"
+                                                onClick={() => fetchIdeaContent(ideaId)}
+                                            >
+                                                Click Here
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>
                 <div className='submit-container'>
-                    <button className='submit-button'>Submit an Idea</button>
+                    <button className='submit-button' onClick={SubmitIdea}>Submit an Idea</button>
                     <ReactPaginate
-                        previousLabel={'Previous'}
-                        nextLabel={'Next'}
+                        previousLabel={'◀'}
+                        nextLabel={'▶'}
                         breakLabel={'...'}
                         breakClassName={'break-me'}
                         pageCount={pageCount}
                         marginPagesDisplayed={2}
-                        pageRangeDisplayed={5}
+                        pageRangeDisplayed={4}
                         onPageChange={handlePageChange}
                         containerClassName={'pagination'}
                         activeClassName={'active'}
+                        pageClassName={'page-item'}
+                        pageLinkClassName={'page-link'}
+                        previousClassName={'page-item'}
+                        previousLinkClassName={'page-link'}
+                        nextClassName={'page-item'}
+                        nextLinkClassName={'page-link'}
+                        breakLinkClassName={'page-link'}
                     />
                 </div>
             </div>

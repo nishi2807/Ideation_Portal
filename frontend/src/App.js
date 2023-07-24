@@ -35,6 +35,7 @@ function App() {
           <Route path='/ideation' element={<Ideation/>}></Route>
           <Route path='/voting' element={<Voting/>}></Route>
           <Route path='/manage' element={<Management/>}></Route>
+          <Route path='/all-ideas' element={<Mnidea/>}></Route>
         </Routes>
       </BrowserRouter>
     </div>

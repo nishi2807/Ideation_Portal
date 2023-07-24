@@ -886,3 +886,45 @@ app.post('/get-user-manage', (req, res) => {
         });
     });
 });
+
+app.post('/get-campaign-token', (req, res) => {
+    const { name, camp_id } = req.body;
+
+    // Fetch the email ID based on the provided username
+    const selectUserSql = 'SELECT email FROM users WHERE name = ?';
+    db.query(selectUserSql, [name], (selectUserErr, selectUserResult) => {
+        if (selectUserErr) {
+            console.error('Error retrieving user details from the database:', selectUserErr);
+            res.status(500).json({ error: 'Failed to retrieve user details.' });
+            return;
+        }
+
+        if (selectUserResult.length === 0) {
+            res.status(404).json({ error: 'User not found.' });
+            return;
+        }
+
+        const user = selectUserResult[0];
+        const userEmail = user.email; // Get the user's email from the query result
+
+        // Fetch the token from the campaign_link table based on camp_id and email
+        const selectCampaignTokenSql = 'SELECT token FROM campaign_links WHERE campaign_id = ? AND email = ?';
+        db.query(selectCampaignTokenSql, [camp_id, userEmail], (selectTokenErr, selectTokenResult) => {
+            if (selectTokenErr) {
+                console.error('Error retrieving campaign token from the database:', selectTokenErr);
+                res.status(500).json({ error: 'Failed to retrieve campaign token.' });
+                return;
+            }
+
+            if (selectTokenResult.length === 0) {
+                res.status(404).json({ error: 'Campaign token not found for the given camp_id and user email.' });
+                return;
+            }
+
+            const token = selectTokenResult[0].token;
+
+            // Send the token as the response
+            res.status(200).json({ token });
+        });
+    });
+});
