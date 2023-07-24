@@ -715,3 +715,174 @@ app.post('/get-user-campaigns', (req, res) => {
         });
     });
 });
+
+app.post('/get-user-idea', (req, res) => {
+    const { name } = req.body;
+
+    const selectUserSql = 'SELECT email FROM users WHERE name = ?';
+    const selectUserCampaignsSql = `
+      SELECT cu.camp_id, c.camp_startdate, c.camp_enddate, c.camp_owner, c.camp_title
+      FROM campaign_user cu
+      INNER JOIN campaigns c ON cu.camp_id = c.camp_id
+      WHERE cu.camp_user_email = ? AND cu.camp_user_role = 'I';
+    `;
+
+    db.query(selectUserSql, [name], (selectUserErr, selectUserResult) => {
+        if (selectUserErr) {
+            console.error('Error retrieving user details from the database:', selectUserErr);
+            res.status(500).json({ error: 'Failed to retrieve user details.' });
+            return;
+        }
+
+        if (selectUserResult.length === 0) {
+            res.status(404).json({ error: 'User not found.' });
+            return;
+        }
+
+        const user = selectUserResult[0];
+        const userEmail = user.email; // Get the user's email from the query result
+
+        // Fetch the campaigns in which the user participated as an Ideator
+        db.query(selectUserCampaignsSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
+            if (selectCampaignsErr) {
+                console.error('Error retrieving user campaigns from the database:', selectCampaignsErr);
+                res.status(500).json({ error: 'Failed to retrieve user campaigns.' });
+                return;
+            }
+
+            if (selectCampaignsResult.length === 0) {
+                res.status(404).json({ error: 'User did not participate in any campaigns as an Ideator.' });
+                return;
+            }
+
+            // Store unique campaign details based on camp_id
+            const uniqueCampaignsMap = {};
+
+            selectCampaignsResult.forEach((campaign) => {
+                if (!uniqueCampaignsMap[campaign.camp_id]) {
+                    uniqueCampaignsMap[campaign.camp_id] = campaign;
+                }
+            });
+
+            // Convert the object back to an array of unique campaigns
+            const uniqueCampaigns = Object.values(uniqueCampaignsMap);
+
+            // Send the campaign details as the response
+            res.status(200).json(uniqueCampaigns);
+        });
+    });
+});
+
+app.post('/get-user-vote', (req, res) => {
+    const { name } = req.body;
+
+    const selectUserSql = 'SELECT email FROM users WHERE name = ?';
+    const selectUserCampaignsSql = `
+      SELECT cu.camp_id, c.camp_startdate, c.camp_enddate, c.camp_owner, c.camp_title
+      FROM campaign_user cu
+      INNER JOIN campaigns c ON cu.camp_id = c.camp_id
+      WHERE cu.camp_user_email = ? AND cu.camp_user_role = 'V';
+    `;
+
+    db.query(selectUserSql, [name], (selectUserErr, selectUserResult) => {
+        if (selectUserErr) {
+            console.error('Error retrieving user details from the database:', selectUserErr);
+            res.status(500).json({ error: 'Failed to retrieve user details.' });
+            return;
+        }
+
+        if (selectUserResult.length === 0) {
+            res.status(404).json({ error: 'User not found.' });
+            return;
+        }
+
+        const user = selectUserResult[0];
+        const userEmail = user.email; // Get the user's email from the query result
+
+        // Fetch the campaigns in which the user participated as an Ideator
+        db.query(selectUserCampaignsSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
+            if (selectCampaignsErr) {
+                console.error('Error retrieving user campaigns from the database:', selectCampaignsErr);
+                res.status(500).json({ error: 'Failed to retrieve user campaigns.' });
+                return;
+            }
+
+            if (selectCampaignsResult.length === 0) {
+                res.status(404).json({ error: 'User did not participate in any campaigns as an Ideator.' });
+                return;
+            }
+
+            // Store unique campaign details based on camp_id
+            const uniqueCampaignsMap = {};
+
+            selectCampaignsResult.forEach((campaign) => {
+                if (!uniqueCampaignsMap[campaign.camp_id]) {
+                    uniqueCampaignsMap[campaign.camp_id] = campaign;
+                }
+            });
+
+            // Convert the object back to an array of unique campaigns
+            const uniqueCampaigns = Object.values(uniqueCampaignsMap);
+
+            // Send the campaign details as the response
+            res.status(200).json(uniqueCampaigns);
+        });
+    });
+});
+
+app.post('/get-user-manage', (req, res) => {
+    const { name } = req.body;
+
+    const selectUserSql = 'SELECT email FROM users WHERE name = ?';
+    const selectUserCampaignsSql = `
+      SELECT cu.camp_id, c.camp_startdate, c.camp_enddate, c.camp_owner, c.camp_title
+      FROM campaign_user cu
+      INNER JOIN campaigns c ON cu.camp_id = c.camp_id
+      WHERE cu.camp_user_email = ? AND cu.camp_user_role = 'M';
+    `;
+
+    db.query(selectUserSql, [name], (selectUserErr, selectUserResult) => {
+        if (selectUserErr) {
+            console.error('Error retrieving user details from the database:', selectUserErr);
+            res.status(500).json({ error: 'Failed to retrieve user details.' });
+            return;
+        }
+
+        if (selectUserResult.length === 0) {
+            res.status(404).json({ error: 'User not found.' });
+            return;
+        }
+
+        const user = selectUserResult[0];
+        const userEmail = user.email; // Get the user's email from the query result
+
+        // Fetch the campaigns in which the user participated as an Ideator
+        db.query(selectUserCampaignsSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
+            if (selectCampaignsErr) {
+                console.error('Error retrieving user campaigns from the database:', selectCampaignsErr);
+                res.status(500).json({ error: 'Failed to retrieve user campaigns.' });
+                return;
+            }
+
+            if (selectCampaignsResult.length === 0) {
+                res.status(404).json({ error: 'User did not participate in any campaigns as an Ideator.' });
+                return;
+            }
+
+            // Store unique campaign details based on camp_id
+            const uniqueCampaignsMap = {};
+
+            selectCampaignsResult.forEach((campaign) => {
+                if (!uniqueCampaignsMap[campaign.camp_id]) {
+                    uniqueCampaignsMap[campaign.camp_id] = campaign;
+                }
+            });
+
+            // Convert the object back to an array of unique campaigns
+            const uniqueCampaigns = Object.values(uniqueCampaignsMap);
+
+            // Send the campaign details as the response
+            res.status(200).json(uniqueCampaigns);
+        });
+    });
+});

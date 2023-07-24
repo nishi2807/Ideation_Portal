@@ -12,6 +12,9 @@ import Idea from './Pages/idea';
 import Vote from './Pages/votes';
 import Manage from './Pages/Manage';
 import IdeaDetails from './Pages/IdeaDetails';
+import Ideation from './Pages/Ideation';
+import Voting from './Pages/Voting';
+import Management from './Pages/Management';
 // import SignUp from './Pages/Signup';
 
 function App() {
@@ -29,6 +32,9 @@ function App() {
           <Route path='/vote' element={<Vote/>}></Route>
           <Route path='/management' element={<Manage/>}></Route>
           <Route path="/idea-content/:ideaId" element={<IdeaDetails/>}></Route>
+          <Route path='/ideation' element={<Ideation/>}></Route>
+          <Route path='/voting' element={<Voting/>}></Route>
+          <Route path='/manage' element={<Management/>}></Route>
         </Routes>
       </BrowserRouter>
     </div>

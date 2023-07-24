@@ -16,6 +16,18 @@ function Campaign() {
         Navigate('/home');
     }
 
+    const ideation = () => {
+        Navigate('/ideation');
+    }
+
+    const voting = () => {
+        Navigate('/voting');
+    }
+
+    const manage = () => {
+        Navigate('/manage')
+    }
+
     const createGroup = () => {
         Navigate('/create-group');
     }
@@ -67,11 +79,11 @@ function Campaign() {
                 <hr className="hori-line"></hr>
                 <p className="menu-content" style={{ color: '#FFa559' }}>Campaigns</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">Ideation</p>
+                <p className="menu-content" onClick={ideation}>Ideation</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">Voting</p>
+                <p className="menu-content" onClick={voting}>Voting</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">Management</p>
+                <p className="menu-content" onClick={manage}>Management</p>
                 <hr className="hori-line"></hr>
                 <p className="menu-content">About Us</p>
                 <hr className="hori-line"></hr>
