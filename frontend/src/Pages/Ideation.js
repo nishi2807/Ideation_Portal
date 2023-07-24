@@ -82,6 +82,8 @@ function Ideation() {
         Navigate(`/all-ideas?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`);
     };
 
+    const openCampaigns = campaignData.filter(campaign => !isCampaignClosed(campaign.camp_enddate));
+
     return (
         <div className='home-page'>
             <Navbar></Navbar>
@@ -96,10 +98,6 @@ function Ideation() {
                 <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={manage}>Management</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">About Us</p>
-                <hr className="hori-line"></hr>
-                <p className="menu-content">Settings</p>
-                <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={logout}>LogOut</p>
             </div>
             <div className='main-content'>
@@ -112,21 +110,21 @@ function Ideation() {
                                 <th>Campaign Title</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
-                                <th>Status</th>
+                                {/* <th>Status</th> */}
                                 <th>Get Details</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {campaignData.map((campaign) => (
+                            {openCampaigns.map((campaign) => (
                                 <tr key={campaign.camp_id}>
                                     <td>{campaign.camp_id}</td>
                                     <td className='campidea-user'>{campaign.camp_owner}</td>
                                     <td className='campidea'>{campaign.camp_title}</td>
                                     <td>{formatDate(campaign.camp_startdate)}</td>
                                     <td>{formatDate(campaign.camp_enddate)}</td>
-                                    <td className={isCampaignClosed(campaign.camp_enddate) ? 'closed' : 'open'}>
+                                    {/* <td className={isCampaignClosed(campaign.camp_enddate) ? 'closed' : 'open'}>
                                         {isCampaignClosed(campaign.camp_enddate) ? 'Closed' : 'Open'}
-                                    </td>
+                                    </td> */}
                                     <td>
                                         <button className="read-more-btn" onClick={() => handleGetDetails(campaign.token, campaign.camp_title, campaign.camp_id)}>
                                             Click Here

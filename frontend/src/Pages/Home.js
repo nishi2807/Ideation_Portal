@@ -17,6 +17,18 @@ function Home() {
         Navigate('/campaign');
     }
 
+    const ideation = () => {
+        Navigate('/ideation');
+    }
+
+    const voting = () => {
+        Navigate('/voting');
+    }
+
+    const manage = () => {
+        Navigate('/manage')
+    }
+
     const images = [
         require('./mark-fletcher-brown-nN5L5GXKFz8-unsplash.jpg'),
         require('./absolutvision-82TpEld0_e4-unsplash.jpg'),
@@ -58,15 +70,11 @@ function Home() {
                 <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={campaign}>Campaigns</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">Ideation</p>
+                <p className="menu-content" onClick={ideation}>Ideation</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">Voting</p>
+                <p className="menu-content" onClick={voting}>Voting</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">Management</p>
-                <hr className="hori-line"></hr>
-                <p className="menu-content">About Us</p>
-                <hr className="hori-line"></hr>
-                <p className="menu-content">Settings</p>
+                <p className="menu-content" onClick={manage}>Management</p>
                 <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={logout}>LogOut</p>
             </div>

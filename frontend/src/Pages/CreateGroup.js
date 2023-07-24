@@ -42,7 +42,7 @@ function CreateGroup() {
         axios.post('http://localhost:8081/campaign/emails', { camp_id: id, camp_user_email: email, camp_user_role: role })
             .then(res => {
                 alert("Successfully created the group for the campaign !");
-                Navigate('/campaign')
+                Navigate('/initiate-campaign')
             })
             .catch(error => {
                 console.error('Error:', error.response.data);
@@ -69,15 +69,11 @@ function CreateGroup() {
                 <hr className="hori-line"></hr>
                 <p className="menu-content">Management</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">About Us</p>
-                <hr className="hori-line"></hr>
-                <p className="menu-content">Settings</p>
-                <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={logout}>LogOut</p>
             </div>
             <div className='main-content'>
-                <button className='create-group' onClick={createGroup}>Create New Group</button>
-                <button className='ini-camp' onClick={initiate_camp}>Initiate Campaign</button>
+                {/* <button className='create-group' onClick={createGroup}>Create New Group</button> */}
+                <button className='create-group' onClick={initiate_camp}>Initiate Campaign</button>
                 <div className='ver-line'></div>
 
                 <div className='create-group-con'>
@@ -160,7 +156,7 @@ function CreateGroup() {
                         <hr className='hr-manage-group'></hr>
                     </Form>
                     <div>
-                        <button className="savegroup-btn" name="save-group" onClick={handleSubmit}>Save</button>
+                        <button className="savegroup-btn" name="save-group" onClick={handleSubmit}>Create Groups</button>
                     </div>
                 </div>
             </div>

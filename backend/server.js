@@ -130,7 +130,7 @@ app.post('/campaign/emails', (req, res) => {
 
 const crypto = require('crypto'); // Import the crypto module
 app.post('/campaign/initiate', (req, res) => {
-    const { camp_id, camp_startdate, camp_enddate, camp_owner, camp_title } = req.body;
+    const { camp_id, camp_startdate, camp_enddate, vote_enddate, manage_enddate, camp_owner, camp_title } = req.body;
 
     // Check if camp_id exists in the campaign_user table
     const checkCampIdQuery = 'SELECT camp_id FROM campaign_user WHERE camp_id = ?';
@@ -156,9 +156,9 @@ app.post('/campaign/initiate', (req, res) => {
             const camp_users = countResult[0].camp_user_email;
 
             // Insert a new campaign into the campaigns table with camp_users count
-            const insertQuery = 'INSERT INTO campaigns (camp_id, camp_startdate, camp_enddate, camp_owner, camp_title, camp_users, no_of_ideas) VALUES (?, ?, ?, ?, ?, ?, 0)';
+            const insertQuery = 'INSERT INTO campaigns (camp_id, camp_startdate, camp_enddate, vote_enddate, manage_enddate, camp_owner, camp_title, camp_users, no_of_ideas) VALUES (?, ?, ?,?,?, ?, ?, ?, 0)';
 
-            db.query(insertQuery, [camp_id, camp_startdate, camp_enddate, camp_owner, camp_title, camp_users], (error, result) => {
+            db.query(insertQuery, [camp_id, camp_startdate, camp_enddate, vote_enddate, manage_enddate, camp_owner, camp_title, camp_users], (error, result) => {
                 if (error) {
                     console.error('Error initiating campaign:', error);
                     return res.status(500).json({ message: 'Failed to initiate campaign' });
@@ -778,7 +778,7 @@ app.post('/get-user-vote', (req, res) => {
 
     const selectUserSql = 'SELECT email FROM users WHERE name = ?';
     const selectUserCampaignsSql = `
-      SELECT cu.camp_id, c.camp_startdate, c.camp_enddate, c.camp_owner, c.camp_title
+      SELECT cu.camp_id, c.camp_startdate, c.vote_enddate, c.camp_owner, c.camp_title
       FROM campaign_user cu
       INNER JOIN campaigns c ON cu.camp_id = c.camp_id
       WHERE cu.camp_user_email = ? AND cu.camp_user_role = 'V';
@@ -835,7 +835,7 @@ app.post('/get-user-manage', (req, res) => {
 
     const selectUserSql = 'SELECT email FROM users WHERE name = ?';
     const selectUserCampaignsSql = `
-      SELECT cu.camp_id, c.camp_startdate, c.camp_enddate, c.camp_owner, c.camp_title
+      SELECT cu.camp_id, c.camp_startdate, c.manage_enddate, c.camp_owner, c.camp_title
       FROM campaign_user cu
       INNER JOIN campaigns c ON cu.camp_id = c.camp_id
       WHERE cu.camp_user_email = ? AND cu.camp_user_role = 'M';

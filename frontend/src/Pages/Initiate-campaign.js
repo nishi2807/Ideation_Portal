@@ -4,6 +4,7 @@ import Navbar from '../Components/Navbar';
 import { Form } from 'react-bootstrap';
 import './Initiate-campaign.css';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 
 function Initiate_campaign() {
@@ -16,9 +17,11 @@ function Initiate_campaign() {
         Navigate('/home');
     }
 
-    const createGroup = () => {
-        Navigate('/create-group');
-    }
+    // const createGroup = () => {
+    //     Navigate('/create-group');
+    // }
+
+    const CurrentUser_name = useSelector((state) => state.CurrentUser_name)
 
     const campaign = () => {
         Navigate('/campaign')
@@ -32,7 +35,9 @@ function Initiate_campaign() {
         camp_id: '',
         camp_startdate: '',
         camp_enddate: '',
-        camp_owner: '',
+        vote_enddate: '',
+        manage_enddate: '',
+        camp_owner: CurrentUser_name,
         camp_title: ''
     });
 
@@ -43,7 +48,7 @@ function Initiate_campaign() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        axios.post('http://localhost:8081/campaign/initiate', { camp_id: values.camp_id, camp_startdate: values.camp_startdate, camp_enddate: values.camp_enddate, camp_owner: values.camp_owner, camp_title: values.camp_title })
+        axios.post('http://localhost:8081/campaign/initiate', { camp_id: values.camp_id, camp_startdate: values.camp_startdate, camp_enddate: values.camp_enddate, vote_enddate: values.vote_enddate, manage_enddate: values.manage_enddate, camp_owner: values.camp_owner, camp_title: values.camp_title })
             .then(res => {
                 alert("Successfully initiated the campaign !");
                 Navigate('/campaign')
@@ -69,15 +74,11 @@ function Initiate_campaign() {
                 <hr className="hori-line"></hr>
                 <p className="menu-content">Management</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">About Us</p>
-                <hr className="hori-line"></hr>
-                <p className="menu-content">Settings</p>
-                <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={logout}>LogOut</p>
             </div>
             <div className='main-content'>
-                <button className='create-group' onClick={createGroup}>Create New Group</button>
-                <button className='ini-camp' onClick={initiate_camp}>Initiate Campaign</button>
+                {/* <button className='create-group' onClick={createGroup}>Create New Group</button> */}
+                <button className='create-group' onClick={initiate_camp}>Initiate Campaign</button>
                 <div className='ver-line'></div>
 
                 <div className='create-group-con'>
@@ -127,11 +128,31 @@ function Initiate_campaign() {
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label id='camp_end'>End Date:</Form.Label>
+                            <Form.Label id='camp_end'>End Date (for idea posting):</Form.Label>
                             <Form.Control
                                 id="camp_end_box"
                                 type="date"
                                 name="camp_enddate"
+                                onChange={handleInput}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label id='voting_end'>End Date (for Voting):</Form.Label>
+                            <Form.Control
+                                id="voting_end_box"
+                                type="date"
+                                name="vote_enddate"
+                                onChange={handleInput}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label id='manage_end'>End Date (for management):</Form.Label>
+                            <Form.Control
+                                id="manage_end_box"
+                                type="date"
+                                name="manage_enddate"
                                 onChange={handleInput}
                                 required
                             />
