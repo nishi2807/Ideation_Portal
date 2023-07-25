@@ -40,6 +40,8 @@ function Campaign() {
     // console.log(CurrentUser_name)
     const [campaignData, setCampaignData] = useState([]);
 
+    console.log(campaignData)
+
     useEffect(() => {
         // Fetch campaign data and token from the server using Axios
         axios.post('http://localhost:8081/get-user-campaigns', { name: CurrentUser_name })
@@ -88,12 +90,13 @@ function Campaign() {
         return end < today;
     };
 
-    const closedCampaigns = campaignData.filter(campaign => isCampaignClosed(campaign.camp_enddate));
+    const closedCampaigns = campaignData.filter(campaign => isCampaignClosed(campaign.manage_enddate));
     // const camp_id = campaignData.camp_id
 
     // console.log(campaignData)
+    // console.log(closedCampaigns)
 
-    const handleGetDetails = (token, encodedCampTitle,camp_id) => {
+    const handleGetDetails = (token, encodedCampTitle, camp_id) => {
         // Navigate to the specified page with the received token and camp_id
         Navigate(`/all-ideas?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`);
     };
