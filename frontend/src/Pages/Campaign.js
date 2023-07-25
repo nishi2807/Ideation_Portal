@@ -123,7 +123,7 @@ function Campaign() {
                 <div className='ver-line'></div>
                 <div className='camp-content'>
                     <h1 className='pastcamp-title'>Your Past Campaigns</h1>
-                    <table className='camp-table'>
+                    <table className='camps-table'>
                         <thead>
                             <tr>
                                 <th>Campaign Id</th>
