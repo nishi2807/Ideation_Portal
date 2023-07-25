@@ -77,7 +77,7 @@ function Voting() {
         return end < today;
     };
 
-    const openCampaigns = campaignData.filter(campaign => !isCampaignClosed(campaign.camp_enddate));
+    const openCampaigns = campaignData.filter(campaign => !isCampaignClosed(campaign.vote_enddate));
 
 
     const handleGetDetails = (token, encodedCampTitle, camp_id) => {
