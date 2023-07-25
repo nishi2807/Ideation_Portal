@@ -102,6 +102,10 @@ function Ideation() {
             </div>
             <div className='main-content'>
                 <div>
+                    <h1 className='i-title'>Ideation Group Campaigns</h1>
+                </div>
+
+                <div>
                     <table className='camp-table'>
                         <thead>
                             <tr>

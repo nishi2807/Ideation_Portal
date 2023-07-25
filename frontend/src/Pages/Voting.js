@@ -103,6 +103,9 @@ function Voting() {
             </div>
             <div className='main-content'>
                 <div>
+                    <h1 className='i-title'>Voting Group Campaigns</h1>
+                </div>
+                <div>
                     <table className='camp-table'>
                         <thead>
                             <tr>
@@ -121,8 +124,8 @@ function Voting() {
                                     <td>{campaign.camp_id}</td>
                                     <td className='campidea-user'>{campaign.camp_owner}</td>
                                     <td className='campidea'>{campaign.camp_title}</td>
-                                    <td>{formatDate(campaign.camp_startdate)}</td>
                                     <td>{formatDate(campaign.camp_enddate)}</td>
+                                    <td>{formatDate(campaign.vote_enddate)}</td>
                                     {/* <td className={isCampaignClosed(campaign.camp_enddate) ? 'closed' : 'open'}>
                                         {isCampaignClosed(campaign.camp_enddate) ? 'Closed' : 'Open'}
                                     </td> */}

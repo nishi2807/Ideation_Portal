@@ -207,7 +207,7 @@ app.post('/campaign/initiate', (req, res) => {
 
                                 // Store the token, campaign ID, and end date in the campaign_links table
                                 const storeLinkQuery = 'INSERT INTO campaign_links (token, campaign_id, end_date, email) VALUES (?, ?, ?, ?)';
-                                db.query(storeLinkQuery, [token, camp_id, camp_enddate, email], (storeError, storeResult) => {
+                                db.query(storeLinkQuery, [token, camp_id, vote_enddate, email], (storeError, storeResult) => {
                                     if (storeError) {
                                         console.error('Error storing campaign link:', storeError);
                                         return res.status(500).json({ message: 'Failed to store campaign link' });
@@ -273,7 +273,7 @@ app.post('/campaign/initiate', (req, res) => {
 
                                 // Store the token, campaign ID, and end date in the campaign_links table
                                 const storeLinkQuery = 'INSERT INTO campaign_links (token, campaign_id, end_date, email) VALUES (?, ?, ?, ?)';
-                                db.query(storeLinkQuery, [token, camp_id, camp_enddate, email], (storeError, storeResult) => {
+                                db.query(storeLinkQuery, [token, camp_id, manage_enddate, email], (storeError, storeResult) => {
                                     if (storeError) {
                                         console.error('Error storing campaign link:', storeError);
                                         return res.status(500).json({ message: 'Failed to store campaign link' });
@@ -609,7 +609,7 @@ app.post('/get-user-details', (req, res) => {
     const selectUserSql = 'SELECT email FROM users WHERE name = ?';
     const selectIdeasCountSql = 'SELECT COUNT(*) AS ideas_count FROM ideas WHERE email = ?';
     const selectVotesCountSql = 'SELECT COUNT(*) AS votes_count FROM vote WHERE email = ?';
-    const selectCampaignsCountSql = 'SELECT COUNT(*) AS campaigns_count FROM campaign_user WHERE camp_user_email = ?';
+    const selectCampaignsCountSql = 'SELECT COUNT(DISTINCT camp_id) AS campaigns_count FROM campaign_user WHERE camp_user_email = ?';
 
     db.query(selectUserSql, [name], (selectUserErr, selectUserResult) => {
         if (selectUserErr) {
@@ -676,7 +676,7 @@ app.post('/get-user-campaigns', (req, res) => {
 
     const selectUserSql = 'SELECT email FROM users WHERE name = ?';
     const selectUserCampaignsSql = `
-      SELECT cu.camp_id, c.camp_startdate, c.camp_enddate, c.camp_owner, c.camp_title, c.camp_users
+      SELECT cu.camp_id, c.camp_startdate, c.manage_enddate, c.camp_owner, c.camp_title, c.camp_users
       FROM campaign_user cu
       INNER JOIN campaigns c ON cu.camp_id = c.camp_id
       WHERE cu.camp_user_email = ?;
@@ -778,7 +778,7 @@ app.post('/get-user-vote', (req, res) => {
 
     const selectUserSql = 'SELECT email FROM users WHERE name = ?';
     const selectUserCampaignsSql = `
-      SELECT cu.camp_id, c.camp_startdate, c.vote_enddate, c.camp_owner, c.camp_title
+      SELECT cu.camp_id, c.camp_enddate, c.vote_enddate, c.camp_owner, c.camp_title
       FROM campaign_user cu
       INNER JOIN campaigns c ON cu.camp_id = c.camp_id
       WHERE cu.camp_user_email = ? AND cu.camp_user_role = 'V';
@@ -835,7 +835,7 @@ app.post('/get-user-manage', (req, res) => {
 
     const selectUserSql = 'SELECT email FROM users WHERE name = ?';
     const selectUserCampaignsSql = `
-      SELECT cu.camp_id, c.camp_startdate, c.manage_enddate, c.camp_owner, c.camp_title
+      SELECT cu.camp_id, c.vote_enddate, c.manage_enddate, c.camp_owner, c.camp_title
       FROM campaign_user cu
       INNER JOIN campaigns c ON cu.camp_id = c.camp_id
       WHERE cu.camp_user_email = ? AND cu.camp_user_role = 'M';

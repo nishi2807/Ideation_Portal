@@ -140,7 +140,7 @@ function Campaign() {
                                     <td className='camp-con-title'>{campaign.camp_title}</td>
                                     <td>{campaign.camp_users}</td>
                                     <td>{formatDate(campaign.camp_startdate)}</td>
-                                    <td>{formatDate(campaign.camp_enddate)}</td>
+                                    <td>{formatDate(campaign.manage_enddate)}</td>
                                     <td>
                                         <button className="read-more-btn" onClick={() => handleGetDetails(campaign.token, campaign.camp_title, campaign.camp_id)}>
                                             Click Here

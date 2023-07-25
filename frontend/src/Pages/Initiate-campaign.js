@@ -143,6 +143,7 @@ function Initiate_campaign() {
                                 id="voting_end_box"
                                 type="date"
                                 name="vote_enddate"
+                                min={values.camp_enddate}
                                 onChange={handleInput}
                                 required
                             />
@@ -153,6 +154,7 @@ function Initiate_campaign() {
                                 id="manage_end_box"
                                 type="date"
                                 name="manage_enddate"
+                                min={values.vote_enddate}
                                 onChange={handleInput}
                                 required
                             />
