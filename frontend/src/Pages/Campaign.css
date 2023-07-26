@@ -49,6 +49,7 @@
     width: 980px;
     right: 0%;
     top: 7%;
+    overflow: auto;
 }
 
 .camp-table {
@@ -100,7 +101,7 @@
 }
 
 .camp-con-title{
-    width: 280px;
+    width: 300px;
 }
 
 .camp-con-owner {

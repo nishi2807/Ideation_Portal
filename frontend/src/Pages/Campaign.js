@@ -126,7 +126,7 @@ function Campaign() {
                     <table className='camps-table'>
                         <thead>
                             <tr>
-                                <th>Campaign Id</th>
+                                <th>Camp Id</th>
                                 <th>Campaign Owner</th>
                                 <th>Campaign Title</th>
                                 <th>Users</th>

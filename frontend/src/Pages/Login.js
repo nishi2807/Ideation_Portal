@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import '../Pages/Login.css';
 import { Link, useNavigate } from "react-router-dom";
@@ -18,17 +18,18 @@ function Login() {
     const Navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const handleInput = (event) => {
-        setValues(prev => ({ ...prev, [event.target.name]: event.target.value}))
-    }
-
-
     const handleSubmit = (event) => {
         event.preventDefault();
         setErrors(Validation(values));
+    }
 
+    const handleInput = (event) => {
+        setValues(prev => ({ ...prev, [event.target.name]: event.target.value }))
+    }
+
+    useEffect(() => {
         if (errors.email === "" && errors.password === "") {
-            axios.post('http://localhost:8081/login', {email: values.email, password: values.password})
+            axios.post('http://localhost:8081/login', { email: values.email, password: values.password })
                 .then(res => {
                     if (res.data === "Success") {
                         alert("Login Successfull!")
@@ -49,15 +50,15 @@ function Login() {
                     console.error(error);
                 });
         }
-    }
+    }, [errors, values, Navigate, dispatch]);
 
     return (
         <div className="login-bg">
             <div className="login-main-con">
                 <div className="text-con">
-                <div className="logo-con">
-                    <p className="logo"></p>
-                </div>
+                    <div className="logo-con">
+                        <p className="logo"></p>
+                    </div>
                     <h1 className="heading">Ideation</h1>
                 </div>
                 <div className="org-con">
@@ -94,19 +95,6 @@ function Login() {
                     <div>
                         <button className="login-button" name="login" onClick={handleSubmit}>LogIn</button>
                     </div>
-                    {/* <div>
-                        <h2 className="option">
-                            - Or -
-                        </h2>
-                    </div> */}
-                    {/* <div>
-                        <button className="google-button">Google</button>
-                    </div> */}
-                    {/* <div>
-                        <p className="no-acc">
-                            Don't have an account? <Link to="/signup">SignUp</Link>
-                        </p>
-                    </div> */}
                 </div>
             </div>
         </div>
