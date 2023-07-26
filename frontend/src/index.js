@@ -7,6 +7,14 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const userNameFromLocalStorage = localStorage.getItem("userName");
+
+// If the user name exists in local storage, dispatch the action to set it in the store
+if (userNameFromLocalStorage) {
+  store.dispatch({ type: "SET_CURRENT_USER_NAME", payload: userNameFromLocalStorage });
+}
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>

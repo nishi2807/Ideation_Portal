@@ -48,7 +48,17 @@ function Initiate_campaign() {
             if (event.target.value.length > 10) {
                 event.target.value = event.target.value.slice(0, 10);
             }
+    
+            // Compare selected date with current date
+            const selectedDate = new Date(event.target.value);
+            const currentDate = new Date();
+    
+            if (selectedDate < currentDate) {
+                alert("Please select a current or future date.");
+                event.target.value = ''; // Clear the input value
+            }
         }
+    
         setValues(prev => ({ ...prev, [event.target.name]: event.target.value }))
     }
 

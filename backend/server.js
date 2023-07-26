@@ -1,8 +1,8 @@
 const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
-// const bcrypt = require("bcrypt");
-// const crypto = require('crypto');
+const session = require("express-session");
+const MySQLStore = require("express-mysql-session")(session);
 const nodemailer = require("nodemailer");
 
 const app = express();
@@ -10,16 +10,37 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Add session middleware
+const sessionStore = new MySQLStore({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "ideation_portal",
+    clearExpired: true,
+    checkExpirationInterval: 900000, // Interval in ms to check and clear expired sessions (15 minutes)
+});
+app.use(
+    session({
+        secret: "your-secret-key",
+        store: sessionStore,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 86400000, // Session duration in ms (1 day)
+        },
+    })
+);
+
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "ideation_portal"
-})
+    database: "ideation_portal",
+});
 
 app.listen(8081, () => {
-    console.log("Listening to port 8081!")
-})
+    console.log("Listening to port 8081!");
+});
 
 app.post('/username', (req, res) => {
     const email = req.body.email;
@@ -56,10 +77,14 @@ app.post('/login', (req, res) => {
         }
 
         if (data.length > 0) {
+            // Store user name in the session
+            req.session.userName = data[0].name;
+            console.log(req.session.userName)
+        
             return res.json("Success");
-        } else {
+          } else {
             return res.json("Failed");
-        }
+          }
     });
 });
 

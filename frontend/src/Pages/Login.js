@@ -4,14 +4,16 @@ import '../Pages/Login.css';
 import { Link, useNavigate } from "react-router-dom";
 import Validation from "../Validation/loginvalidation";
 import axios from "axios";
-import { currentuser } from "./constants";
 import { useDispatch } from "react-redux";
+// import { setCurrentUser } from "../store.js";
 
 function Login() {
     const [values, setValues] = useState({
         email: '',
         password: ''
     })
+
+    // const [user, setUser] = useState('')
     // console.log(values.email)
 
     const [errors, setErrors] = useState({});
@@ -29,27 +31,37 @@ function Login() {
 
     useEffect(() => {
         if (errors.email === "" && errors.password === "") {
-            axios.post('http://localhost:8081/login', { email: values.email, password: values.password })
-                .then(res => {
-                    if (res.data === "Success") {
-                        alert("Login Successfull!")
-                        Navigate('/home');
-                    } else {
-                        alert("No user found !")
-                    }
-                })
-                .catch(err => console.log(err));
-
-            axios.post('http://localhost:8081/username', { email: values.email })
-                .then(response => {
-                    console.log(response.data.name);
-                    dispatch({ type: "SET_CURRENT_USER_NAME", payload: response.data.name });
-                    currentuser = response.data.name;
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
+            axios
+              .post("http://localhost:8081/login", {
+                email: values.email,
+                password: values.password,
+              })
+              .then((res) => {
+                if (res.data === "Success") {
+                  axios
+                    .post("http://localhost:8081/username", { email: values.email })
+                    .then((response) => {
+                        const userName = response.data.name;
+                        dispatch({ type: "SET_CURRENT_USER_NAME", payload: userName });
+                        localStorage.setItem("userName", userName);
+                        console.log(userName)
+                      alert("Login Successful!");
+                      Navigate("/home");
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                      alert("Failed to retrieve user details");
+                    });
+                } else {
+                  alert("No user found!");
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+                alert("Failed to login");
+              });
+          }
+        
     }, [errors, values, Navigate, dispatch]);
 
     return (
