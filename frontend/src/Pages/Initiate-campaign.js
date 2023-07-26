@@ -42,6 +42,13 @@ function Initiate_campaign() {
     });
 
     const handleInput = (event) => {
+        // Limit the year to four digits
+        if (event.target.name === 'camp_startdate' || event.target.name === 'camp_enddate'
+            || event.target.name === 'vote_enddate' || event.target.name === 'manage_enddate') {
+            if (event.target.value.length > 10) {
+                event.target.value = event.target.value.slice(0, 10);
+            }
+        }
         setValues(prev => ({ ...prev, [event.target.name]: event.target.value }))
     }
 
