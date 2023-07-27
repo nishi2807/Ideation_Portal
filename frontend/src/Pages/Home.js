@@ -36,6 +36,7 @@ function Home() {
     ]
 
     const CurrentUser_name = useSelector((state) => state.CurrentUser_name);
+    const CurrentUser_role = useSelector((state) => state.CurrentUser_role)
     // console.log(CurrentUser_name)
 
     const [totalIdeas, setTotalIdeas] = useState(0);
@@ -68,8 +69,13 @@ function Home() {
             <div className="menu">
                 <p className="menu-content" style={{ color: '#FFa559' }}>Home</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content" onClick={campaign}>Campaigns</p>
-                <hr className="hori-line"></hr>
+                {CurrentUser_role === "admin" && (
+                    <>
+                        <p className="menu-content" onClick={campaign}>Campaigns</p>
+                        <hr className="hori-line"></hr>
+                    </>
+                )}
+                {/* <hr className="hori-line"></hr> */}
                 <p className="menu-content" onClick={ideation}>Ideation</p>
                 <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={voting}>Voting</p>
