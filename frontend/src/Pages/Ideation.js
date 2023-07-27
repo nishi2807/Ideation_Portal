@@ -106,16 +106,16 @@ function Ideation() {
                 </div>
 
                 <div>
-                    <table className='camp-table'>
+                    <table className='icamp-table'>
                         <thead>
                             <tr>
-                                <th>Campaign Id</th>
+                                <th>Camp Id</th>
                                 <th>Campaign Owner</th>
                                 <th>Campaign Title</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
+                                <th>Ideation Start Date</th>
+                                <th>Ideation End Date</th>
                                 {/* <th>Status</th> */}
-                                <th>Get Details</th>
+                                <th>Get Detail</th>
                             </tr>
                         </thead>
                         <tbody>

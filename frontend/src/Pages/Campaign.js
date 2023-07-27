@@ -37,6 +37,7 @@ function Campaign() {
     // }
 
     const CurrentUser_name = useSelector((state) => state.CurrentUser_name);
+    const CurrentUser_role = useSelector((state) => state.CurrentUser_role)
     // console.log(CurrentUser_name)
     const [campaignData, setCampaignData] = useState([]);
 
@@ -90,11 +91,10 @@ function Campaign() {
         return end < today;
     };
 
-    const closedCampaigns = campaignData.filter(campaign => isCampaignClosed(campaign.manage_enddate));
-    // const camp_id = campaignData.camp_id
+    
 
-    // console.log(campaignData)
-    // console.log(closedCampaigns)
+    const closedCampaigns = campaignData.filter(campaign => isCampaignClosed(campaign.manage_enddate));
+    const allCampaigns = CurrentUser_role === 'admin' ? campaignData : closedCampaigns;
 
     const handleGetDetails = (token, encodedCampTitle, camp_id) => {
         // Navigate to the specified page with the received token and camp_id
@@ -136,7 +136,7 @@ function Campaign() {
                             </tr>
                         </thead>
                         <tbody>
-                            {closedCampaigns.map((campaign) => (
+                            {allCampaigns.map((campaign) => (
                                 <tr key={campaign.camp_id}>
                                     <td>{campaign.camp_id}</td>
                                     <td className='camp-con-owner'>{campaign.camp_owner}</td>

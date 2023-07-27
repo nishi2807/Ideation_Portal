@@ -699,50 +699,50 @@ app.post('/get-user-details', (req, res) => {
                     });
                 });
             })
-        }
-
-        // Fetch the number of ideas posted by the user
-        db.query(selectIdeasCountSql, [userEmail], (selectIdeasErr, selectIdeasResult) => {
-            if (selectIdeasErr) {
-                console.error('Error retrieving ideas count from the database:', selectIdeasErr);
-                res.status(500).json({ error: 'Failed to retrieve ideas count.' });
-                return;
-            }
-
-            const ideasCount = selectIdeasResult[0].ideas_count;
-
-            // Fetch the number of times the user has voted
-            db.query(selectVotesCountSql, [userEmail], (selectVotesErr, selectVotesResult) => {
-                if (selectVotesErr) {
-                    console.error('Error retrieving votes count from the database:', selectVotesErr);
-                    res.status(500).json({ error: 'Failed to retrieve votes count.' });
+        } else {
+            // Fetch the number of ideas posted by the user
+            db.query(selectIdeasCountSql, [userEmail], (selectIdeasErr, selectIdeasResult) => {
+                if (selectIdeasErr) {
+                    console.error('Error retrieving ideas count from the database:', selectIdeasErr);
+                    res.status(500).json({ error: 'Failed to retrieve ideas count.' });
                     return;
                 }
 
-                const votesCount = selectVotesResult[0].votes_count;
+                const ideasCount = selectIdeasResult[0].ideas_count;
 
-                // Fetch the number of campaigns created by the user
-                db.query(selectCampaignsCountSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
-                    if (selectCampaignsErr) {
-                        console.error('Error retrieving campaigns count from the database:', selectCampaignsErr);
-                        res.status(500).json({ error: 'Failed to retrieve campaigns count.' });
+                // Fetch the number of times the user has voted
+                db.query(selectVotesCountSql, [userEmail], (selectVotesErr, selectVotesResult) => {
+                    if (selectVotesErr) {
+                        console.error('Error retrieving votes count from the database:', selectVotesErr);
+                        res.status(500).json({ error: 'Failed to retrieve votes count.' });
                         return;
                     }
 
-                    const campaignsCount = selectCampaignsResult[0].campaigns_count;
+                    const votesCount = selectVotesResult[0].votes_count;
 
-                    // Combine all the details and send as the response
-                    const userDetails = {
-                        ...user,
-                        ideas_count: ideasCount,
-                        votes_count: votesCount,
-                        campaigns_count: campaignsCount,
-                    };
+                    // Fetch the number of campaigns created by the user
+                    db.query(selectCampaignsCountSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
+                        if (selectCampaignsErr) {
+                            console.error('Error retrieving campaigns count from the database:', selectCampaignsErr);
+                            res.status(500).json({ error: 'Failed to retrieve campaigns count.' });
+                            return;
+                        }
 
-                    res.status(200).json(userDetails);
+                        const campaignsCount = selectCampaignsResult[0].campaigns_count;
+
+                        // Combine all the details and send as the response
+                        const userDetails = {
+                            ...user,
+                            ideas_count: ideasCount,
+                            votes_count: votesCount,
+                            campaigns_count: campaignsCount,
+                        };
+
+                        res.status(200).json(userDetails);
+                    });
                 });
             });
-        });
+        }
     });
 });
 
@@ -750,12 +750,13 @@ app.post('/get-user-details', (req, res) => {
 app.post('/get-user-campaigns', (req, res) => {
     const { name } = req.body;
 
-    const selectUserSql = 'SELECT email FROM users WHERE name = ?';
+    const selectUserSql = 'SELECT email, role FROM users WHERE name = ?';
     const selectUserCampaignsSql = `
       SELECT cu.camp_id, c.camp_startdate, c.manage_enddate, c.camp_owner, c.camp_title, c.camp_users
       FROM campaign_user cu
       INNER JOIN campaigns c ON cu.camp_id = c.camp_id
-      WHERE cu.camp_user_email = ?;
+      WHERE cu.camp_user_email = ?
+      ORDER BY c.camp_startdate DESC;  -- Latest campaigns on top
     `;
 
     db.query(selectUserSql, [name], (selectUserErr, selectUserResult) => {
@@ -772,23 +773,49 @@ app.post('/get-user-campaigns', (req, res) => {
 
         const user = selectUserResult[0];
         const userEmail = user.email; // Get the user's email from the query result
+        const userRole = user.role; // Get the user's role from the query result
 
-        // Fetch the campaigns in which the user participated
-        db.query(selectUserCampaignsSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
-            if (selectCampaignsErr) {
-                console.error('Error retrieving user campaigns from the database:', selectCampaignsErr);
-                res.status(500).json({ error: 'Failed to retrieve user campaigns.' });
-                return;
-            }
+        if (userRole === 'admin') {
+            // If the user is an admin, retrieve details of all campaigns
+            const selectAllCampaignsSql = `
+              SELECT camp_id, camp_startdate, manage_enddate, camp_owner, camp_title, camp_users
+              FROM campaigns
+              ORDER BY camp_startdate DESC;  -- Latest campaigns on top
+            `;
 
-            if (selectCampaignsResult.length === 0) {
-                res.status(404).json({ error: 'User did not participate in any campaigns.' });
-                return;
-            }
+            db.query(selectAllCampaignsSql, (selectAllCampaignsErr, selectAllCampaignsResult) => {
+                if (selectAllCampaignsErr) {
+                    console.error('Error retrieving all campaigns from the database:', selectAllCampaignsErr);
+                    res.status(500).json({ error: 'Failed to retrieve all campaigns.' });
+                    return;
+                }
 
-            // Send the campaign details as the response
-            res.status(200).json(selectCampaignsResult);
-        });
+                if (selectAllCampaignsResult.length === 0) {
+                    res.status(404).json({ error: 'No campaigns found.' });
+                    return;
+                }
+
+                // Send details of all campaigns as the response
+                res.status(200).json(selectAllCampaignsResult);
+            });
+        } else {
+            // If the user is not an admin, continue with the original query to retrieve user campaigns
+            db.query(selectUserCampaignsSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
+                if (selectCampaignsErr) {
+                    console.error('Error retrieving user campaigns from the database:', selectCampaignsErr);
+                    res.status(500).json({ error: 'Failed to retrieve user campaigns.' });
+                    return;
+                }
+
+                if (selectCampaignsResult.length === 0) {
+                    res.status(404).json({ error: 'User did not participate in any campaigns.' });
+                    return;
+                }
+
+                // Send the campaign details as the response
+                res.status(200).json(selectCampaignsResult);
+            });
+        }
     });
 });
 

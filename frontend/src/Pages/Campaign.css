@@ -52,12 +52,13 @@
     overflow: auto;
 }
 
-.camp-table {
+.icamp-table {
     position: absolute;
     /* display: flex; */
-    left: 2%;
-    right: 3%;
+    /* left: 2%; */
+    /* right: 3%; */
     top: 15%;
+    width: 1150px;
     border-collapse: collapse;
 }
 
@@ -67,18 +68,8 @@
     left: 2%;
     right: 3%;
     top: 10%;
+    width: 930px;
     border-collapse: collapse;
-}
-
-.camp-table tbody tr td {
-    margin-bottom: 20px;
-}
-
-.camp-table td,
-.camp-table th {
-    border: 1px solid #ccc;
-    padding: 8px;
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 .camps-table tbody tr td {
@@ -87,6 +78,17 @@
 
 .camps-table td,
 .camps-table th {
+    border: 1px solid #ccc;
+    padding: 8px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.icamp-table tbody tr td {
+    margin-bottom: 20px;
+}
+
+.icamp-table td,
+.icamp-table th {
     border: 1px solid #ccc;
     padding: 8px;
     font-family: Arial, Helvetica, sans-serif;
@@ -109,11 +111,11 @@
 }
 
 .campidea {
-    width: 500px;
+    width: 40%;
 }
 
 .campidea-user {
-    width: 200px;
+    width: 15%;
 }
 
 .pastcamp-title{
