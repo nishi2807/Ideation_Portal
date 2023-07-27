@@ -10,14 +10,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Add session middleware
+
 const sessionStore = new MySQLStore({
     host: "localhost",
     user: "root",
     password: "",
     database: "ideation_portal",
     clearExpired: true,
-    checkExpirationInterval: 900000, // Interval in ms to check and clear expired sessions (15 minutes)
+    checkExpirationInterval: 900000, // 15 minutes
 });
 app.use(
     session({
@@ -26,7 +26,7 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie: {
-            maxAge: 86400000, // Session duration in ms (1 day)
+            maxAge: 86400000, // 1 day
         },
     })
 );
@@ -45,7 +45,7 @@ app.listen(8081, () => {
 app.post('/username', (req, res) => {
     const email = req.body.email;
     console.log(email)
-    const sql = "SELECT name FROM users WHERE email = ?";
+    const sql = "SELECT name, role FROM users WHERE email = ?";
 
     db.query(sql, [email], (err, data) => {
         if (err) {
@@ -54,8 +54,9 @@ app.post('/username', (req, res) => {
 
         if (data.length > 0) {
             const name = data[0].name;
+            const role = data[0].role;
             // console.log(name)
-            return res.json({ name });
+            return res.json({ name, role });
         } else {
             return res.json("User not found");
         }
@@ -79,12 +80,14 @@ app.post('/login', (req, res) => {
         if (data.length > 0) {
             // Store user name in the session
             req.session.userName = data[0].name;
-            console.log(req.session.userName)
-        
-            return res.json("Success");
-          } else {
+            req.session.userRole = data[0].role;
+            console.log(req.session.userName, req.session.userRole);
+            console.log('Entire Response Data:', data[0]);
+
+            return res.json('Success');
+        } else {
             return res.json("Failed");
-          }
+        }
     });
 });
 
@@ -631,7 +634,7 @@ app.post('/ideas/selectedIdeas', (req, res) => {
 app.post('/get-user-details', (req, res) => {
     const { name } = req.body;
 
-    const selectUserSql = 'SELECT email FROM users WHERE name = ?';
+    const selectUserSql = 'SELECT email, role FROM users WHERE name = ?';
     const selectIdeasCountSql = 'SELECT COUNT(*) AS ideas_count FROM ideas WHERE email = ?';
     const selectVotesCountSql = 'SELECT COUNT(*) AS votes_count FROM vote WHERE email = ?';
     const selectCampaignsCountSql = 'SELECT COUNT(DISTINCT camp_id) AS campaigns_count FROM campaign_user WHERE camp_user_email = ?';
@@ -650,6 +653,53 @@ app.post('/get-user-details', (req, res) => {
 
         const user = selectUserResult[0];
         const userEmail = user.email; // Get the user's email from the query result
+        const userRole = user.role; // Get the user's role from the query result
+
+        // Check if the user has a role as "admin"
+        if (userRole == 'user') {
+            // Fetch the number of ideas posted by the user
+            db.query(selectIdeasCountSql, [userEmail], (selectIdeasErr, selectIdeasResult) => {
+                if (selectIdeasErr) {
+                    console.error('Error retrieving ideas count from the database:', selectIdeasErr);
+                    res.status(500).json({ error: 'Failed to retrieve ideas count.' });
+                    return;
+                }
+
+                const ideasCount = selectIdeasResult[0].ideas_count;
+
+                // Fetch the number of times the user has voted
+                db.query(selectVotesCountSql, [userEmail], (selectVotesErr, selectVotesResult) => {
+                    if (selectVotesErr) {
+                        console.error('Error retrieving votes count from the database:', selectVotesErr);
+                        res.status(500).json({ error: 'Failed to retrieve votes count.' });
+                        return;
+                    }
+
+                    const votesCount = selectVotesResult[0].votes_count;
+
+                    // Fetch the number of campaigns created by the user
+                    db.query(selectCampaignsCountSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
+                        if (selectCampaignsErr) {
+                            console.error('Error retrieving campaigns count from the database:', selectCampaignsErr);
+                            res.status(500).json({ error: 'Failed to retrieve campaigns count.' });
+                            return;
+                        }
+
+                        const campaignsCount = selectCampaignsResult[0].campaigns_count;
+
+                        // Combine all the details and send as the response
+                        const userDetails = {
+                            ...user,
+                            ideas_count: ideasCount,
+                            votes_count: votesCount,
+                            campaigns_count: campaignsCount,
+                        };
+
+                        res.status(200).json(userDetails);
+                    });
+                });
+            })
+        }
 
         // Fetch the number of ideas posted by the user
         db.query(selectIdeasCountSql, [userEmail], (selectIdeasErr, selectIdeasResult) => {
@@ -695,6 +745,7 @@ app.post('/get-user-details', (req, res) => {
         });
     });
 });
+
 
 app.post('/get-user-campaigns', (req, res) => {
     const { name } = req.body;

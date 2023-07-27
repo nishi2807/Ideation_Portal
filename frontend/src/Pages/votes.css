@@ -99,6 +99,42 @@
     justify-content: center;
 }
 
+.goback-btn {
+    position: absolute;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    background-color: #ffa559;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    padding: 0.7%;
+    border: #ffa559;
+    width: fit-content;
+    top: 560px;
+    right: 200px;
+    border-radius: 10px;
+    justify-content: center;
+}
+
+.mgoback-btn {
+    position: absolute;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    background-color: #ffa559;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    padding: 0.7%;
+    border: #ffa559;
+    width: fit-content;
+    top: 560px;
+    right: 290px;
+    border-radius: 10px;
+    justify-content: center;
+}
+
 .idea-heading {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 30px;

@@ -69,6 +69,10 @@ function Mnidea() {
             .catch((error) => console.error('Error fetching idea content:', error));
     };
 
+    const goBack = () => {
+        navigate(-1); // Go back to the previous page
+    };
+
     return (
         <div className='home-page'>
             <Navbar />
@@ -110,6 +114,7 @@ function Mnidea() {
                     </table>
                 </div>
                 <div className='submit-container'>
+                    <button className='goback-btn' onClick={goBack}>Go Back</button>
                     <button className='submit-button' onClick={SubmitIdea}>Submit an Idea</button>
                     <ReactPaginate
                         previousLabel={'◀'}

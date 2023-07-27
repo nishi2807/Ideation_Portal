@@ -82,7 +82,7 @@
     width: 90px;
     height: 90px;
     top: 10%;
-    left: 130px;
+    left: 520px;
     background: url(icons8-idea-90.png);
     background-repeat: no-repeat;
     /* border-radius: 50px; */
@@ -96,7 +96,7 @@
     font-size: 25px;
     color: white;
     top: 140px;
-    left: 112px;
+    left: 100px;
 }
 
 .camp {
@@ -104,7 +104,7 @@
     width: 90px;
     height: 90px;
     top: 10%;
-    left: 520px;
+    left: 150px;
     background-color: #f1f1f1;
     background: url(campaign.png);
 }
@@ -116,7 +116,7 @@
     font-size: 25px;
     color: white;
     top: 140px;
-    left: 470px;
+    left: 490px;
 }
 
 .report {

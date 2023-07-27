@@ -4,6 +4,7 @@ import './idea.css'
 import { Form } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Idea() {
     const [values, setValues] = useState({
@@ -11,6 +12,8 @@ function Idea() {
         idea_summary: '',
         idea_description: ''
     });
+
+    const navigate = useNavigate('')
 
     const [camp_title, setCamp_title] = useState('');
     const [camp_id, setCamp_id] = useState('');
@@ -45,6 +48,7 @@ function Idea() {
         })
             .then(res => {
                 alert('Your Idea has been posted successfully!')
+                navigate(`/all-ideas?token=${token}&camp_title=${camp_title}&camp_id=${camp_id}`)
                 console.log(res.data.message);
             })
             .catch(error => {
@@ -54,6 +58,10 @@ function Idea() {
             });
 
     }
+
+    const goBack = () => {
+        navigate(-1); // Go back to the previous page
+    };
 
     return (
         <div className='home-page'>
@@ -101,6 +109,7 @@ function Idea() {
                     </Form.Group>
                 </Form>
                 <div>
+                    <button className='igoback-btn' onClick={goBack}>Go Back</button>
                     <button className="idea-post-btn" name="post-idea" onClick={handleSubmit}>Post</button>
                 </div>
             </div>

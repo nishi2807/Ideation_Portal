@@ -4,7 +4,7 @@ import '../Pages/Login.css';
 import { Link, useNavigate } from "react-router-dom";
 import Validation from "../Validation/loginvalidation";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import { setCurrentUser } from "../store.js";
 
 function Login() {
@@ -29,6 +29,9 @@ function Login() {
         setValues(prev => ({ ...prev, [event.target.name]: event.target.value }))
     }
 
+    // const CurrentUser_role = useSelector((state) => state.CurrentUser_role);
+    // console.log(CurrentUser_role)
+
     useEffect(() => {
         if (errors.email === "" && errors.password === "") {
             axios
@@ -42,9 +45,12 @@ function Login() {
                     .post("http://localhost:8081/username", { email: values.email })
                     .then((response) => {
                         const userName = response.data.name;
+                        const userRole = response.data.role;
                         dispatch({ type: "SET_CURRENT_USER_NAME", payload: userName });
+                        dispatch({ type: "SET_CURRENT_USER_ROLE", payload: userRole });
                         localStorage.setItem("userName", userName);
-                        console.log(userName)
+                        localStorage.setItem("userRole", userRole);
+                        console.log(userName, userRole)
                       alert("Login Successful!");
                       Navigate("/home");
                     })

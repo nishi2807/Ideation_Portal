@@ -83,10 +83,10 @@ function Home() {
                     <FadingCarousel images={images}></FadingCarousel>
                 </div>
                 <div className="report-con">
-                    <p className="ideas"></p>
-                    <p className="idea-text">Total Ideas: {totalIdeas}</p>
                     <p className="camp"></p>
-                    <p className="camp-text">Total Campaigns: {totalCampaigns}</p>
+                    <p className="idea-text">Total Campaigns: {totalCampaigns}</p>
+                    <p className="ideas"></p>
+                    <p className="camp-text">Total Ideas: {totalIdeas}</p>
                     <p className="report"></p>
                     <p className="report-text">Total Votes: {totalVotes}</p>
                 </div>

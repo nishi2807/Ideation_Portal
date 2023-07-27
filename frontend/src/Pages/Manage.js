@@ -64,6 +64,10 @@ function Manage() {
             });
     };
 
+    const goBack = () => {
+        navigate(-1); // Go back to the previous page
+    };
+
     return (
         <div className='home-page'>
             <Navbar />
@@ -108,6 +112,7 @@ function Manage() {
                     </table>
                 </div>
                 <div className='submit-container'>
+                    <button className='mgoback-btn' onClick={goBack}>Go Back</button>
                     <button className='submit-button' onClick={handleSubmitSelectedIdeas}>
                         Submit Selected Idea(s)
                     </button>

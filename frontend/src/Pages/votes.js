@@ -101,6 +101,10 @@ function Vote() {
             .catch((error) => console.error('Error fetching idea content:', error));
     };
 
+    const goBack = () => {
+        navigate(-1); // Go back to the previous page
+    };
+    
     return (
         <div className="home-page">
             <Navbar />
@@ -152,6 +156,7 @@ function Vote() {
                     </table>
                 </div>
                 <div className="submit-container">
+                    <button className='goback-btn' onClick={goBack}>Go Back</button>
                     <button className="submit-button" onClick={handleSubmitVotes}>
                         Submit Votes
                     </button>
