@@ -33,6 +33,10 @@ function Idea() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        if (!values.idea_title || !values.idea_summary || !values.idea_description) {
+            alert('Please fill in all required fields.');
+            return;
+        }
 
         axios.post(`http://localhost:8081/ideas/${camp_id}/${token}`, {
             idea_title: values.idea_title,
