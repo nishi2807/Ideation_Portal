@@ -53,14 +53,18 @@ function Initiate_campaign() {
             const selectedDate = new Date(event.target.value);
             const currentDate = new Date();
     
+            // Set the input value to current date if it's before the current date
             if (selectedDate < currentDate) {
-                alert("Please select a current or future date.");
-                event.target.value = ''; // Clear the input value
+                alert('Select Current Date or Future Date')
+                const currentDateString = currentDate.toISOString().slice(0, 10);
+                event.target.value = currentDateString;
+                // event.target.value = '';
             }
         }
     
         setValues(prev => ({ ...prev, [event.target.name]: event.target.value }))
     }
+       
 
     const handleSubmit = (event) => {
         event.preventDefault();
