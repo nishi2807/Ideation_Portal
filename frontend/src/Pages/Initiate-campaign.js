@@ -9,28 +9,31 @@ import { useSelector } from 'react-redux';
 
 function Initiate_campaign() {
     const Navigate = useNavigate();
+    const home = () => {
+        Navigate('/home')
+    }
+
     const logout = () => {
         Navigate('/');
     }
 
-    const home = () => {
-        Navigate('/home');
+    const campaign = () => {
+        Navigate('/campaign');
     }
 
-    // const createGroup = () => {
-    //     Navigate('/create-group');
-    // }
+    const ideation = () => {
+        Navigate('/ideation');
+    }
+
+    const voting = () => {
+        Navigate('/voting');
+    }
+
+    const manage = () => {
+        Navigate('/manage')
+    }
 
     const CurrentUser_name = useSelector((state) => state.CurrentUser_name)
-
-    const campaign = () => {
-        Navigate('/campaign')
-    }
-
-    const initiate_camp = () => {
-        Navigate('/initiate-campaign')
-    }
-
     const [values, setValues] = useState({
         camp_id: '',
         camp_startdate: '',
@@ -90,11 +93,11 @@ function Initiate_campaign() {
                 <hr className="hori-line"></hr>
                 <p className="menu-content" style={{ color: '#FFa559' }} onClick={campaign}>Campaigns</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">Ideation</p>
+                <p className="menu-content" onClick={ideation}>Ideation</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">Voting</p>
+                <p className="menu-content" onClick={voting}>Voting</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">Management</p>
+                <p className="menu-content" onClick={manage}>Management</p>
                 <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={logout}>LogOut</p>
             </div>

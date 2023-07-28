@@ -9,24 +9,28 @@ function CreateGroup() {
 
     const Navigate = useNavigate();
 
+    const home = () => {
+        Navigate('/home')
+    }
+
     const logout = () => {
         Navigate('/');
     }
 
-    const home = () => {
-        Navigate('/home');
-    }
-
-    const createGroup = () => {
-        Navigate('/create-group');
-    }
-
     const campaign = () => {
-        Navigate('/campaign')
+        Navigate('/campaign');
     }
 
-    const initiate_camp = () => {
-        Navigate('/initiate-campaign')
+    const ideation = () => {
+        Navigate('/ideation');
+    }
+
+    const voting = () => {
+        Navigate('/voting');
+    }
+
+    const manage = () => {
+        Navigate('/manage')
     }
 
     const [values, setValues] = useState({
@@ -97,15 +101,15 @@ function CreateGroup() {
         <div className='home-page'>
             <Navbar></Navbar>
             <div className="menu">
-                <p className="menu-content" onClick={home}>Home</p>
+            <p className="menu-content" onClick={home}>Home</p>
                 <hr className="hori-line"></hr>
                 <p className="menu-content" style={{ color: '#FFa559' }} onClick={campaign}>Campaigns</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">Ideation</p>
+                <p className="menu-content" onClick={ideation}>Ideation</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">Voting</p>
+                <p className="menu-content" onClick={voting}>Voting</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content">Management</p>
+                <p className="menu-content" onClick={manage}>Management</p>
                 <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={logout}>LogOut</p>
             </div>
