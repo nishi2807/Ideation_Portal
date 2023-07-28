@@ -91,7 +91,7 @@ function Campaign() {
         return end < today;
     };
 
-    
+
 
     const closedCampaigns = campaignData.filter(campaign => isCampaignClosed(campaign.manage_enddate));
     const allCampaigns = CurrentUser_role === 'admin' ? campaignData : closedCampaigns;
@@ -119,11 +119,18 @@ function Campaign() {
             </div>
             <div className='main-content'>
                 {/* <button className='create-group' onClick={createGroup}>Create New Group</button> */}
-                <button className='create-group' onClick={createGroup}>Initiate Campaign</button>
-                <div className='ver-line'></div>
-                <div className='camp-content'>
-                    <h1 className='pastcamp-title'>Your Past Campaigns</h1>
-                    <table className='camps-table'>
+                {CurrentUser_role === "admin" && (
+                    <div>
+                        <button className='create-group' onClick={createGroup}>Initiate Campaign</button>
+                        {/* <div className='ver-line'></div> */}
+                    </div>
+                )}
+                {/* <div className='ver-line'></div> */}
+                <h1 className= 'pastcamp-title-user'>
+                    {CurrentUser_role === "admin" ? "All Campaigns" : "Your Past Campaigns"}
+                </h1>
+                <div className={CurrentUser_role === "admin" ? 'camp-content' : 'camp-content-user'}>
+                    <table className={CurrentUser_role === "admin" ? 'camps-table' : 'camps-table-user'}>
                         <thead>
                             <tr>
                                 <th>Camp Id</th>
@@ -132,6 +139,7 @@ function Campaign() {
                                 <th>Users</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
+                                {CurrentUser_role === "admin" && <th>Status</th>}
                                 <th>Get Detail</th>
                             </tr>
                         </thead>
@@ -139,11 +147,12 @@ function Campaign() {
                             {allCampaigns.map((campaign) => (
                                 <tr key={campaign.camp_id}>
                                     <td>{campaign.camp_id}</td>
-                                    <td className='camp-con-owner'>{campaign.camp_owner}</td>
-                                    <td className='camp-con-title'>{campaign.camp_title}</td>
+                                    <td className={CurrentUser_role === "admin" ? 'camp-con-owner' : 'camp-con-onweruser'}>{campaign.camp_owner}</td>
+                                    <td className={CurrentUser_role === "admin" ? 'camp-con-title' : 'camp-con-titleuser'}>{campaign.camp_title}</td>
                                     <td>{campaign.camp_users}</td>
                                     <td>{formatDate(campaign.camp_startdate)}</td>
                                     <td>{formatDate(campaign.manage_enddate)}</td>
+                                    {CurrentUser_role === "admin" && <td className={isCampaignClosed(campaign.manage_enddate) ? 'closed' : 'open'}>{isCampaignClosed(campaign.manage_enddate) ? 'Closed' : 'Open'}</td>}
                                     <td>
                                         <button className="read-more-btn" onClick={() => handleGetDetails(campaign.token, campaign.camp_title, campaign.camp_id)}>
                                             Click Here

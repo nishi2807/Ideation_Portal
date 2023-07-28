@@ -9,10 +9,16 @@ import store from './store';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const userNameFromLocalStorage = localStorage.getItem("userName");
+const userRoleFromLocalStorage = localStorage.getItem("userRole");
 
 // If the user name exists in local storage, dispatch the action to set it in the store
 if (userNameFromLocalStorage) {
   store.dispatch({ type: "SET_CURRENT_USER_NAME", payload: userNameFromLocalStorage });
+}
+
+// If the user role exists in local storage, dispatch the action to set it in the store
+if (userRoleFromLocalStorage) {
+  store.dispatch({ type: "SET_CURRENT_USER_ROLE", payload: userRoleFromLocalStorage });
 }
 
 root.render(

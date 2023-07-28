@@ -32,12 +32,35 @@ function CreateGroup() {
     const [values, setValues] = useState({
         // camp_id: '',
         // camp_user_email: ''
+        // camp_ideation_id: '',
+        // camp_ideation_user_email: '',
+        // camp_voting_id: '',
+        // camp_voting_user_email: '',
+        // camp_management_id: '',
+        // camp_management_user_email: ''
     })
+
+    // const [confirmationStatus, setConfirmationStatus] = useState(false);
 
     const handleInput = (event) => {
         setValues(prev => ({ ...prev, [event.target.name]: event.target.value }))
         console.log(values)
+        // if (event.target.name === 'camp_ideation_id' && event.target.value !== '') {
+        //     setConfirmationStatus(true);
+        // } else {
+        //     setConfirmationStatus(false);
+        // }
     }
+
+    // const handleBlur = (event) => {
+    //     // Check if the Ideation campaign ID is filled and set the confirmation status accordingly
+    //     if (event.target.name === 'camp_ideation_id' && event.target.value !== '') {
+    //         setConfirmationStatus(true);
+    //     } else {
+    //         setConfirmationStatus(false);
+    //     }
+    // };
+
     const updatedb = (id, email, role) => {
         return axios.post('http://localhost:8081/campaign/emails', {
             camp_id: id,
@@ -48,6 +71,15 @@ function CreateGroup() {
     
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        // if (confirmationStatus) {
+        //     setValues((prev) => ({
+        //         ...prev,
+        //         camp_voting_id: values.camp_ideation_id,
+        //         camp_management_id: values.camp_ideation_id
+        //     }));
+        // }
+
         try {
             await Promise.all([
                 updatedb(values.camp_ideation_id, values.camp_ideation_user_email, 'I'),
@@ -79,11 +111,11 @@ function CreateGroup() {
             </div>
             <div className='main-content'>
                 {/* <button className='create-group' onClick={createGroup}>Create New Group</button> */}
-                <button className='create-group' onClick={initiate_camp}>Initiate Campaign</button>
-                <div className='ver-line'></div>
+                {/* <button className='create-group' onClick={initiate_camp}>Initiate Campaign</button> */}
+                {/* <div className='ver-line'></div> */}
 
                 <div className='create-group-con'>
-                    <h3 className='camp-heading'>Ideation Group</h3>
+                    <h3 className='camp-heading'>Create Ideation Group</h3>
                     <Form>
                         <Form.Group>
                             <Form.Label id='camp_id'>Campaign ID:</Form.Label>
@@ -92,7 +124,9 @@ function CreateGroup() {
                                 type="text"
                                 name="camp_ideation_id"
                                 placeholder="Enter Campaign ID"
-                                onChange={handleInput}
+                                onChange={handleInput}   
+                                // onBlur={handleBlur}    
+                                // value={values.camp_ideation_id}                         
                                 required
                             />
                         </Form.Group>
@@ -103,13 +137,14 @@ function CreateGroup() {
                                 type="email"
                                 name="camp_ideation_user_email"
                                 placeholder="Enter email id of user seperated with commas (,)"
+                                // value={values.camp_ideation_user_email}
                                 onChange={handleInput}
                                 required
                             />
                         </Form.Group>
                     </Form>
                     <hr className='hr-create-group'></hr>
-                    <h3 className='vote-heading'>Voting Group</h3>
+                    <h3 className='vote-heading'>Create Voting Group</h3>
                     <Form>
                         <Form.Group>
                             <Form.Label id='vote_id'>Campaign ID:</Form.Label>
@@ -135,7 +170,7 @@ function CreateGroup() {
                         </Form.Group>
                         <hr className='hr-vote-group'></hr>
                     </Form>
-                    <h3 className='manage-heading'>Management Group</h3>
+                    <h3 className='manage-heading'>Create Management Group</h3>
                     <Form>
                         <Form.Group>
                             <Form.Label id='manage_id'>Campaign ID:</Form.Label>

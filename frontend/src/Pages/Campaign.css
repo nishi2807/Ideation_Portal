@@ -7,10 +7,12 @@
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
-    padding: 1.2%;
-    margin-top: 1%;
+    padding: 1%;
+    margin-top: 0%;
     border: #ffa559;
     border-radius: 10px;
+    bottom: 4%;
+    right: 2.5%;
 }
 
 .ver-line {
@@ -18,7 +20,7 @@
     display: flex;
     border-left: 1px solid #000000;
     height: 565px;
-    left: 230px;
+    left: 210px;
 }
 
 .ini-camp {
@@ -45,10 +47,22 @@
     display: flex;
     /* background-color: #ffa559; */
     /* opacity: 50%; */
-    height: 550px;
-    width: 980px;
-    right: 0%;
-    top: 7%;
+    height: 460px;
+    width: 1150px;
+    /* right: 0%; */
+    top: 12%;
+    overflow: auto;
+}
+
+.camp-content-user {
+    position: absolute;
+    display: flex;
+    /* background-color: #ffa559; */
+    /* opacity: 50%; */
+    height: 520px;
+    width: 1150px;
+    /* right: 0%; */
+    top: 12%;
     overflow: auto;
 }
 
@@ -57,18 +71,16 @@
     /* display: flex; */
     /* left: 2%; */
     /* right: 3%; */
-    top: 15%;
-    width: 1150px;
+    /* top: 12%; */
+    width: 1120px;
     border-collapse: collapse;
 }
 
 .camps-table {
     position: absolute;
     /* display: flex; */
-    left: 2%;
-    right: 3%;
-    top: 10%;
-    width: 930px;
+    /* top: 10%; */
+    width: 1120px;
     border-collapse: collapse;
 }
 
@@ -78,6 +90,27 @@
 
 .camps-table td,
 .camps-table th {
+    border: 1px solid #ccc;
+    padding: 8px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.camps-table-user {
+    position: absolute;
+    /* display: flex; */
+    /* left: 2%; */
+    /* right: 3%; */
+    /* top: 10%; */
+    width: 1150px;
+    border-collapse: collapse;
+}
+
+.camps-table-user tbody tr td {
+    margin-bottom: 20px;
+}
+
+.camps-table-user td,
+.camps-table-user th {
     border: 1px solid #ccc;
     padding: 8px;
     font-family: Arial, Helvetica, sans-serif;
@@ -103,10 +136,18 @@
 }
 
 .camp-con-title{
-    width: 300px;
+    width: 430px;
 }
 
 .camp-con-owner {
+    width: 140px;
+}
+
+.camp-con-titleuser{
+    width: 530px;
+}
+
+.camp-con-owneruser {
     width: 140px;
 }
 
@@ -122,14 +163,22 @@
     position: absolute;
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
-    top: -20px;
-    left: 2%;
+    top: 5px;
+    left: 21%;
+}
+
+.pastcamp-title-user{
+    position: absolute;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    top: 5px;
+    /* left: 21%; */
 }
 
 .i-title {
     position: absolute;
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
-    top: 2%;
-    left: 2%;
+    top: 0%;
+    left: 2.5%;
 }

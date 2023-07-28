@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -27,6 +27,7 @@ function Ideation() {
     }
 
     const CurrentUser_name = useSelector((state) => state.CurrentUser_name)
+    const CurrentUser_role = useSelector((state) => state.CurrentUser_role)
     const [campaignData, setCampaignData] = useState([]);
 
     useEffect(() => {
@@ -83,6 +84,7 @@ function Ideation() {
     };
 
     const openCampaigns = campaignData.filter(campaign => !isCampaignClosed(campaign.camp_enddate));
+    const allCampaigns = CurrentUser_role === 'admin' ? campaignData : openCampaigns;
 
     return (
         <div className='home-page'>
@@ -105,30 +107,28 @@ function Ideation() {
                     <h1 className='i-title'>Ideation Group Campaigns</h1>
                 </div>
 
-                <div>
+                <div className='camp-content-user'>
                     <table className='icamp-table'>
                         <thead>
                             <tr>
                                 <th>Camp Id</th>
                                 <th>Campaign Owner</th>
                                 <th>Campaign Title</th>
-                                <th>Ideation Start Date</th>
-                                <th>Ideation End Date</th>
-                                {/* <th>Status</th> */}
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                {CurrentUser_role === "admin" && <th>Status</th>}
                                 <th>Get Detail</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {openCampaigns.map((campaign) => (
+                            {allCampaigns.map((campaign) => (
                                 <tr key={campaign.camp_id}>
                                     <td>{campaign.camp_id}</td>
                                     <td className='campidea-user'>{campaign.camp_owner}</td>
                                     <td className='campidea'>{campaign.camp_title}</td>
                                     <td>{formatDate(campaign.camp_startdate)}</td>
                                     <td>{formatDate(campaign.camp_enddate)}</td>
-                                    {/* <td className={isCampaignClosed(campaign.camp_enddate) ? 'closed' : 'open'}>
-                                        {isCampaignClosed(campaign.camp_enddate) ? 'Closed' : 'Open'}
-                                    </td> */}
+                                    {CurrentUser_role === "admin" && <td className={isCampaignClosed(campaign.camp_enddate) ? 'closed' : 'open'}>{isCampaignClosed(campaign.camp_enddate) ? 'Closed' : 'Open'}</td>}
                                     <td>
                                         <button className="read-more-btn" onClick={() => handleGetDetails(campaign.token, campaign.camp_title, campaign.camp_id)}>
                                             Click Here

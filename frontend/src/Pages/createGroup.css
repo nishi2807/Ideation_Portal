@@ -11,7 +11,7 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 30px;
     top: 5px;
-    left: 280px;
+    left: 10%;
     font-style: normal;
 }
 
@@ -20,20 +20,20 @@
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
-    left: 280px;
+    left: 10%;
     margin-top: 1%;
 }
 
 #camp_id_box{
     position: absolute;
     display: flex;
-    left: 280px;
+    left: 10%;
     top: 130px;
     height: 18px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 7px;
     padding: 0.6%;
-    width: 200px;
+    width: 300px;
 }
 
 #camp_user{
@@ -78,8 +78,8 @@
 .hr-create-group{
     position: absolute;
     display: flex;
-    width: 820px;
-    left: 270px;
+    width: 1050px;
+    /* left: 270px; */
     top: 180px;
 }
 
@@ -89,7 +89,7 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 30px;
     top: 180px;
-    left: 280px;
+    left: 10%;
     font-style: normal;
 }
 
@@ -98,20 +98,20 @@
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
-    left: 280px;
+    left: 10%;
     margin-top: 15.5%;
 }
 
 #vote_id_box{
     position: absolute;
     display: flex;
-    left: 280px;
+    left: 10%;
     top: 305px;
     height: 18px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 7px;
     padding: 0.6%;
-    width: 200px;
+    width: 300px;
 }
 
 #vote_user {
@@ -138,16 +138,16 @@
 .hr-vote-group{
     position: absolute;
     display: flex;
-    width: 820px;
-    left: 270px;
+    width: 1050px;
+    /* left: 270px; */
     top: 355px;
 }
 
 .hr-manage-group{
     position: absolute;
     display: flex;
-    width: 820px;
-    left: 270px;
+    width: 1050px;
+    /* left: 270px; */
     top: 355px;
 }
 
@@ -157,7 +157,7 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 30px;
     top: 360px;
-    left: 280px;
+    left: 10%;
     font-style: normal;
 }
 
@@ -166,20 +166,20 @@
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
-    left: 280px;
+    left: 10%;
     margin-top: 30.5%;
 }
 
 #manage_id_box{
     position: absolute;
     display: flex;
-    left: 280px;
+    left: 10%;
     top: 490px;
     height: 18px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 7px;
     padding: 0.6%;
-    width: 200px;
+    width: 300px;
 }
 
 #manage_user {

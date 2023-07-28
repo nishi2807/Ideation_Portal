@@ -3,6 +3,7 @@ import Navbar from '../Components/Navbar';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
+import { useSelector } from 'react-redux';
 // import './mnidea.css';
 
 function Mnidea() {
@@ -73,6 +74,8 @@ function Mnidea() {
         navigate(-1); // Go back to the previous page
     };
 
+    const CurrentUser_role = useSelector((state) => state.CurrentUser_role);
+
     return (
         <div className='home-page'>
             <Navbar />
@@ -114,8 +117,12 @@ function Mnidea() {
                     </table>
                 </div>
                 <div className='submit-container'>
-                    <button className='goback-btn' onClick={goBack}>Go Back</button>
-                    <button className='submit-button' onClick={SubmitIdea}>Submit an Idea</button>
+                    <button className={CurrentUser_role === "admin" ? 'submit-button' : 'goback-btn'} onClick={goBack}>Go Back</button>
+                    {CurrentUser_role === "user" && (
+                        <div>
+                            <button className='submit-button' onClick={SubmitIdea}>Submit an Idea</button>
+                        </div>
+                    )}
                     <ReactPaginate
                         previousLabel={'◀'}
                         nextLabel={'▶'}

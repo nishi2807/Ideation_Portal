@@ -224,3 +224,18 @@
     align-items: flex-start;
     white-space: pre-wrap;
 }
+
+.read-more-btn-grey {
+    /* position: absolute; */
+    align-items: center;
+    text-align: center;
+    display: flex;
+    background-color: lightgrey;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    /* padding: 0.7%; */
+    border: #ffa559;
+    height: 25px;
+    border-radius: 5px;
+    font-size: 16px;
+}

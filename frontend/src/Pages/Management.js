@@ -77,7 +77,16 @@ function Management() {
         return end < today;
     };
 
+    const isCampaignOpen = (endDate) => {
+        const today = new Date();
+        const end = new Date(endDate);
+        return end > today;
+    };
+
+    const CurrentUser_role = useSelector((state) => state.CurrentUser_role)
+
     const openCampaigns = campaignData.filter(campaign => !isCampaignClosed(campaign.manage_enddate));
+    const allCampaigns = CurrentUser_role === 'admin' ? campaignData : openCampaigns;
 
     const handleGetDetails = (token, encodedCampTitle, camp_id) => {
         // Navigate to the specified page with the received token and camp_id
@@ -104,32 +113,32 @@ function Management() {
                 <div>
                     <h1 className='i-title'>Management Group Campaigns</h1>
                 </div>
-                <div>
+                <div className='camp-content-user'>
                     <table className='icamp-table'>
                         <thead>
                             <tr>
                                 <th>Camp Id</th>
                                 <th>Campaign Owner</th>
                                 <th>Campaign Title</th>
-                                <th>Management Start Date</th>
-                                <th>Management End Date</th>
-                                {/* <th>Status</th> */}
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                {CurrentUser_role === "admin" && <th>Status</th>}
                                 <th>Get Detail</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {openCampaigns.map((campaign) => (
+                            {allCampaigns.map((campaign) => (
                                 <tr key={campaign.camp_id}>
                                     <td>{campaign.camp_id}</td>
                                     <td className='campidea-user'>{campaign.camp_owner}</td>
                                     <td className='campidea'>{campaign.camp_title}</td>
                                     <td>{formatDate(campaign.vote_enddate)}</td>
                                     <td>{formatDate(campaign.manage_enddate)}</td>
-                                    {/* <td className={isCampaignClosed(campaign.camp_enddate) ? 'closed' : 'open'}>
-                                        {isCampaignClosed(campaign.camp_enddate) ? 'Closed' : 'Open'}
-                                    </td> */}
+                                    {CurrentUser_role === "admin" && <td className={isCampaignClosed(campaign.manage_enddate) ? 'closed' : 'open'}>{isCampaignClosed(campaign.manage_enddate) ? 'Closed' : (!isCampaignOpen(campaign.vote_enddate) ? 'Open' : 'Not Open Yet')}</td>}
                                     <td>
-                                        <button className="read-more-btn" onClick={() => handleGetDetails(campaign.token, campaign.camp_title, campaign.camp_id)}>
+                                        <button className={!isCampaignOpen(campaign.vote_enddate) ? 'read-more-btn' : 'read-more-btn-grey'} onClick={() => handleGetDetails(campaign.token, campaign.camp_title, campaign.camp_id)}
+                                            disabled={isCampaignOpen(campaign.vote_enddate)}>
+
                                             Click Here
                                         </button>
                                     </td>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/Navbar';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 function Manage() {
     const [ideas, setIdeas] = useState([]);
@@ -36,7 +37,14 @@ function Manage() {
         navigate(`/idea-content/${ideaId}`);
     };
 
+    const CurrentUser_role = useSelector((state) => state.CurrentUser_role);
+
     const handleCheckboxChange = (ideaId) => {
+        if (CurrentUser_role === 'admin') {
+            // If the user is an admin, prevent any changes to the selected ideas
+            return;
+        }
+
         setSelectedIdeas((prevSelectedIdeas) => {
             if (prevSelectedIdeas.includes(ideaId)) {
                 return prevSelectedIdeas.filter((id) => id !== ideaId);
@@ -112,10 +120,15 @@ function Manage() {
                     </table>
                 </div>
                 <div className='submit-container'>
-                    <button className='mgoback-btn' onClick={goBack}>Go Back</button>
-                    <button className='submit-button' onClick={handleSubmitSelectedIdeas}>
-                        Submit Selected Idea(s)
-                    </button>
+                    <button className={CurrentUser_role === "admin" ? 'submit-button' : 'goback-btn'} onClick={goBack}>Go Back</button>
+                    {CurrentUser_role === "user" && (
+                        <div>
+                            <button className='submit-button' onClick={handleSubmitSelectedIdeas}>
+                                Submit Selected Idea(s)
+                            </button>
+                            {/* <div className='ver-line'></div> */}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -235,7 +235,7 @@ app.post('/campaign/initiate', (req, res) => {
 
                                 // Store the token, campaign ID, and end date in the campaign_links table
                                 const storeLinkQuery = 'INSERT INTO campaign_links (token, campaign_id, end_date, email) VALUES (?, ?, ?, ?)';
-                                db.query(storeLinkQuery, [token, camp_id, vote_enddate, email], (storeError, storeResult) => {
+                                db.query(storeLinkQuery, [token, camp_id, manage_enddate, email], (storeError, storeResult) => {
                                     if (storeError) {
                                         console.error('Error storing campaign link:', storeError);
                                         return res.status(500).json({ message: 'Failed to store campaign link' });
@@ -250,7 +250,12 @@ app.post('/campaign/initiate', (req, res) => {
                                         from: 'jobpower14@gmail.com',
                                         to: email,
                                         subject: 'Invitation to Vote',
-                                        text: `The campaign has been initiated, and you are invited to vote. Please click on this link: ${voteURL}`,
+                                        html: `<h3>Hello,</h3>
+                                        <p>The campaign "${camp_title}" has been initiated, and you are invited to vote.</p>
+                                        <p>Please click on the link below to access the page:</p>
+                                        <a href="${voteURL}">Click Here</a>
+                                        <p>The end date for this group is ${vote_enddate}. Please ensure to complete your tasks before this date.</p>
+                                        <p>Thank you</p>`,
                                     };
 
                                     transporter.sendMail(mailOptions, (emailError, info) => {
@@ -268,7 +273,7 @@ app.post('/campaign/initiate', (req, res) => {
 
                                 // Store the token, campaign ID, and end date in the campaign_links table
                                 const storeLinkQuery = 'INSERT INTO campaign_links (token, campaign_id, end_date, email) VALUES (?, ?, ?, ?)';
-                                db.query(storeLinkQuery, [token, camp_id, camp_enddate, email], (storeError, storeResult) => {
+                                db.query(storeLinkQuery, [token, camp_id, manage_enddate, email], (storeError, storeResult) => {
                                     if (storeError) {
                                         console.error('Error storing campaign link:', storeError);
                                         return res.status(500).json({ message: 'Failed to store campaign link' });
@@ -283,7 +288,12 @@ app.post('/campaign/initiate', (req, res) => {
                                         from: 'jobpower14@gmail.com',
                                         to: email,
                                         subject: 'Invitation to Post Idea',
-                                        text: `The campaign has been initiated, and you can now post your ideas. Please click on this link: ${postIdeaURL}`,
+                                        html: `<h3>Hello,</h3>
+                                        <p>The campaign "${camp_title}" has been initiated, and you are invited to post your ideas.</p>
+                                        <p>Please click on the link below to access the page:</p>
+                                        <a href="${postIdeaURL}">Click Here</a>
+                                        <p>The end date for this group is ${camp_enddate}. Please ensure to complete your tasks before this date.</p>
+                                        <p>Thank you</p>`,
                                     };
 
                                     transporter.sendMail(mailOptions, (emailError, info) => {
@@ -316,7 +326,12 @@ app.post('/campaign/initiate', (req, res) => {
                                         from: 'jobpower14@gmail.com',
                                         to: email,
                                         subject: 'Invitation to Management',
-                                        text: `The campaign has been initiated, and you are invited to manage the campaign. Please click on this link: ${managementURL}`,
+                                        html: `<h3>Hello,</h3>
+                                        <p>The campaign "${camp_title}" has been initiated, and you are invited to select the ideas from the top voted ideas.</p>
+                                        <p>Please click on the link below to access the page:</p>
+                                        <a href="${managementURL}">Click Here</a>
+                                        <p>The end date for this group is ${manage_enddate}. Please ensure to complete your tasks before this date.</p>
+                                        <p>Thank you</p>`,
                                     };
 
                                     transporter.sendMail(mailOptions, (emailError, info) => {
@@ -822,7 +837,7 @@ app.post('/get-user-campaigns', (req, res) => {
 app.post('/get-user-idea', (req, res) => {
     const { name } = req.body;
 
-    const selectUserSql = 'SELECT email FROM users WHERE name = ?';
+    const selectUserSql = 'SELECT email, role FROM users WHERE name = ?';
     const selectUserCampaignsSql = `
       SELECT cu.camp_id, c.camp_startdate, c.camp_enddate, c.camp_owner, c.camp_title
       FROM campaign_user cu
@@ -844,42 +859,68 @@ app.post('/get-user-idea', (req, res) => {
 
         const user = selectUserResult[0];
         const userEmail = user.email; // Get the user's email from the query result
+        const userRole = user.role;
 
-        // Fetch the campaigns in which the user participated as an Ideator
-        db.query(selectUserCampaignsSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
-            if (selectCampaignsErr) {
-                console.error('Error retrieving user campaigns from the database:', selectCampaignsErr);
-                res.status(500).json({ error: 'Failed to retrieve user campaigns.' });
-                return;
-            }
+        if (userRole === 'admin') {
+            const selectAllIdeas = `
+            SELECT camp_id, camp_startdate, camp_enddate, camp_owner, camp_title
+            FROM campaigns
+            ORDER BY camp_startdate DESC;
+            `;
 
-            if (selectCampaignsResult.length === 0) {
-                res.status(404).json({ error: 'User did not participate in any campaigns as an Ideator.' });
-                return;
-            }
-
-            // Store unique campaign details based on camp_id
-            const uniqueCampaignsMap = {};
-
-            selectCampaignsResult.forEach((campaign) => {
-                if (!uniqueCampaignsMap[campaign.camp_id]) {
-                    uniqueCampaignsMap[campaign.camp_id] = campaign;
+            db.query(selectAllIdeas, (selectAllIdeasErr, selectAllIdeasResult) => {
+                if (selectAllIdeasErr) {
+                    console.error('Error retrieving all campaigns from the database:', selectAllIdeasErr);
+                    res.status(500).json({ error: 'Failed to retrieve all campaigns.' });
+                    return;
                 }
+
+                if (selectAllIdeasResult.length === 0) {
+                    res.status(404).json({ error: 'No campaigns found.' });
+                    return;
+                }
+
+                // Send details of all campaigns as the response
+                res.status(200).json(selectAllIdeasResult);
+            })
+
+        } else {
+            // Fetch the campaigns in which the user participated as an Ideator
+            db.query(selectUserCampaignsSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
+                if (selectCampaignsErr) {
+                    console.error('Error retrieving user campaigns from the database:', selectCampaignsErr);
+                    res.status(500).json({ error: 'Failed to retrieve user campaigns.' });
+                    return;
+                }
+
+                if (selectCampaignsResult.length === 0) {
+                    res.status(404).json({ error: 'User did not participate in any campaigns as an Ideator.' });
+                    return;
+                }
+
+                // Store unique campaign details based on camp_id
+                const uniqueCampaignsMap = {};
+
+                selectCampaignsResult.forEach((campaign) => {
+                    if (!uniqueCampaignsMap[campaign.camp_id]) {
+                        uniqueCampaignsMap[campaign.camp_id] = campaign;
+                    }
+                });
+
+                // Convert the object back to an array of unique campaigns
+                const uniqueCampaigns = Object.values(uniqueCampaignsMap);
+
+                // Send the campaign details as the response
+                res.status(200).json(uniqueCampaigns);
             });
-
-            // Convert the object back to an array of unique campaigns
-            const uniqueCampaigns = Object.values(uniqueCampaignsMap);
-
-            // Send the campaign details as the response
-            res.status(200).json(uniqueCampaigns);
-        });
+        }
     });
 });
 
 app.post('/get-user-vote', (req, res) => {
     const { name } = req.body;
 
-    const selectUserSql = 'SELECT email FROM users WHERE name = ?';
+    const selectUserSql = 'SELECT email, role FROM users WHERE name = ?';
     const selectUserCampaignsSql = `
       SELECT cu.camp_id, c.camp_enddate, c.vote_enddate, c.camp_owner, c.camp_title
       FROM campaign_user cu
@@ -900,43 +941,68 @@ app.post('/get-user-vote', (req, res) => {
         }
 
         const user = selectUserResult[0];
-        const userEmail = user.email; // Get the user's email from the query result
+        const userEmail = user.email;
+        const userRole = user.role;
 
-        // Fetch the campaigns in which the user participated as an Ideator
-        db.query(selectUserCampaignsSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
-            if (selectCampaignsErr) {
-                console.error('Error retrieving user campaigns from the database:', selectCampaignsErr);
-                res.status(500).json({ error: 'Failed to retrieve user campaigns.' });
-                return;
-            }
+        if (userRole === 'admin') {
+            const selectAllVotes = `
+            SELECT camp_id, camp_enddate, vote_enddate, camp_owner, camp_title
+            FROM campaigns
+            ORDER BY camp_enddate DESC;
+            `;
 
-            if (selectCampaignsResult.length === 0) {
-                res.status(404).json({ error: 'User did not participate in any campaigns as an Ideator.' });
-                return;
-            }
-
-            // Store unique campaign details based on camp_id
-            const uniqueCampaignsMap = {};
-
-            selectCampaignsResult.forEach((campaign) => {
-                if (!uniqueCampaignsMap[campaign.camp_id]) {
-                    uniqueCampaignsMap[campaign.camp_id] = campaign;
+            db.query(selectAllVotes, (selectAllVotesErr, selectAllVotesResult) => {
+                if (selectAllVotesErr) {
+                    console.error('Error retrieving all campaigns from the database:', selectAllVotesErr);
+                    res.status(500).json({ error: 'Failed to retrieve all campaigns.' });
+                    return;
                 }
+
+                if (selectAllVotesResult.length === 0) {
+                    res.status(404).json({ error: 'No campaigns found.' });
+                    return;
+                }
+
+                // Send details of all campaigns as the response
+                res.status(200).json(selectAllVotesResult);
+            })
+        } else {
+            // Fetch the campaigns in which the user participated as an Ideator
+            db.query(selectUserCampaignsSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
+                if (selectCampaignsErr) {
+                    console.error('Error retrieving user campaigns from the database:', selectCampaignsErr);
+                    res.status(500).json({ error: 'Failed to retrieve user campaigns.' });
+                    return;
+                }
+
+                if (selectCampaignsResult.length === 0) {
+                    res.status(404).json({ error: 'User did not participate in any campaigns as an Ideator.' });
+                    return;
+                }
+
+                // Store unique campaign details based on camp_id
+                const uniqueCampaignsMap = {};
+
+                selectCampaignsResult.forEach((campaign) => {
+                    if (!uniqueCampaignsMap[campaign.camp_id]) {
+                        uniqueCampaignsMap[campaign.camp_id] = campaign;
+                    }
+                });
+
+                // Convert the object back to an array of unique campaigns
+                const uniqueCampaigns = Object.values(uniqueCampaignsMap);
+
+                // Send the campaign details as the response
+                res.status(200).json(uniqueCampaigns);
             });
-
-            // Convert the object back to an array of unique campaigns
-            const uniqueCampaigns = Object.values(uniqueCampaignsMap);
-
-            // Send the campaign details as the response
-            res.status(200).json(uniqueCampaigns);
-        });
+        }
     });
 });
 
 app.post('/get-user-manage', (req, res) => {
     const { name } = req.body;
 
-    const selectUserSql = 'SELECT email FROM users WHERE name = ?';
+    const selectUserSql = 'SELECT email, role FROM users WHERE name = ?';
     const selectUserCampaignsSql = `
       SELECT cu.camp_id, c.vote_enddate, c.manage_enddate, c.camp_owner, c.camp_title
       FROM campaign_user cu
@@ -958,35 +1024,60 @@ app.post('/get-user-manage', (req, res) => {
 
         const user = selectUserResult[0];
         const userEmail = user.email; // Get the user's email from the query result
+        const userRole = user.role;
 
-        // Fetch the campaigns in which the user participated as an Ideator
-        db.query(selectUserCampaignsSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
-            if (selectCampaignsErr) {
-                console.error('Error retrieving user campaigns from the database:', selectCampaignsErr);
-                res.status(500).json({ error: 'Failed to retrieve user campaigns.' });
-                return;
-            }
+        if (userRole === 'admin') {
+            const selectAllVotes = `
+            SELECT camp_id, vote_enddate, manage_enddate, camp_owner, camp_title
+            FROM campaigns
+            ORDER BY vote_enddate DESC;
+            `;
 
-            if (selectCampaignsResult.length === 0) {
-                res.status(404).json({ error: 'User did not participate in any campaigns as an Ideator.' });
-                return;
-            }
-
-            // Store unique campaign details based on camp_id
-            const uniqueCampaignsMap = {};
-
-            selectCampaignsResult.forEach((campaign) => {
-                if (!uniqueCampaignsMap[campaign.camp_id]) {
-                    uniqueCampaignsMap[campaign.camp_id] = campaign;
+            db.query(selectAllVotes, (selectAllVotesErr, selectAllVotesResult) => {
+                if (selectAllVotesErr) {
+                    console.error('Error retrieving all campaigns from the database:', selectAllVotesErr);
+                    res.status(500).json({ error: 'Failed to retrieve all campaigns.' });
+                    return;
                 }
+
+                if (selectAllVotesResult.length === 0) {
+                    res.status(404).json({ error: 'No campaigns found.' });
+                    return;
+                }
+
+                // Send details of all campaigns as the response
+                res.status(200).json(selectAllVotesResult);
+            })
+        } else {
+            // Fetch the campaigns in which the user participated as an Ideator
+            db.query(selectUserCampaignsSql, [userEmail], (selectCampaignsErr, selectCampaignsResult) => {
+                if (selectCampaignsErr) {
+                    console.error('Error retrieving user campaigns from the database:', selectCampaignsErr);
+                    res.status(500).json({ error: 'Failed to retrieve user campaigns.' });
+                    return;
+                }
+
+                if (selectCampaignsResult.length === 0) {
+                    res.status(404).json({ error: 'User did not participate in any campaigns as an Ideator.' });
+                    return;
+                }
+
+                // Store unique campaign details based on camp_id
+                const uniqueCampaignsMap = {};
+
+                selectCampaignsResult.forEach((campaign) => {
+                    if (!uniqueCampaignsMap[campaign.camp_id]) {
+                        uniqueCampaignsMap[campaign.camp_id] = campaign;
+                    }
+                });
+
+                // Convert the object back to an array of unique campaigns
+                const uniqueCampaigns = Object.values(uniqueCampaignsMap);
+
+                // Send the campaign details as the response
+                res.status(200).json(uniqueCampaigns);
             });
-
-            // Convert the object back to an array of unique campaigns
-            const uniqueCampaigns = Object.values(uniqueCampaignsMap);
-
-            // Send the campaign details as the response
-            res.status(200).json(uniqueCampaigns);
-        });
+        }
     });
 });
 

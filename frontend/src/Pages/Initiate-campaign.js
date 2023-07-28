@@ -52,13 +52,14 @@ function Initiate_campaign() {
             // Compare selected date with current date
             const selectedDate = new Date(event.target.value);
             const currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0);
     
             // Set the input value to current date if it's before the current date
-            if (selectedDate < currentDate) {
+            if (selectedDate.getTime() < currentDate.getTime()) {
                 alert('Select Current Date or Future Date')
                 const currentDateString = currentDate.toISOString().slice(0, 10);
-                event.target.value = currentDateString;
-                // event.target.value = '';
+                // event.target.value = currentDateString;
+                event.target.value = '';
             }
         }
     
@@ -99,8 +100,8 @@ function Initiate_campaign() {
             </div>
             <div className='main-content'>
                 {/* <button className='create-group' onClick={createGroup}>Create New Group</button> */}
-                <button className='create-group' onClick={initiate_camp}>Initiate Campaign</button>
-                <div className='ver-line'></div>
+                {/* <button className='create-group' onClick={initiate_camp}>Initiate Campaign</button> */}
+                {/* <div className='ver-line'></div> */}
 
                 <div className='create-group-con'>
                     <h3 className='camp-heading'>Initiate a New Campaign</h3>
@@ -133,6 +134,7 @@ function Initiate_campaign() {
                                 id="camp_owner_box"
                                 type="name"
                                 name="camp_owner"
+                                value={values.camp_owner} 
                                 placeholder="Enter your full name"
                                 onChange={handleInput}
                                 required

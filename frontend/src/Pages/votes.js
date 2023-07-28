@@ -5,6 +5,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import Rating from 'react-rating-stars-component';
 import './votes.css';
 import ReactPaginate from 'react-paginate';
+import { useSelector } from 'react-redux';
 
 function Vote() {
     const [ideas, setIdeas] = useState([]);
@@ -63,13 +64,21 @@ function Vote() {
         return text.substr(0, maxLength) + '...';
     };
 
+    const CurrentUser_role = useSelector((state) => state.CurrentUser_role);
+
     const handleVote = (rating, index) => {
-        setPrevRatings((prevRatings) => {
-            const updatedRatings = [...prevRatings];
-            updatedRatings[pageNumber] = [...updatedRatings[pageNumber]]; // Create a new array to ensure immutability
-            updatedRatings[pageNumber][index] = rating;
-            return updatedRatings;
-        });
+        if (CurrentUser_role === 'admin') {
+            // If the user is an admin, prevent any changes to the ratings
+            return;
+        } else {
+            setPrevRatings((prevRatings) => {
+                const updatedRatings = [...prevRatings];
+                updatedRatings[pageNumber] = [...updatedRatings[pageNumber]]; // Create a new array to ensure immutability
+                updatedRatings[pageNumber][index] = rating;
+                return updatedRatings;
+            });
+        }
+
     };
 
     const handlePageChange = ({ selected }) => {
@@ -104,7 +113,7 @@ function Vote() {
     const goBack = () => {
         navigate(-1); // Go back to the previous page
     };
-    
+
     return (
         <div className="home-page">
             <Navbar />
@@ -139,6 +148,7 @@ function Vote() {
                                                 activeColor="#ffd700"
                                                 value={prevRatings[pageNumber]?.[index] || 0} // Use previous rating if available
                                                 onChange={(rating) => handleVote(rating, index)}
+                                                edit={CurrentUser_role !== 'admin'}
                                             />
                                         </td>
                                         <td>
@@ -156,10 +166,14 @@ function Vote() {
                     </table>
                 </div>
                 <div className="submit-container">
-                    <button className='goback-btn' onClick={goBack}>Go Back</button>
-                    <button className="submit-button" onClick={handleSubmitVotes}>
-                        Submit Votes
-                    </button>
+                    <button className={CurrentUser_role === "admin" ? 'submit-button' : 'goback-btn'} onClick={goBack}>Go Back</button>
+                    {CurrentUser_role === "user" && (
+                        <div>
+                            <button className="submit-button" onClick={handleSubmitVotes}>
+                                Submit Votes
+                            </button>
+                        </div>
+                    )}
                     <ReactPaginate
                         previousLabel={'◀'}
                         nextLabel={'▶'}
