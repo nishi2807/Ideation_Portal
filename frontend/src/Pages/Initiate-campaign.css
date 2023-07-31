@@ -3,21 +3,21 @@
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
-    left: 520px;
+    left: 10%;
     /* top: 200px; */
-    margin-top: 1%;
+    margin-top: 15%;
 }
 
 #camp_statement_box {
     position: absolute;
     display: flex;
-    left: 520px;
-    top: 130px;
+    left: 10%;
+    top: 49%;
     height: 18px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 7px;
     padding: 0.6%;
-    width: 540px;
+    width: 400px;
 }
 
 #camp_owner {
@@ -25,21 +25,21 @@
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
-    left: 10%;
+    left: 660px;
     /* top: 200px; */
-    margin-top: 9%;
+    margin-top: 15%;
 }
 
 #camp_owner_box{
     position: absolute;
     display: flex;
-    left: 10%;
-    top: 230px;
+    left: 660px;
+    top: 49%;
     height: 18px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 7px;
     padding: 0.6%;
-    width: 300px;
+    width: 400px;
 }
 
 #camp_start {
@@ -47,8 +47,8 @@
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
-    margin-top: 9%;
-    left: 520px;
+    margin-top: 22%;
+    left: 10%;
 }
 
 #camp_end {
@@ -56,32 +56,32 @@
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
-    margin-top: 9%;
-    left: 830px;
+    margin-top: 22%;
+    left: 37.3%;
 }
 
 #camp_start_box{
     position: absolute;
     display: flex;
-    left: 520px;
-    top: 230px;
+    left: 10%;
+    top: 62.5%;
     height: 18px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 7px;
     padding: 0.6%;
-    width: 230px;
+    width: 280px;
 }
 
 #camp_end_box{
     position: absolute;
     display: flex;
-    left: 830px;
-    top: 230px;
+    left: 37.3%;
+    top: 62.5%;
     height: 18px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 7px;
     padding: 0.6%;
-    width: 230px;
+    width: 280px;
 }
 
 .inicamp-btn {
@@ -89,12 +89,12 @@
     align-items: center;
     text-align: center;
     display: flex;
-    background-color: #ffa559;
+    background-color: #6CB4EE;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
     padding: 0.7%;
-    border: #ffa559;
+    border: #6CB4EE;
     width: 150px;
     top: 400px;
     right: 78px;
@@ -107,20 +107,21 @@
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
-    margin-top: 17.5%;
-    left: 10%;
+    margin-top: 22%;
+    left: 64.5%;
 }
 
 #voting_end_box{
     position: absolute;
     display: flex;
-    left: 10%;
-    top: 330px;
+    /* left: 55%; */
+    right: 11%;
+    top: 62.5%;
     height: 18px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 7px;
     padding: 0.6%;
-    width: 230px;
+    width: 280px;
 }
 
 #manage_end {
@@ -128,18 +129,18 @@
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
-    margin-top: 17.5%;
-    left: 520px;
+    margin-top: 29%;
+    left: 10%;
 }
 
 #manage_end_box{
     position: absolute;
     display: flex;
-    left: 520px;
-    top: 330px;
+    left: 10%;
+    top: 76.5%;
     height: 18px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 7px;
     padding: 0.6%;
-    width: 230px;
+    width: 280px;
 }

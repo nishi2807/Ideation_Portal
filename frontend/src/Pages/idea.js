@@ -60,7 +60,7 @@ function Idea() {
     }
 
     const goBack = () => {
-        navigate(-1); // Go back to the previous page
+        navigate(`/all-ideas?token=${token}&camp_title=${camp_title}&camp_id=${camp_id}`); // Go back to the previous page
     };
 
     return (

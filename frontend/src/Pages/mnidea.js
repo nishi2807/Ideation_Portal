@@ -21,7 +21,7 @@ function Mnidea() {
 
     useEffect(() => {
         axios
-            .post(`http://localhost:8081/ideas?token=${token}`)
+            .post(`http://localhost:8081/ideas?camp_id=${campid}`)
             .then((response) => {
                 const allIdeas = response.data;
                 setAllIdeas(allIdeas); // Store all ideas in the state
@@ -71,7 +71,7 @@ function Mnidea() {
     };
 
     const goBack = () => {
-        navigate(-1); // Go back to the previous page
+        navigate('/ideation'); // Go back to the previous page
     };
 
     const CurrentUser_role = useSelector((state) => state.CurrentUser_role);
@@ -85,7 +85,7 @@ function Mnidea() {
                 </div>
                 <div className='ideas-con'>
                     <table className='ideas-table'>
-                        <thead>
+                        <thead className='theading'>
                             <tr>
                                 <th>Title</th>
                                 <th>Summary</th>

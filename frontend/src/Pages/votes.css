@@ -44,6 +44,11 @@
     /* width: 11%; */
     text-align: center;
 }
+.ideas-table tbody {
+    /* display: block; */
+    max-height: 470px; /* Set a fixed maximum height for the tbody */
+    overflow-y: auto;
+}
 
 .ideas-table tbody tr td {
     margin-bottom: 20px;
@@ -74,12 +79,12 @@
     align-items: center;
     text-align: center;
     display: flex;
-    background-color: #ffa559;
+    background-color: #6CB4EE;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     /* padding: 0.7%; */
-    border: #ffa559;
-    height: 25px;
+    border: #6CB4EE;
+    height: fit-content;
     border-radius: 5px;
     font-size: 16px;
 }
@@ -89,12 +94,12 @@
     align-items: center;
     text-align: center;
     display: flex;
-    background-color: #ffa559;
+    background-color: #6CB4EE;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
     padding: 0.7%;
-    border: #ffa559;
+    border: #6CB4EE;
     width: fit-content;
     top: 560px;
     right: 50px;
@@ -107,12 +112,12 @@
     align-items: center;
     text-align: center;
     display: flex;
-    background-color: #ffa559;
+    background-color: #6CB4EE;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
     padding: 0.7%;
-    border: #ffa559;
+    border: #6CB4EE;
     width: fit-content;
     top: 560px;
     right: 200px;
@@ -125,12 +130,12 @@
     align-items: center;
     text-align: center;
     display: flex;
-    background-color: #ffa559;
+    background-color: #6CB4EE;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
     padding: 0.7%;
-    border: #ffa559;
+    border: #6CB4EE;
     width: fit-content;
     top: 560px;
     right: 290px;
@@ -150,7 +155,11 @@
     justify-content: center;
     list-style-type: none;
     padding: 0;
-    margin: 0;
+    margin-right: 100%;
+    margin-bottom: -1%;
+    /* top: 80%; */
+    /* bottom: 3%; */
+    /* left: 1%; */
 }
 
 .pagination .page-item {
@@ -181,7 +190,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 500px;
+    margin-top: 490px;
     /* list-style-type: none; */
     /* top: 530px; */
 }
@@ -234,8 +243,8 @@
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     /* padding: 0.7%; */
-    border: #ffa559;
-    height: 25px;
+    border: #6CB4EE;
+    height: fit-content;
     border-radius: 5px;
     font-size: 16px;
 }

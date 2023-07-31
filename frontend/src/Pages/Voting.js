@@ -91,8 +91,12 @@ function Voting() {
 
 
     const handleGetDetails = (token, encodedCampTitle, camp_id) => {
-        // Navigate to the specified page with the received token and camp_id
-        Navigate(`/vote?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`);
+
+        if (CurrentUser_role === 'admin') {
+            Navigate(`/vote?camp_id=${camp_id}`)
+        } else {
+            Navigate(`/vote?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`);
+        }
     };
 
     return (
@@ -105,7 +109,7 @@ function Voting() {
                 <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={ideation}>Ideation</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content" style={{ color: '#FFa559' }}>Voting</p>
+                <p className="menu-content" style={{ color: '#6CB4EE' }}>Voting</p>
                 <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={manage}>Management</p>
                 <hr className="hori-line"></hr>
@@ -117,13 +121,13 @@ function Voting() {
                 </div>
                 <div className='camp-content-user'>
                     <table className='icamp-table'>
-                        <thead>
+                        <thead className='theading'>
                             <tr>
                                 <th>Camp Id</th>
                                 <th>Campaign Owner</th>
                                 <th>Campaign Title</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
+                                <th>Voting Start Date</th>
+                                <th>Voting End Date</th>
                                 {CurrentUser_role === "admin" && <th>Status</th>}
                                 <th>Get Detail</th>
                             </tr>

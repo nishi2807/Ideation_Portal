@@ -126,32 +126,6 @@ app.post('/campaign/emails', (req, res) => {
             }
 
             console.log('Emails stored successfully');
-
-            // Send email invitations to the participants
-            const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: 'jobpower14@gmail.com',
-                    pass: 'xcsdbolaiymfadra'
-                }
-            });
-
-            const mailOptionsI = {
-                from: 'jobpower14@gmail.com',
-                to: emails,
-                subject: camp_user_role == 'I' ? "Welcome to Ideation Group" : camp_user_role == 'V' ? "Welcome to Voting Group" : "Welcome to Management Group",
-                text: camp_user_role == 'I' ? "You are invited to participate in the campaign. We will send you the participation link as soon as the campaign is initiated." : camp_user_role == 'V' ? "You are invited to participate in the campaign. We will send you the participation link as soon as the campaign is initiated." : "You are invited to participate in the campaign. We will send you the participation link as soon as the campaign is initiated."
-            };
-
-            transporter.sendMail(mailOptionsI, (emailError, info) => {
-                if (emailError) {
-                    console.error('Error sending email invitations:', emailError);
-                    return res.status(500).json({ message: 'Failed to send email invitations' });
-                }
-
-                console.log('Email invitations sent successfully');
-                return res.status(200).json({ message: 'Emails stored and invitations sent successfully' });
-            });
         });
     });
 });
@@ -392,33 +366,23 @@ app.post('/ideas/:campaignId/:token', (req, res) => {
 });
 
 app.post('/ideas', (req, res) => {
-    const { token } = req.query;
+    const { camp_id } = req.query;
 
-    db.query('SELECT campaign_id FROM campaign_links WHERE token = ?', [token], (error, linkResults) => {
-        if (error) {
-            console.error('Error fetching campaign link data from the database:', error);
-            res.status(500).send('Internal Server Error');
-        } else if (linkResults.length === 0) {
-            res.status(404).send('Campaign link not found');
-        } else {
-            const campId = linkResults[0].campaign_id;
-
-            // Fetch the ideas that have the associated camp_id
-            db.query(
-                'SELECT idea_title, idea_summary, idea_description FROM ideas WHERE camp_id = ?',
-                [campId],
-                (error, ideaResults) => {
-                    if (error) {
-                        console.error('Error fetching ideas data from the database:', error);
-                        res.status(500).send('Internal Server Error');
-                    } else {
-                        res.json(ideaResults);
-                    }
-                }
-            );
+    // Fetch the ideas that have the associated camp_id
+    db.query(
+        'SELECT idea_title, idea_summary, idea_description FROM ideas WHERE camp_id = ?',
+        [camp_id],
+        (error, ideaResults) => {
+            if (error) {
+                console.error('Error fetching ideas data from the database:', error);
+                res.status(500).send('Internal Server Error');
+            } else {
+                res.json(ideaResults);
+            }
         }
-    });
+    );
 });
+
 
 
 app.post('/ideas/voting', (req, res) => {

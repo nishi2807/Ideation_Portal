@@ -89,8 +89,12 @@ function Management() {
     const allCampaigns = CurrentUser_role === 'admin' ? campaignData : openCampaigns;
 
     const handleGetDetails = (token, encodedCampTitle, camp_id) => {
-        // Navigate to the specified page with the received token and camp_id
-        Navigate(`/management?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`);
+
+        if (CurrentUser_role === 'admin') {
+            Navigate(`/management?camp_id=${camp_id}`)
+        }else {
+            Navigate(`/management?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`);
+        }
     };
 
     return (
@@ -105,7 +109,7 @@ function Management() {
                 <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={voting}>Voting</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content" style={{ color: '#FFa559' }}>Management</p>
+                <p className="menu-content" style={{ color: '#6CB4EE' }}>Management</p>
                 <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={logout}>LogOut</p>
             </div>
@@ -115,13 +119,13 @@ function Management() {
                 </div>
                 <div className='camp-content-user'>
                     <table className='icamp-table'>
-                        <thead>
+                        <thead className='theading'>
                             <tr>
                                 <th>Camp Id</th>
                                 <th>Campaign Owner</th>
                                 <th>Campaign Title</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
+                                <th>Management Start Date</th>
+                                <th>Management End Date</th>
                                 {CurrentUser_role === "admin" && <th>Status</th>}
                                 <th>Get Detail</th>
                             </tr>

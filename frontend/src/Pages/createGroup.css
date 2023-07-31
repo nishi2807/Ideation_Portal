@@ -33,7 +33,7 @@
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 7px;
     padding: 0.6%;
-    width: 300px;
+    width: 400px;
 }
 
 #camp_user{
@@ -62,12 +62,12 @@
     align-items: center;
     text-align: center;
     display: flex;
-    background-color: #ffa559;
+    background-color: #6CB4EE;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
     padding: 0.7%;
-    border: #ffa559;
+    border: #6CB4EE;
     width: 150px;
     top: 550px;
     right: 77px;
@@ -119,15 +119,15 @@
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
-    left: 660px;
-    margin-top: 15.5%;
+    left: 10%;
+    margin-top: 8%;
 }
 
 #vote_user_box{
     position: absolute;
     display: flex;
-    left: 660px;
-    top: 305px;
+    left: 10%;
+    top: 35%;
     height: 18px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 7px;
@@ -188,17 +188,19 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
     left: 660px;
-    margin-top: 30.5%;
+    margin-top: 8%;
 }
 
 #manage_user_box{
     position: absolute;
     display: flex;
     left: 660px;
-    top: 490px;
-    height: 18px;
+    top: 35%;
+    height: 35px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 7px;
+    border-width: 2px;
+    border-color: black;
     padding: 0.6%;
-    width: 400px;
+    width: 420px;
 }

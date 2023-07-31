@@ -13,6 +13,7 @@ function Vote() {
     const location = useLocation();
     const token = new URLSearchParams(location.search).get('token');
     const campid = new URLSearchParams(location.search).get('camp_id');
+    const camptitle = new URLSearchParams(location.search).get('camp_title');
     const entriesPerPage = 10;
     const navigate = useNavigate();
     const [pageNumber, setPageNumber] = useState(0);
@@ -33,7 +34,7 @@ function Vote() {
 
     useEffect(() => {
         axios
-            .post(`http://localhost:8081/ideas?token=${token}`)
+            .post(`http://localhost:8081/ideas?camp_id=${campid}`)
             .then((response) => {
                 const allIdeas = response.data;
                 setAllIdeas(allIdeas); // Store all ideas in the state
@@ -94,6 +95,7 @@ function Vote() {
             .then((response) => {
                 alert('Your votes are successfully submitted!');
                 console.log('Votes submitted successfully:', response.data);
+                navigate(`/voting`);
             })
             .catch((error) => {
                 console.error('Error submitting votes:', error);
@@ -111,7 +113,7 @@ function Vote() {
     };
 
     const goBack = () => {
-        navigate(-1); // Go back to the previous page
+        navigate(`/voting`); // Go back to the previous page
     };
 
     return (
@@ -123,7 +125,7 @@ function Vote() {
                 </div>
                 <div className="ideas-con">
                     <table className="ideas-table">
-                        <thead>
+                        <thead className='theading'>
                             <tr>
                                 <th>Idea Title</th>
                                 <th>Idea Summary</th>

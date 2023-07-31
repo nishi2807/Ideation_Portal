@@ -13,6 +13,10 @@ function Home() {
         Navigate('/');
     }
 
+    const home = () => {
+        Navigate('/home')
+    }
+
     const campaign = () => {
         Navigate('/campaign');
     }
@@ -67,7 +71,7 @@ function Home() {
         <div className="home-page">
             <Navbar></Navbar>
             <div className="menu">
-                <p className="menu-content" style={{ color: '#FFa559' }}>Home</p>
+                <p className="menu-content" style={{ color: '#6CB4EE' }}>Home</p>
                 <hr className="hori-line"></hr>
                 {/* {CurrentUser_role === "admin" && (
                     <> */}
@@ -90,11 +94,11 @@ function Home() {
                 </div>
                 <div className="report-con">
                     <p className="camp"></p>
-                    <p className="idea-text">Total Campaigns: {totalCampaigns}</p>
+                    <p className="idea-text" onClick={campaign}>Total Campaigns: {totalCampaigns}</p>
                     <p className="ideas"></p>
-                    <p className="camp-text">Total Ideas: {totalIdeas}</p>
+                    <p className="camp-text" onClick={ideation}>Total Ideas: {totalIdeas}</p>
                     <p className="report"></p>
-                    <p className="report-text">Total Votes: {totalVotes}</p>
+                    <p className="report-text" onClick={voting}>Total Votes: {totalVotes}</p>
                 </div>
             </div>
         </div>

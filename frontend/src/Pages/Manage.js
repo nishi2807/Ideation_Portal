@@ -8,6 +8,7 @@ function Manage() {
     const [ideas, setIdeas] = useState([]);
     const location = useLocation();
     const campid = new URLSearchParams(location.search).get('camp_id');
+    const camptitle = new URLSearchParams(location.search).get('camp_title');
     const navigate = useNavigate();
     const [selectedIdeas, setSelectedIdeas] = useState([]);
     const token = new URLSearchParams(location.search).get('token');
@@ -64,6 +65,7 @@ function Manage() {
             .then((response) => {
                 console.log('Selected ideas stored successfully:', response.data);
                 alert("Selected Ideas are submitted successfully !")
+                navigate(`/manage`);
                 // Handle success
             })
             .catch((error) => {
@@ -73,7 +75,7 @@ function Manage() {
     };
 
     const goBack = () => {
-        navigate(-1); // Go back to the previous page
+        navigate(`/manage`); // Go back to the previous page
     };
 
     return (
@@ -85,7 +87,7 @@ function Manage() {
                 </div>
                 <div className='ideas-con'>
                     <table className='ideas-table'>
-                        <thead>
+                        <thead className='theading'>
                             <tr>
                                 <th>Idea Title</th>
                                 <th>Idea Summary</th>

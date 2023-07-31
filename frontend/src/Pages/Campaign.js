@@ -107,7 +107,7 @@ function Campaign() {
             <div className="menu">
                 <p className="menu-content" onClick={home}>Home</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content" style={{ color: '#FFa559' }}>Campaigns</p>
+                <p className="menu-content" style={{ color: '#6CB4EE' }}>Campaigns</p>
                 <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={ideation}>Ideation</p>
                 <hr className="hori-line"></hr>
@@ -131,7 +131,7 @@ function Campaign() {
                 </h1>
                 <div className={CurrentUser_role === "admin" ? 'camp-content' : 'camp-content-user'}>
                     <table className={CurrentUser_role === "admin" ? 'camps-table' : 'camps-table-user'}>
-                        <thead>
+                        <thead className='theading'>
                             <tr>
                                 <th>Camp Id</th>
                                 <th>Campaign Owner</th>

@@ -58,7 +58,7 @@
     display:flex;
     height: 250px;
     width: 800px;
-    background-color: #ffa559;
+    background-color: #6CB4EE;
     border-radius: 0px 0px 0px 50px;
     margin-top: 28.7%;
     align-items: center;
@@ -157,8 +157,8 @@
 .login-button {
     position: absolute;
     display: flex;
-    background-color: #ffa559;
-    border: #ffa559;
+    background-color: #6CB4EE;
+    border: #6CB4EE;
     text-align: center;
     width: 20vw;
     padding: 2%;

@@ -79,8 +79,12 @@ function Ideation() {
     };
 
     const handleGetDetails = (token, encodedCampTitle, camp_id) => {
-        // Navigate to the specified page with the received token and camp_id
-        Navigate(`/all-ideas?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`);
+
+        if (CurrentUser_role === 'admin') {
+            Navigate(`/all-ideas?camp_id=${camp_id}`)
+        } else {
+            Navigate(`/all-ideas?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`);
+        }
     };
 
     const openCampaigns = campaignData.filter(campaign => !isCampaignClosed(campaign.camp_enddate));
@@ -94,7 +98,7 @@ function Ideation() {
                 <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={campaign}>Campaigns</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content" style={{ color: '#FFa559' }}>Ideation</p>
+                <p className="menu-content" style={{ color: '#6CB4EE' }}>Ideation</p>
                 <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={voting}>Voting</p>
                 <hr className="hori-line"></hr>
@@ -109,13 +113,13 @@ function Ideation() {
 
                 <div className='camp-content-user'>
                     <table className='icamp-table'>
-                        <thead>
+                        <thead className='theading'>
                             <tr>
                                 <th>Camp Id</th>
                                 <th>Campaign Owner</th>
                                 <th>Campaign Title</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
+                                <th>Ideation Start Date</th>
+                                <th>Ideation End Date</th>
                                 {CurrentUser_role === "admin" && <th>Status</th>}
                                 <th>Get Detail</th>
                             </tr>

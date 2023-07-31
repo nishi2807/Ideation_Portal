@@ -91,7 +91,7 @@ function Initiate_campaign() {
             <div className="menu">
                 <p className="menu-content" onClick={home}>Home</p>
                 <hr className="hori-line"></hr>
-                <p className="menu-content" style={{ color: '#FFa559' }} onClick={campaign}>Campaigns</p>
+                <p className="menu-content" style={{ color: '#6CB4EE' }} onClick={campaign}>Campaigns</p>
                 <hr className="hori-line"></hr>
                 <p className="menu-content" onClick={ideation}>Ideation</p>
                 <hr className="hori-line"></hr>

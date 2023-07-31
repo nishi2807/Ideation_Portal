@@ -3,13 +3,13 @@
     align-items: center;
     text-align: center;
     display: flex;
-    background-color: #ffa559;
+    background-color: #6CB4EE;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
     padding: 1%;
     margin-top: 0%;
-    border: #ffa559;
+    border: #6CB4EE;
     border-radius: 10px;
     bottom: 4%;
     right: 2.5%;
@@ -28,8 +28,8 @@
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
-    background-color: #ffa559;
-    border: #ffa559;
+    background-color: #6CB4EE;
+    border: #6CB4EE;
     color: white;
     padding-top: 1.2%;
     padding-bottom: 1.2%;
@@ -152,7 +152,7 @@
 }
 
 .campidea {
-    width: 40%;
+    width: 35%;
 }
 
 .campidea-user {
@@ -181,4 +181,9 @@
     font-family: Arial, Helvetica, sans-serif;
     top: 0%;
     left: 2.5%;
+}
+
+.theading{
+    background-color: #6CB4EE;
+    color: white;
 }
