@@ -65,6 +65,34 @@ function Vote() {
         return text.substr(0, maxLength) + '...';
     };
 
+    useEffect(() => {
+        console.log(token);
+        if (token) {
+            // Fetch the user's selected ideas using the provided token
+            axios
+                .post(`http://localhost:8081/fetch-user-votes?token=${token}`, { token })
+                .then((response) => {
+                    const { userVotesResults } = response.data;
+                    console.log(response.data);
+                    const voteByIdeaId = {};
+                    userVotesResults.forEach((result) => {
+                        voteByIdeaId[result.idea_id] = result.vote;
+                    });
+
+                    // Initialize prevRatings as a 2D array with the same dimensions as the ideas state
+                    const initialPrevRatings = Array.from({ length: pageCount }, () =>
+                        Array.from({ length: entriesPerPage }, (_, index) =>
+                            voteByIdeaId[ideaIds[index + pageNumber * entriesPerPage]] || 0
+                        )
+                    );
+                    setPrevRatings(initialPrevRatings);
+                })
+                .catch((error) => {
+                    console.error('Error fetching user selected ideas:', error);
+                });
+        }
+    }, [token]);
+    
     const CurrentUser_role = useSelector((state) => state.CurrentUser_role);
 
     const handleVote = (rating, index) => {

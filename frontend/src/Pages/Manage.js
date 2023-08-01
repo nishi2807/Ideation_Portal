@@ -27,6 +27,24 @@ function Manage() {
         fetchTopVotedIdeas();
     }, [campid]);
 
+    useEffect(() => {
+        console.log(token)
+        if (token) {
+            // Fetch the user's selected ideas using the provided token
+            axios
+                .post(`http://localhost:8081/fetch-user-selectedideas?token=${token}`, { token })
+                .then((response) => {
+                    const { userVotesResults } = response.data;
+                    console.log(response.data)
+                    const selectedIdeasIds = userVotesResults.map((result) => result.idea_id);
+                    setSelectedIdeas(selectedIdeasIds);
+                })
+                .catch((error) => {
+                    console.error('Error fetching user selected ideas:', error);
+                });
+        }
+    }, [token]);
+
     const truncateText = (text, maxLength) => {
         if (text.length <= maxLength) {
             return text;
@@ -122,7 +140,7 @@ function Manage() {
                     </table>
                 </div>
                 <div className='submit-container'>
-                    <button className={CurrentUser_role === "admin" ? 'submit-button' : 'goback-btn'} onClick={goBack}>Go Back</button>
+                    <button className={CurrentUser_role === "admin" ? 'submit-button' : 'mgoback-btn'} onClick={goBack}>Go Back</button>
                     {CurrentUser_role === "user" && (
                         <div>
                             <button className='submit-button' onClick={handleSubmitSelectedIdeas}>

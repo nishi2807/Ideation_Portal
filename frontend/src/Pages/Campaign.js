@@ -4,6 +4,8 @@ import Navbar from '../Components/Navbar';
 import './Campaign.css';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import ReactPaginate from 'react-paginate';
+
 
 function Campaign() {
     const Navigate = useNavigate();
@@ -32,13 +34,8 @@ function Campaign() {
         Navigate('/create-group');
     }
 
-    // const initiate_camp = () => {
-    //     Navigate('/initiate-campaign')
-    // }
-
     const CurrentUser_name = useSelector((state) => state.CurrentUser_name);
     const CurrentUser_role = useSelector((state) => state.CurrentUser_role)
-    // console.log(CurrentUser_name)
     const [campaignData, setCampaignData] = useState([]);
 
     console.log(campaignData)
@@ -91,13 +88,26 @@ function Campaign() {
         return end < today;
     };
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const campaignsPerPage = 10;
 
+    // Calculate the index of the first and last campaigns for the current page
+    const indexOfLastCampaign = currentPage * campaignsPerPage;
+    const indexOfFirstCampaign = indexOfLastCampaign - campaignsPerPage;
+
+    // Function to handle page navigation
+    const handlePageChange = ({ selected }) => {
+        setCurrentPage(selected + 1); // Add 1 to selected page to adjust for zero-based indexing
+    };
 
     const closedCampaigns = campaignData.filter(campaign => isCampaignClosed(campaign.manage_enddate));
     const allCampaigns = CurrentUser_role === 'admin' ? campaignData : closedCampaigns;
+    const currentCampaigns = allCampaigns.slice((currentPage - 1) * campaignsPerPage, currentPage * campaignsPerPage);
+    const pageCount = Math.ceil(allCampaigns.length / campaignsPerPage);
+
+
 
     const handleGetDetails = (token, encodedCampTitle, camp_id) => {
-        // Navigate to the specified page with the received token and camp_id
         Navigate(`/all-ideas?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`);
     };
 
@@ -118,15 +128,31 @@ function Campaign() {
                 <p className="menu-content" onClick={logout}>LogOut</p>
             </div>
             <div className='main-content'>
-                {/* <button className='create-group' onClick={createGroup}>Create New Group</button> */}
+                <ReactPaginate
+                    previousLabel={'◀'}
+                    nextLabel={'▶'}
+                    breakLabel={'...'}
+                    breakClassName={'break-me'}
+                    pageCount={pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={4}
+                    onPageChange={handlePageChange}
+                    containerClassName={'cpagination'}
+                    activeClassName={'active'}
+                    pageClassName={'page-item'}
+                    pageLinkClassName={'page-link'}
+                    previousClassName={'page-item'}
+                    previousLinkClassName={'page-link'}
+                    nextClassName={'page-item'}
+                    nextLinkClassName={'page-link'}
+                    breakLinkClassName={'page-link'}
+                />
                 {CurrentUser_role === "admin" && (
                     <div>
                         <button className='create-group' onClick={createGroup}>Initiate Campaign</button>
-                        {/* <div className='ver-line'></div> */}
                     </div>
                 )}
-                {/* <div className='ver-line'></div> */}
-                <h1 className= 'pastcamp-title-user'>
+                <h1 className='pastcamp-title-user'>
                     {CurrentUser_role === "admin" ? "All Campaigns" : "Your Past Campaigns"}
                 </h1>
                 <div className={CurrentUser_role === "admin" ? 'camp-content' : 'camp-content-user'}>
@@ -144,7 +170,7 @@ function Campaign() {
                             </tr>
                         </thead>
                         <tbody>
-                            {allCampaigns.map((campaign) => (
+                            {currentCampaigns.map((campaign) => (
                                 <tr key={campaign.camp_id}>
                                     <td>{campaign.camp_id}</td>
                                     <td className={CurrentUser_role === "admin" ? 'camp-con-owner' : 'camp-con-onweruser'}>{campaign.camp_owner}</td>

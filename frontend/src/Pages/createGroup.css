@@ -204,3 +204,21 @@
     padding: 0.6%;
     width: 420px;
 }
+
+.goback-btn-camp {
+    position: absolute;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    background-color: #6CB4EE;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    padding: 0.7%;
+    border: #6CB4EE;
+    width: fit-content;
+    top: 550px;
+    right: 20%;
+    border-radius: 10px;
+    justify-content: center;
+}

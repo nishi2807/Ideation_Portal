@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 
 function Mnidea() {
     const [ideas, setIdeas] = useState([]);
-    const [allIdeas, setAllIdeas] = useState([]); // New state for storing all ideas
+    const [allIdeas, setAllIdeas] = useState([]);
     const location = useLocation();
     const token = new URLSearchParams(location.search).get('token');
     const campid = new URLSearchParams(location.search).get('camp_id');
@@ -71,7 +71,7 @@ function Mnidea() {
     };
 
     const goBack = () => {
-        navigate('/ideation'); // Go back to the previous page
+        navigate('/ideation');
     };
 
     const CurrentUser_role = useSelector((state) => state.CurrentUser_role);

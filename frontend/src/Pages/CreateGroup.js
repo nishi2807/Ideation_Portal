@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
 import './createGroup.css';
 import { Form } from 'react-bootstrap';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 function CreateGroup() {
 
@@ -33,53 +34,89 @@ function CreateGroup() {
         Navigate('/manage')
     }
 
+    const goBack = () => {
+        Navigate('/campaign')
+    }
+
+    const CurrentUser_name = useSelector((state) => state.CurrentUser_name)
+
     const [values, setValues] = useState({
-    })
+        camp_owner: CurrentUser_name,
+        camp_ideation_id: '',
+        camp_ideation_user_email: '',
+        camp_voting_user_email: '',
+        camp_management_user_email: '',
+        camp_startdate: '',
+        camp_enddate: '',
+        vote_enddate: '',
+        manage_enddate: '',
+        camp_title: '',
+    });
 
     // const [confirmationStatus, setConfirmationStatus] = useState(false);
 
+
     const handleInput = (event) => {
-        setValues(prev => ({ ...prev, [event.target.name]: event.target.value }))
-        console.log(values)
-    }
-
-
-    const updatedb = (id, email, role) => {
-        return axios.post('http://localhost:8081/campaign/emails', {
-            camp_id: id,
-            camp_user_email: email,
-            camp_user_role: role,
-        });
+        setValues((prev) => ({ ...prev, [event.target.name]: event.target.value }));
     };
 
-    const initiateing_camp = (id, start, end, voteend, manageend, ownner, title) => {
-        return axios.post('http://localhost:8081/campaign/initiate', {
-            camp_id: id,
-            camp_startdate: start,
-            camp_enddate: end,
-            vote_enddate: voteend,
-            manage_enddate: manageend,
-            camp_owner: ownner,
-            camp_title: title
-        })
-    }
+    const updatedb = async (id, email, role) => {
+        try {
+            const response = await axios.post('http://localhost:8081/campaign/emails', {
+                camp_id: id,
+                camp_user_email: email,
+                camp_user_role: role,
+            });
+            console.log('Response from updatedb:', response.data);
+            return true;
+        } catch (error) {
+            console.error('Error in updatedb:', error);
+            return false;
+        }
+    };
+
+    const initiating_camp = async () => {
+        console.log('Initiating campaign...');
+        try {
+            const response = await axios.post('http://localhost:8081/campaign/initiate', {
+                camp_id: values.camp_ideation_id,
+                camp_startdate: values.camp_startdate,
+                camp_enddate: values.camp_enddate,
+                vote_enddate: values.vote_enddate,
+                manage_enddate: values.manage_enddate,
+                camp_owner: values.camp_owner,
+                camp_title: values.camp_title,
+            });
+            console.log('Response from initiating_camp:', response.data);
+            return true;
+        } catch (error) {
+            console.error('Error in initiating_camp:', error);
+            return false;
+        }
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const isGroupsCreated = await Promise.all([
+            updatedb(values.camp_ideation_id, values.camp_ideation_user_email, 'I'),
+            updatedb(values.camp_ideation_id, values.camp_voting_user_email, 'V'),
+            updatedb(values.camp_ideation_id, values.camp_management_user_email, 'M'),
+        ]);
 
-        try {
-            await Promise.all([
-                updatedb(values.camp_ideation_id, values.camp_ideation_user_email, 'I'),
-                updatedb(values.camp_ideation_id, values.camp_voting_user_email, 'V'),
-                updatedb(values.camp_ideation_id, values.camp_management_user_email, 'M'),
-                initiateing_camp(values.camp_ideation_id, values.camp_startdate, values.camp_enddate, values.vote_enddate, values.manage_enddate, values.camp_owner, values.camp_title)
-            ]);
-            alert('Campaign Initiated Successfully!');
-            Navigate('/campaign');
-        } catch (error) {
-            console.error('Error:', error.response.data);
+        if (isGroupsCreated.every((result) => result)) {
+            const isCampaignInitiated = await initiating_camp();
+            if (isCampaignInitiated) {
+                console.log('Campaign initiated successfully');
+                alert('Campaign Initiated Successfully!');
+                Navigate('/campaign');
+            } else {
+                console.error('Failed to initiate campaign');
+            }
+        } else {
+            console.error('Failed to create groups');
         }
     };
+
 
     return (
         <div className='home-page'>
@@ -130,10 +167,6 @@ function CreateGroup() {
                                 required
                             />
                         </Form.Group>
-                    </Form>
-                    {/* <hr className='hr-create-group'></hr> */}
-                    {/* <h3 className='vote-heading'>Create Voting Group</h3> */}
-                    <Form>
                         {/* <Form.Group>
                             <Form.Label id='vote_id'>Campaign ID:</Form.Label>
                             <Form.Control
@@ -157,9 +190,6 @@ function CreateGroup() {
                             />
                         </Form.Group>
                         {/* <hr className='hr-vote-group'></hr> */}
-                    </Form>
-                    {/* <h3 className='manage-heading'>Create Management Group</h3> */}
-                    <Form>
                         {/* <Form.Group>
                             <Form.Label id='manage_id'>Campaign ID:</Form.Label>
                             <Form.Control
@@ -184,6 +214,7 @@ function CreateGroup() {
                                 <option value="">Select Management User</option>
                                 <option value="user1@gmail.com">User1 (user1@gmail.com)</option>
                                 <option value="user2@gmail.com">User2 (user2@gmail.com)</option>
+                                <option value="ritunishidhruv@gmail.com">Ritu (ritunishidhruv@gmail.com)</option>
                             </Form.Select>
                         </Form.Group>
                         <Form.Group>
@@ -253,6 +284,7 @@ function CreateGroup() {
                         </Form.Group>
                     </Form>
                     <div>
+                        <button className='goback-btn-camp' onClick={goBack}>Go Back</button>
                         <button className="savegroup-btn" name="save-group" onClick={handleSubmit}>Initiate</button>
                     </div>
                 </div>

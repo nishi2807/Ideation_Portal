@@ -3,6 +3,7 @@ import Navbar from '../Components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import ReactPaginate from 'react-paginate';
 
 function Voting() {
     const Navigate = useNavigate();
@@ -86,8 +87,22 @@ function Voting() {
     const CurrentUser_role = useSelector((state) => state.CurrentUser_role)
     console.log(CurrentUser_role)
 
-    const openCampaigns = campaignData.filter(campaign => !isCampaignClosed(campaign.vote_enddate));
+    const [currentPage, setCurrentPage] = useState(1);
+    const campaignsPerPage = 10;
+
+    // Calculate the index of the first and last campaigns for the current page
+    const indexOfLastCampaign = currentPage * campaignsPerPage;
+    const indexOfFirstCampaign = indexOfLastCampaign - campaignsPerPage;
+
+    // Function to handle page navigation
+    const handlePageChange = ({ selected }) => {
+        setCurrentPage(selected + 1); // Add 1 to selected page to adjust for zero-based indexing
+    };
+
+    const openCampaigns = campaignData.filter(campaign => !isCampaignClosed(campaign.camp_enddate));
     const allCampaigns = CurrentUser_role === 'admin' ? campaignData : openCampaigns;
+    const currentCampaigns = allCampaigns.slice((currentPage - 1) * campaignsPerPage, currentPage * campaignsPerPage);
+    const pageCount = Math.ceil(allCampaigns.length / campaignsPerPage);
 
 
     const handleGetDetails = (token, encodedCampTitle, camp_id) => {
@@ -116,6 +131,25 @@ function Voting() {
                 <p className="menu-content" onClick={logout}>LogOut</p>
             </div>
             <div className='main-content'>
+                <ReactPaginate
+                    previousLabel={'◀'}
+                    nextLabel={'▶'}
+                    breakLabel={'...'}
+                    breakClassName={'break-me'}
+                    pageCount={pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={4}
+                    onPageChange={handlePageChange}
+                    containerClassName={'cpagination'}
+                    activeClassName={'active'}
+                    pageClassName={'page-item'}
+                    pageLinkClassName={'page-link'}
+                    previousClassName={'page-item'}
+                    previousLinkClassName={'page-link'}
+                    nextClassName={'page-item'}
+                    nextLinkClassName={'page-link'}
+                    breakLinkClassName={'page-link'}
+                />
                 <div>
                     <h1 className='i-title'>Voting Group Campaigns</h1>
                 </div>
@@ -129,18 +163,18 @@ function Voting() {
                                 <th>Voting Start Date</th>
                                 <th>Voting End Date</th>
                                 {CurrentUser_role === "admin" && <th>Status</th>}
-                                <th>Get Detail</th>
+                                <th>Idea Detail</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {allCampaigns.map((campaign) => (
+                            {currentCampaigns.map((campaign) => (
                                 <tr key={campaign.camp_id}>
                                     <td>{campaign.camp_id}</td>
                                     <td className='campidea-user'>{campaign.camp_owner}</td>
                                     <td className='campidea'>{campaign.camp_title}</td>
                                     <td>{formatDate(campaign.camp_enddate)}</td>
                                     <td>{formatDate(campaign.vote_enddate)}</td>
-                                    {CurrentUser_role === "admin" && <td className={isCampaignClosed(campaign.vote_enddate) ? 'closed' : 'open'}>{isCampaignClosed(campaign.vote_enddate) ? 'Closed' : (!isCampaignOpen(campaign.camp_enddate) ? 'Open' : 'Not Open Yet')}</td>}
+                                    {CurrentUser_role === "admin" && <td className={isCampaignClosed(campaign.vote_enddate) ? 'closed' : isCampaignOpen(campaign.camp_enddate) ? 'not-open' : 'open'}>{isCampaignClosed(campaign.vote_enddate) ? 'Closed' : (!isCampaignOpen(campaign.camp_enddate) ? 'Open' : 'Not Open Yet')}</td>}
                                     <td>
                                         <button className={!isCampaignOpen(campaign.camp_enddate) ? 'read-more-btn' : 'read-more-btn-grey'} onClick={() => handleGetDetails(campaign.token, campaign.camp_title, campaign.camp_id)}>
                                             Click Here

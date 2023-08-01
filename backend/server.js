@@ -126,12 +126,14 @@ app.post('/campaign/emails', (req, res) => {
             }
 
             console.log('Emails stored successfully');
+            return res.status(200).json({ message: 'Emails stored successfully' });
         });
     });
 });
 
-const crypto = require('crypto'); // Import the crypto module
+const crypto = require('crypto');
 app.post('/campaign/initiate', (req, res) => {
+    console.log('Received request to initiate campaign:', req.body); 
     const { camp_id, camp_startdate, camp_enddate, vote_enddate, manage_enddate, camp_owner, camp_title } = req.body;
 
     // Check if camp_id exists in the campaign_user table
@@ -1083,6 +1085,84 @@ app.post('/get-campaign-token', (req, res) => {
 
             // Send the token as the response
             res.status(200).json({ token });
+        });
+    });
+});
+
+app.post('/fetch-user-votes', (req, res) => {
+    const token = req.query.token;
+
+    // Check if the token exists and is valid
+    if (!token) {
+        return res.status(400).json({ error: 'Token is missing in the request.' });
+    }
+
+    const getUserSql = 'SELECT * FROM campaign_links WHERE token = ?';
+    db.query(getUserSql, [token], (getUserErr, userResults) => {
+        if (getUserErr) {
+            console.error('Error executing user query:', getUserErr);
+            return res.status(500).json({ error: 'Error retrieving user data.' });
+        }
+
+        // Check if the user with the provided token exists
+        if (userResults.length === 0) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+
+        const user = userResults[0].email;
+        const camp_id = userResults[0].campaign_id
+        console.log(user)
+        console.log(camp_id)
+
+        // Fetch votes from the "votes" table for the user based on their user_id
+        const userVotesSql = 'SELECT vote, idea_id FROM vote WHERE email = ? AND camp_id = ?';
+        db.query(userVotesSql, [user, camp_id], (userVotesErr, userVotesResults) => {
+            if (userVotesErr) {
+                console.error('Error executing user votes query:', userVotesErr);
+                return res.status(500).json({ error: 'Error retrieving user votes.' });
+            }
+
+            // If there are no votes for this user, you can return an empty array
+            return res.status(200).json({ userVotesResults });
+        });
+    });
+});
+
+app.post('/fetch-user-selectedideas', (req, res) => {
+    const token = req.query.token;
+
+    // Check if the token exists and is valid
+    if (!token) {
+        return res.status(400).json({ error: 'Token is missing in the request.' });
+    }
+
+    const getUserSql = 'SELECT * FROM campaign_links WHERE token = ?';
+    db.query(getUserSql, [token], (getUserErr, userResults) => {
+        if (getUserErr) {
+            console.error('Error executing user query:', getUserErr);
+            return res.status(500).json({ error: 'Error retrieving user data.' });
+        }
+
+        // Check if the user with the provided token exists
+        if (userResults.length === 0) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+
+        const user = userResults[0].email;
+        const camp_id = userResults[0].campaign_id
+        console.log(user)
+        console.log(camp_id)
+
+        // Fetch votes from the "votes" table for the user based on their user_id
+        const userVotesSql = 'SELECT idea_id FROM selected_ideas WHERE email = ? AND camp_id = ?';
+        db.query(userVotesSql, [user, camp_id], (userVotesErr, userVotesResults) => {
+            if (userVotesErr) {
+                console.error('Error executing user votes query:', userVotesErr);
+                return res.status(500).json({ error: 'Error retrieving user votes.' });
+            }
+
+            // If there are no votes for this user, you can return an empty array
+            return res.status(200).json({ userVotesResults });
         });
     });
 });

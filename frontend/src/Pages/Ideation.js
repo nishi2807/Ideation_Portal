@@ -3,6 +3,7 @@ import Navbar from '../Components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import ReactPaginate from 'react-paginate';
 
 function Ideation() {
     const Navigate = useNavigate();
@@ -87,8 +88,22 @@ function Ideation() {
         }
     };
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const campaignsPerPage = 10;
+
+    // Calculate the index of the first and last campaigns for the current page
+    const indexOfLastCampaign = currentPage * campaignsPerPage;
+    const indexOfFirstCampaign = indexOfLastCampaign - campaignsPerPage;
+
+    // Function to handle page navigation
+    const handlePageChange = ({ selected }) => {
+        setCurrentPage(selected + 1); // Add 1 to selected page to adjust for zero-based indexing
+    };
+
     const openCampaigns = campaignData.filter(campaign => !isCampaignClosed(campaign.camp_enddate));
     const allCampaigns = CurrentUser_role === 'admin' ? campaignData : openCampaigns;
+    const currentCampaigns = allCampaigns.slice((currentPage - 1) * campaignsPerPage, currentPage * campaignsPerPage);
+    const pageCount = Math.ceil(allCampaigns.length / campaignsPerPage);
 
     return (
         <div className='home-page'>
@@ -107,6 +122,25 @@ function Ideation() {
                 <p className="menu-content" onClick={logout}>LogOut</p>
             </div>
             <div className='main-content'>
+                <ReactPaginate
+                    previousLabel={'◀'}
+                    nextLabel={'▶'}
+                    breakLabel={'...'}
+                    breakClassName={'break-me'}
+                    pageCount={pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={4}
+                    onPageChange={handlePageChange}
+                    containerClassName={'cpagination'}
+                    activeClassName={'active'}
+                    pageClassName={'page-item'}
+                    pageLinkClassName={'page-link'}
+                    previousClassName={'page-item'}
+                    previousLinkClassName={'page-link'}
+                    nextClassName={'page-item'}
+                    nextLinkClassName={'page-link'}
+                    breakLinkClassName={'page-link'}
+                />
                 <div>
                     <h1 className='i-title'>Ideation Group Campaigns</h1>
                 </div>
@@ -121,11 +155,11 @@ function Ideation() {
                                 <th>Ideation Start Date</th>
                                 <th>Ideation End Date</th>
                                 {CurrentUser_role === "admin" && <th>Status</th>}
-                                <th>Get Detail</th>
+                                <th>Idea Detail</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {allCampaigns.map((campaign) => (
+                            {currentCampaigns.map((campaign) => (
                                 <tr key={campaign.camp_id}>
                                     <td>{campaign.camp_id}</td>
                                     <td className='campidea-user'>{campaign.camp_owner}</td>

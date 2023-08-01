@@ -59,7 +59,7 @@
     display: flex;
     /* background-color: #ffa559; */
     /* opacity: 50%; */
-    height: 520px;
+    height: 460px;
     width: 1150px;
     /* right: 0%; */
     top: 12%;
@@ -97,10 +97,6 @@
 
 .camps-table-user {
     position: absolute;
-    /* display: flex; */
-    /* left: 2%; */
-    /* right: 3%; */
-    /* top: 10%; */
     width: 1150px;
     border-collapse: collapse;
 }
@@ -133,6 +129,10 @@
 
 .closed {
     color: red;
+}
+
+.not-open {
+    color: orange;
 }
 
 .camp-con-title{

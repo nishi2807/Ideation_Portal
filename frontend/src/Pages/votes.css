@@ -248,3 +248,39 @@
     border-radius: 5px;
     font-size: 16px;
 }
+
+.cpagination {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    padding: 0;
+    margin-right: 83.5%;
+    margin-top: 46%;
+    margin-bottom: -3%;
+    /* top: 80%; */
+    /* bottom: 3%; */
+    /* left: 1%; */
+}
+
+.cpagination .page-item {
+    margin-right: 5px;
+}
+
+.cpagination .page-item .page-link {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.cpagination .page-item.active .page-link {
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+.cpagination .page-item.disabled .page-link {
+    pointer-events: none;
+    cursor: default;
+    color: #ccc;
+}
