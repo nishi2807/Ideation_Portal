@@ -15,6 +15,7 @@ import IdeaDetails from './Pages/IdeaDetails';
 import Ideation from './Pages/Ideation';
 import Voting from './Pages/Voting';
 import Management from './Pages/Management';
+import Mnideacamp from './Pages/mnidea-camp';
 // import SignUp from './Pages/Signup';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route path='/voting' element={<Voting/>}></Route>
           <Route path='/manage' element={<Management/>}></Route>
           <Route path='/all-ideas' element={<Mnidea/>}></Route>
+          <Route path='/camp-details' element={<Mnideacamp/>}></Route>
         </Routes>
       </BrowserRouter>
     </div>

@@ -108,7 +108,7 @@ function Campaign() {
 
 
     const handleGetDetails = (token, encodedCampTitle, camp_id) => {
-        Navigate(`/all-ideas?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`);
+        Navigate(`/camp-details?token=${token}&camp_title=${encodedCampTitle}&camp_id=${camp_id}`);
     };
 
     return (
