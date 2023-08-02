@@ -92,21 +92,16 @@ function Vote() {
                 });
         }
     }, [token]);
-    
+
     const CurrentUser_role = useSelector((state) => state.CurrentUser_role);
 
     const handleVote = (rating, index) => {
-        if (CurrentUser_role === 'admin') {
-            // If the user is an admin, prevent any changes to the ratings
-            return;
-        } else {
-            setPrevRatings((prevRatings) => {
-                const updatedRatings = [...prevRatings];
-                updatedRatings[pageNumber] = [...updatedRatings[pageNumber]]; // Create a new array to ensure immutability
-                updatedRatings[pageNumber][index] = rating;
-                return updatedRatings;
-            });
-        }
+        setPrevRatings((prevRatings) => {
+            const updatedRatings = [...prevRatings];
+            updatedRatings[pageNumber] = [...updatedRatings[pageNumber]]; // Create a new array to ensure immutability
+            updatedRatings[pageNumber][index] = rating;
+            return updatedRatings;
+        });
 
     };
 
@@ -176,7 +171,6 @@ function Vote() {
                                                 count={5}
                                                 size={20}
                                                 activeColor="#ffd700"
-                                                value={prevRatings[pageNumber]?.[index] || 0} // Use previous rating if available
                                                 onChange={(rating) => handleVote(rating, index)}
                                                 edit={CurrentUser_role !== 'admin'}
                                             />
