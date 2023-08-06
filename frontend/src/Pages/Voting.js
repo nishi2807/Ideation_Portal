@@ -99,7 +99,7 @@ function Voting() {
         setCurrentPage(selected + 1); // Add 1 to selected page to adjust for zero-based indexing
     };
 
-    const openCampaigns = campaignData.filter(campaign => !isCampaignClosed(campaign.camp_enddate));
+    const openCampaigns = campaignData.filter(campaign => !isCampaignClosed(campaign.vote_enddate));
     const allCampaigns = CurrentUser_role === 'admin' ? campaignData : openCampaigns;
     const currentCampaigns = allCampaigns.slice((currentPage - 1) * campaignsPerPage, currentPage * campaignsPerPage);
     const pageCount = Math.ceil(allCampaigns.length / campaignsPerPage);
